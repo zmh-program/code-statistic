@@ -48,8 +48,12 @@ app.get('/:user/:repo/', async function (req, res) {
         res.send('permission denied');
         return;
     }
-    const repo_info = await cache.requestWithCache(`/repos/${username}/${repo}`);
-    res.send(await getLanguage(username, repo));
+    const resp = await cache.requestWithCache(`/repos/${username}/${repo}`);
+
+    res.send({
+        size: utils.storeConvert(resp['size'], 1),
+        langs: await getLanguage(username, repo),
+    });
 })
 
 
