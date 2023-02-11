@@ -40,7 +40,7 @@ app.get('/:user/', async function (req, res) {
         return await getLanguage(username, resp['name']);
     }));
     res.send(result);
-})
+});
 
 app.get('/:user/:repo/', async function (req, res) {
     const username = req.params['user'], repo = req.params['repo'];
@@ -48,13 +48,18 @@ app.get('/:user/:repo/', async function (req, res) {
         res.send('permission denied');
         return;
     }
-    const resp = await cache.requestWithCache(`/repos/${username}/${repo}`);
+    const info = await cache.requestWithCache(`/repos/${username}/${repo}`);
 
     res.send({
-        size: utils.storeConvert(resp['size'], 1),
+        size: utils.storeConvert(info['size'], 1),
+        forks: info['forks'],
+        stars: info['stargazers_count'],
+        watchers: info['watchers_count'],
+        license: info['license']['spdx_id'],
         langs: await getLanguage(username, repo),
+        releases: (await cache.requestWithCache(`/repos/${username}/${repo}/releases`)).length,
     });
-})
+});
 
 
 app.listen(conf.port);
