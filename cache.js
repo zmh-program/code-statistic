@@ -1,9 +1,10 @@
-// 类似于 Service Worker 缓存机制
-
+const logger = (require("log4js")).getLogger("Cache");
 const axios = require("axios");
-const token = process.env.CODE_STATISTIC || "";
 
-class ApiCache {
+logger.level = "debug";
+axios.defaults.baseURL = "https://api.github.com";
+
+class LightCache {
   constructor() {
       this.caches = {};
   }
@@ -15,7 +16,7 @@ class ApiCache {
     return value;
   }
   getCache(key) {
-    if (! key in this.caches) {
+    if (!(key in this.caches)) {
       return undefined;
     }
     const memory = this.caches[key];
@@ -24,27 +25,42 @@ class ApiCache {
     }
     return memory.value;
   }
-  
+  getOrSet(key, sync, expiration) {
+    const cache = this.getCache(key);
+    return cache === undefined ? this.setCache(key, sync(), expiration) : cache;
+  }
+  async asyncGetOrSet(key, async, expiration) {
+    const cache = this.getCache(key);
+    return cache === undefined ? this.setCache(key, await async(), expiration) : cache;
+  }
+}
+
+class ApiCache extends LightCache {
+  constructor(token) {
+    super();
+    this.token = token;
+  }
   async syncAxios(url) {
+    logger.debug("Request GitHub API address:", url);
     return (await axios.get(url, {
       headers: {
         Accept: "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${this.token}`,
       }
     })).data;
   }
 
   async requestWithCache(url, expiration=3600) {
-    const cache = this.getCache(url);
-    if ( ! cache === undefined ) {
-      const resp = await this.syncAxios(url);
-      return this.setCache(url, resp, expiration);
-    }
-    return cache;
+    // 类似于 Service Worker 缓存机制
+    return this.asyncGetOrSet(
+      url,
+      async () => (await this.syncAxios(url)),
+      expiration,
+    );
   }
 }
 
-module.exports = [
-  token,
-  ApiCache
-]
+module.exports = {
+  LightCache: LightCache,
+  ApiCache: ApiCache,
+}
