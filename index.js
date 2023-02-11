@@ -1,5 +1,6 @@
 const express = require('express');
 const cache = new (require('./cache').ApiCache)();
+const utils = require('./utils');
 const conf = require('./config');
 const app = express();
 
@@ -47,7 +48,9 @@ app.get('/:user/:repo/', async function (req, res) {
         res.send('permission denied');
         return;
     }
+    const repo_info = await cache.requestWithCache(`/repos/${username}/${repo}`);
     res.send(await getLanguage(username, repo));
 })
 
-app.listen(3000);
+
+app.listen(conf.port);
