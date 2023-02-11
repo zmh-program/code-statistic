@@ -20,7 +20,7 @@ class LightCache {
       return undefined;
     }
     const memory = this.caches[key];
-    if (memory.expiration > new Date().getTime() / 1000) {
+    if (memory.expiration < new Date().getTime() / 1000) {
       return undefined;
     }
     return memory.value;
