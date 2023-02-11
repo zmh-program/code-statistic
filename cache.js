@@ -1,5 +1,6 @@
 const logger = (require("log4js")).getLogger("Cache");
 const axios = require("axios");
+const conf = require("./config");
 
 logger.level = "debug";
 axios.defaults.baseURL = "https://api.github.com";
@@ -36,9 +37,10 @@ class LightCache {
 }
 
 class ApiCache extends LightCache {
-  constructor(token) {
+  constructor() {
     super();
-    this.token = token;
+    this.token = conf.token;
+    this.expiration = conf.expiration;
   }
   async syncAxios(url) {
     logger.debug("Request GitHub API address:", url);
@@ -50,12 +52,12 @@ class ApiCache extends LightCache {
     })).data;
   }
 
-  async requestWithCache(url, expiration=3600) {
+  async requestWithCache(url) {
     // 类似于 Service Worker 缓存机制
     return this.asyncGetOrSet(
       url,
       async () => (await this.syncAxios(url)),
-      expiration,
+      this.expiration,
     );
   }
 }
