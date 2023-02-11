@@ -35,11 +35,16 @@ app.get('/:user/', async function (req, res) {
         res.send('permission denied');
         return;
     }
-    const response = await cache.requestWithCache(`/users/${username}/repos`);
-    const result = await langStatistics(Object.values(response).map(async (resp) => {
-        return await getLanguage(username, resp['name']);
-    }));
-    res.send(result);
+    const response = await cache.requestWithCache(`/users/${username}`);
+    res.send({
+        followers: response['followers'],
+        repos: response['public_repos'],
+        langs: await langStatistics(
+          Object.values(await cache.requestWithCache(`/users/${username}/repos`)
+        ).map(async (resp) => {
+            return await getLanguage(username, resp['name']);
+        })),
+    });
 });
 
 app.get('/:user/:repo/', async function (req, res) {
@@ -57,7 +62,7 @@ app.get('/:user/:repo/', async function (req, res) {
         watchers: info['watchers_count'],
         license: info['license']['spdx_id'],
         langs: await getLanguage(username, repo),
-        releases: (await cache.requestWithCache(`/repos/${username}/${repo}/releases`)).length,
+        // releases: (await cache.requestWithCache(`/repos/${username}/${repo}/releases`)).length,  - 700ms
     });
 });
 
