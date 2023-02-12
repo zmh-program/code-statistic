@@ -34,7 +34,7 @@ app.get('/repo/:user/:repo/', async function (req, res) {
         return;
     }
     res.type('svg');
-    res.send(await stats.getRepository(username, repo));
+    res.render('repo', await stats.getRepository(username, repo));
 });
 
 

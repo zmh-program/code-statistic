@@ -53,7 +53,8 @@ async function getRepository(username, repo) {
   // get releases (700ms): (await cache.requestWithCache(`/repos/${username}/${repo}/releases`)).length
   const info = await cache.requestWithCache(`/repos/${username}/${repo}`);
   return {
-    repo: `${username} / ${repo}`,
+    username: username,
+    repo: repo,
     size: storeConvert(info['size'], 1),
     forks: info['forks'],
     stars: info['stargazers_count'],
