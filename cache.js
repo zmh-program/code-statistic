@@ -26,14 +26,6 @@ class LightCache {
     }
     return memory.value;
   }
-  getOrSet(key, sync, expiration) {
-    const cache = this.getCache(key);
-    return cache === undefined ? this.setCache(key, sync(), expiration) : cache;
-  }
-  async asyncGetOrSet(key, async, expiration) {
-    const cache = this.getCache(key);
-    return cache === undefined ? this.setCache(key, await async(), expiration) : cache;
-  }
 }
 
 class ApiCache extends LightCache {
@@ -43,7 +35,6 @@ class ApiCache extends LightCache {
     this.expiration = conf.expiration;
   }
   async syncAxios(url) {
-    logger.debug("Request GitHub API address:", url);
     return (await axios.get(url, {
       headers: {
         Accept: "application/json",
@@ -54,11 +45,16 @@ class ApiCache extends LightCache {
 
   async requestWithCache(url) {
     // 类似于 Service Worker 缓存机制
-    return this.asyncGetOrSet(
-      url,
-      async () => (await this.syncAxios(url)),
-      this.expiration,
-    );
+    const cache = this.getCache(url);
+    if (cache === undefined) {
+      logger.info("Request GitHub API address: ", url);
+      const response = await this.syncAxios(url);
+      this.setCache(url, response, this.expiration);
+      return response;
+    } else {
+      logger.debug("Cached GitHub API address: ", url);
+      return cache;
+    }
   }
 }
 
