@@ -24,7 +24,7 @@ app.get('/user/:user/', async function (req, res) {
         return;
     }
     res.type('svg');
-    res.render('user', await stats.getAccount(username));
+    res.render('user', await stats.getAccount(username, req.query));
 });
 
 app.get('/repo/:user/:repo/', async function (req, res) {
@@ -34,7 +34,7 @@ app.get('/repo/:user/:repo/', async function (req, res) {
         return;
     }
     res.type('svg');
-    res.render('repo', await stats.getRepository(username, repo));
+    res.render('repo', await stats.getRepository(username, repo, req.query));
 });
 
 

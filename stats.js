@@ -620,9 +620,10 @@ function langHandler(langs) {
     }
   });
 }
-async function getAccount(username) {
+async function getAccount(username, query={}) {
   const response = await cache.requestWithCache(`/users/${username}`);
   return {
+    dark : !! query.dark,
     username: username,
     followers: decConvert(response['followers']),
     repos: response['public_repos'],
@@ -634,10 +635,11 @@ async function getAccount(username) {
   };
 }
 
-async function getRepository(username, repo) {
+async function getRepository(username, repo, query={}) {
   // get releases (700ms): (await cache.requestWithCache(`/repos/${username}/${repo}/releases`)).length
   const info = await cache.requestWithCache(`/repos/${username}/${repo}`);
   return {
+    dark : !! query.dark,
     username: username,
     repo: repo,
     size: storeConvert(info['size'], 1),

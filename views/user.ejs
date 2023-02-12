@@ -1,21 +1,145 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="132" height="20" role="img" aria-label="404: badge not found">
-    <title>404: badge not found</title>
-    <linearGradient id="s" x2="0" y2="100%">
-        <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
-        <stop offset="1" stop-opacity=".1"/>
-    </linearGradient>
-    <clipPath id="r">
-        <rect width="132" height="20" rx="3" fill="#fff"/>
-    </clipPath>
-    <g clip-path="url(#r)">
-        <rect width="31" height="20" fill="#555"/>
-        <rect x="31" width="101" height="20" fill="#e05d44"/>
-        <rect width="132" height="20" fill="url(#s)"/>
-    </g>
-    <g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="110">
-        <text aria-hidden="true" x="165" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="210">404</text>
-        <text x="165" y="140" transform="scale(.1)" fill="#fff" textLength="210">404</text>
-        <text aria-hidden="true" x="805" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="910">badge not found</text>
-        <text x="805" y="140" transform="scale(.1)" fill="#fff" textLength="910">badge not found</text>
+<% const left = Math.ceil(langs.length / 2); const height = 195 + (left > 4 ? (left - 4) * 20 : 0)  %>
+<svg width="450" height="195" viewBox="0 0 660 <%- height + 1 %>" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="descId">
+    <title id="titleId"><%- username %>'s Code Stats</title>
+    <desc id="descId">User Code Statistics</desc>
+    <style>
+        .oct-icon {
+            display: block;
+            fill: #8b849e;
+        }
+        .header {
+            font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
+            fill: #2f80ed;
+            animation: fadeInAnimation 0.8s ease-in-out forwards;
+        }
+        @supports(-moz-appearance: auto) {
+            .header { font-size: 15.5px; }
+        }
+        .stat {
+            font: 600 14px 'Segoe UI', Ubuntu, "Helvetica Neue", Sans-Serif; fill: #434d58;
+        }
+        @supports(-moz-appearance: auto) {
+            .stat { font-size:12px; }
+        }
+        .stagger {
+            opacity: 0;
+            animation: fadeInAnimation 0.3s ease-in-out forwards;
+        }
+        .bold { font-weight: 700 }
+        .icon {
+            fill: #4c71f2;
+            display: none;
+        }
+        @keyframes growWidthAnimation {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+        .lang-name {
+            font: 400 11px "Segoe UI", Ubuntu, Sans-Serif;
+            fill: #434d58;
+        }
+        .stagger {
+            opacity: 0;
+            animation: fadeInAnimation 0.3s ease-in-out forwards;
+        }
+        #rect-mask rect{
+            animation: fadeInAnimation 1s ease-in-out forwards;
+        }
+
+        @keyframes scaleInAnimation {
+            from {
+                transform: translate(-5px, 5px) scale(0);
+            }
+            to {
+                transform: translate(-5px, 5px) scale(1);
+            }
+        }
+        @keyframes rankAnimation {
+            from {
+                stroke-dashoffset: 251.32741228718345;
+            }
+            to {
+                stroke-dashoffset: 125.45405959298056;
+            }
+        }
+        @keyframes scaleInAnimation {
+            from {
+                transform: translate(-5px, 5px) scale(0);
+            }
+            to {
+                transform: translate(-5px, 5px) scale(1);
+            }
+        }
+        @keyframes fadeInAnimation {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+    <rect data-testid="card-bg" x="0.5" y="0.5" rx="4.5" height="99%" stroke="#e4e2e2" width="659" fill="<%- dark ? "#e4e2e2" : "#000" %>" stroke-opacity="1"/>
+    <g data-testid="card-title" transform="translate(40, 35)"><g transform="translate(0, 0)"><text x="0" y="0" class="header" data-testid="header"><a href="https://github.com/<%- username %>/"><%- username %></a></text></g></g>
+    <g data-testid="main-card-info" transform="translate(0, 55)"><svg x="0" y="0">
+            <g transform="translate(0, 0)">
+                <g class="stagger" style="animation-delay: 450ms" transform="translate(25, 0)">
+                    <svg xmlns="http://www.w3.org/2000/svg" data-testid="icon" class="icon" viewBox="0 0 16 16" version="1.1" width="16" height="16">
+                        <path fill-rule="evenodd" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25zm0 2.445L6.615 5.5a.75.75 0 01-.564.41l-3.097.45 2.24 2.184a.75.75 0 01.216.664l-.528 3.084 2.769-1.456a.75.75 0 01.698 0l2.77 1.456-.53-3.084a.75.75 0 01.216-.664l2.24-2.183-3.096-.45a.75.75 0 01-.564-.41L8 2.694v.001z"/>
+                    </svg>
+                    <text class="stat  bold" y="12.5">Followers:</text>
+                    <svg x="169.01" aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="oct-icon">
+                        <path fill-rule="evenodd" d="M5 3.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.122a2.25 2.25 0 10-1.5 0v.878A2.25 2.25 0 005.75 8.5h1.5v2.128a2.251 2.251 0 101.5 0V8.5h1.5a2.25 2.25 0 002.25-2.25v-.878a2.25 2.25 0 10-1.5 0v.878a.75.75 0 01-.75.75h-4.5A.75.75 0 015 6.25v-.878zm3.75 7.378a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm3-8.75a.75.75 0 100-1.5.75.75 0 000 1.5z"></path>
+                    </svg>
+                    <text class="stat  bold" x="192.01" y="12.5" data-testid="stars"><%- followers %></text>
+                </g>
+            </g><g transform="translate(0, 25)">
+                <g class="stagger" style="animation-delay: 600ms" transform="translate(25, 0)">
+                    <text class="stat  bold" y="12.5">Repos:</text>
+                    <svg x="169.01" aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="oct-icon">
+                        <path fill-rule="evenodd" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25zm0 2.445L6.615 5.5a.75.75 0 01-.564.41l-3.097.45 2.24 2.184a.75.75 0 01.216.664l-.528 3.084 2.769-1.456a.75.75 0 01.698 0l2.77 1.456-.53-3.084a.75.75 0 01.216-.664l2.24-2.183-3.096-.45a.75.75 0 01-.564-.41L8 2.694v.001z"></path>
+                    </svg>
+                    <text class="stat  bold" x="192.01" y="12.5" data-testid="forks"><%- repos %></text>
+                </g>
+            </g>
+        </svg></g>
+    <line x1="290" y1="40" x2="290" y2="186" stroke="#eeecec"></line>
+    <g xmlns="http://www.w3.org/2000/svg" transform="translate(300, 55)" data-testid="main-card-progress">
+
+        <svg data-testid="lang-items" x="25">
+            <mask id="rect-mask">
+                <rect x="0" y="0" width="300" height="8" fill="white" rx="5"/>
+            </mask>
+
+            <% langs.forEach(function(lang){ %>
+                <rect mask="url(#rect-mask)" data-testid="lang-progress" x="<%- lang.cursor * 300 %>" y="0" width="<%- lang.ratio * 300 %>" height="8" fill="<%- lang.color %>"/>
+            <% }); %>
+            <g transform="translate(0, 25)">
+                <g transform="translate(0, 0)">
+                    <% langs.splice(0, left).forEach(function (lang, idx) { %>
+                        <g transform="translate(0, <%- idx * 25 %>)">
+                            <g class="stagger" style="animation-delay: <%- 450 + (idx * 150) %>ms">
+                                <circle cx="5" cy="6" r="5" fill="<%- lang.color %>"/>
+                                <text data-testid="lang-name" x="15" y="10" class="lang-name"><%- lang.text %></text>
+                            </g>
+                        </g>
+                    <% });%>
+                </g>
+                <g transform="translate(150, 0)">
+                    <% langs.splice(0, left).forEach(function (lang, idx) { %>
+                        <g transform="translate(0, <%- idx * 25 %>)">
+                            <g class="stagger" style="animation-delay: <%- 450 + (idx * 150) %>ms">
+                                <circle cx="5" cy="6" r="5" fill="<%- lang.color %>"/>
+                                <text data-testid="lang-name" x="15" y="10" class="lang-name"><%- lang.text %></text>
+                            </g>
+                        </g>
+                    <% });%>
+                </g>
+            </g>
+        </svg>
     </g>
 </svg>
