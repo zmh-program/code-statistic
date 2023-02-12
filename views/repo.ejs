@@ -143,45 +143,28 @@
             <% langs.forEach(function(lang){ %>
                 <rect mask="url(#rect-mask)" data-testid="lang-progress" x="<%- lang.cursor * 300 %>" y="0" width="<%- lang.ratio * 300 %>" height="8" fill="<%- lang.color %>"/>
             <% }); %>
-
-
             <g transform="translate(0, 25)">
-                <g transform="translate(0, 0)"><g transform="translate(0, 0)">
-                        <g class="stagger" style="animation-delay: 450ms">
-                            <circle cx="5" cy="6" r="5" fill="#f1e05a"/>
-                            <text data-testid="lang-name" x="15" y="10" class="lang-name">
-                                JavaScript 76.79%
-                            </text>
+                <% const left = Math.ceil(langs.length / 2) %>
+                <g transform="translate(0, 0)">
+                    <% langs.splice(0, left).forEach(function (lang, idx) { %>
+                        <g transform="translate(0, <%- idx * 25 %>)">
+                            <g class="stagger" style="animation-delay: <%- 450 + (idx * 150) %>ms">
+                                <circle cx="5" cy="6" r="5" fill="<%- lang.color %>"/>
+                                <text data-testid="lang-name" x="15" y="10" class="lang-name"><%- lang.text %></text>
+                            </g>
                         </g>
-                    </g><g transform="translate(0, 25)">
-                        <g class="stagger" style="animation-delay: 600ms">
-                            <circle cx="5" cy="6" r="5" fill="#e34c26"/>
-                            <text data-testid="lang-name" x="15" y="10" class="lang-name">
-                                HTML 10.18%
-                            </text>
+                    <% });%>
+                </g>
+                <g transform="translate(150, 0)">
+                    <% langs.splice(0, left).forEach(function (lang, idx) { %>
+                        <g transform="translate(0, <%- idx * 25 %>)">
+                            <g class="stagger" style="animation-delay: <%- 450 + (idx * 150) %>ms">
+                                <circle cx="5" cy="6" r="5" fill="<%- lang.color %>"/>
+                                <text data-testid="lang-name" x="15" y="10" class="lang-name"><%- lang.text %></text>
+                            </g>
                         </g>
-                    </g><g transform="translate(0, 50)">
-                        <g class="stagger" style="animation-delay: 750ms">
-                            <circle cx="5" cy="6" r="5" fill="#3178c6"/>
-                            <text data-testid="lang-name" x="15" y="10" class="lang-name">
-                                TypeScript 9.89%
-                            </text>
-                        </g>
-                    </g></g><g transform="translate(150, 0)"><g transform="translate(0, 0)">
-                        <g class="stagger" style="animation-delay: 450ms">
-                            <circle cx="5" cy="6" r="5" fill="#563d7c"/>
-                            <text data-testid="lang-name" x="15" y="10" class="lang-name">
-                                CSS 2.69%
-                            </text>
-                        </g>
-                    </g><g transform="translate(0, 25)">
-                        <g class="stagger" style="animation-delay: 600ms">
-                            <circle cx="5" cy="6" r="5" fill="#5686a5"/>
-                            <text data-testid="lang-name" x="15" y="10" class="lang-name">
-                                GLSL 0.46%
-                            </text>
-                        </g>
-                    </g></g>
+                    <% });%>
+                </g>
             </g>
         </svg>
     </g>

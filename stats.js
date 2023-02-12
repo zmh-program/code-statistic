@@ -552,6 +552,12 @@ const lang_colors = {  /** thanks, @anuraghazra's github-readme-stats **/
   "xBase": "#403a40"
 }
 
+function sort(arr) {
+  const len = arr.length - 1;
+  for (let i = 0; i <= len; i++) {for (let j = 0; j < len - i; j++) {if (arr[j] > arr[j + 1]) {[arr[j], arr[j + 1]] = [arr[j + 1], arr[j]]}}}
+  return arr
+}
+
 function storeConvert(size, idx=0) {
   if (size <= 0) {
     return "0";
@@ -564,9 +570,10 @@ function storeConvert(size, idx=0) {
   return `${size.toFixed(1)} ${store_units[idx]}`;
 }
 
-function decConvert(n) {
+function decConvert(n, allowed_pre=true) {
   let idx = 0;
-  while (idx < (dec_units.length - 1) && n > 100) { n /= 1000 ; idx ++ }
+  let condition = allowed_pre ? 100 : 1000;
+  while (idx < (dec_units.length - 1) && n > condition) { n /= 1000 ; idx ++ }
   return idx === 0 ? n : n.toFixed(1) + dec_units[idx];
 }
 
@@ -592,8 +599,8 @@ async function langStatistics(queue) {
 
 function langHandler(langs) {
   langs = {...langs};  // 这里有一个很神奇的关于指针的Bug的回忆
-                       // (缓存与操作的Array指向一个列表, 导致了奇妙的事情发生, 有意者可以亲自拉下代码复刻这一[特性])
-  const val_arr = Object.values(langs).sort().reverse();
+                       // (缓存与操作的对象指向一个Array, 导致了奇妙的事情发生, 有意者可以亲自拉下代码复刻这一[特性])
+  const val_arr = sort(Object.values(langs)).reverse();
   const total = val_arr.reduce((before, after) => before + after);
   for (let k in langs) {
     langs[langs[k]] = k;
@@ -609,7 +616,7 @@ function langHandler(langs) {
       color: lang_colors[lang],
       cursor: cursor - ratio,
       ratio: ratio,
-      text: `${(ratio*100).toFixed(0)}% (${decConvert(key)})`,
+      text: `${lang} ${(ratio * 100).toFixed(0)}% (${decConvert(key, false)})`,
     }
   });
 }
