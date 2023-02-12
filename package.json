@@ -1,5 +1,5 @@
 {
-  "name": "codeline-statistic",
+  "name": "code-statistic",
   "version": "1.0.0",
   "description": "Parse the lines of code for each language in the repository/account and generate the results. ",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zmh-program/codeline-statistic.git"
+    "url": "git+https://github.com/zmh-program/code-statistic.git"
   },
   "keywords": [
     "line-statistic"
@@ -16,9 +16,9 @@
   "author": "zmh-program",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/zmh-program/codeline-statistic/issues"
+    "url": "https://github.com/zmh-program/code-statistic/issues"
   },
-  "homepage": "https://github.com/zmh-program/codeline-statistic#readme",
+  "homepage": "https://github.com/zmh-program/code-statistic#readme",
   "dependencies": {
     "axios": "^1.3.2",
     "ejs": "^3.1.8",
