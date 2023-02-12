@@ -1,4 +1,5 @@
 const express = require('express');
+const engine = require('ejs-locals');
 const cache = new (require('./cache').ApiCache)();
 const logger = (require("log4js")).getLogger("Backend");
 const utils = require('./utils');
@@ -6,6 +7,7 @@ const conf = require('./config');
 const app = express();
 
 logger.level = "debug";
+app.set('views',__dirname + '/views');
 app.set("view engine","ejs");
 
 
@@ -33,50 +35,58 @@ async function langStatistics(queue) {
     return res;
 }
 
-app.get('/', function(req, res) {
-    res.send("<p>User Code Analysis: <strong>/user/:user/</strong> (e.g. /user/zmh-program/)</p>" +
-      "<p>Repo Code Statistic: <strong>/repo/:user/:repo/</strong> (e.g. /repo/zmh-program/admin-pages/)</p>")
-})
-app.get('/user/:user/', async function (req, res) {
-    const username = req.params['user'];
-    if ( ! isAvailableUser(username) ) {
-        res.send('permission denied');
-        return;
-    }
+async function getAccount(username) {
     const response = await cache.requestWithCache(`/users/${username}`);
-    res.type('svg');
-    res.send({
+    return {
+        username: username,
         followers: response['followers'],
         repos: response['public_repos'],
         langs: await langStatistics(
           Object.values(await cache.requestWithCache(`/users/${username}/repos`)
-        ).map(async (resp) => {
-            return await getLanguage(username, resp['name']);
-        })),
-    });
-});
+          ).map(async (resp) => {
+              return await getLanguage(username, resp['name']);
+          })),
+    };
+}
 
-app.get('/repo/:user/:repo/', async function (req, res) {
-    const username = req.params['user'], repo = req.params['repo'];
-    if ( ! isAvailableUser(username) ) {
-        res.send('permission denied');
-        return;
-    }
+async function getRepository(username, repo) {
+    // get releases (700ms): (await cache.requestWithCache(`/repos/${username}/${repo}/releases`)).length
     const info = await cache.requestWithCache(`/repos/${username}/${repo}`);
-    res.type('svg');
-    res.send({
+    return {
+        repo: `${username} / ${repo}`,
         size: utils.storeConvert(info['size'], 1),
         forks: info['forks'],
         stars: info['stargazers_count'],
         watchers: info['watchers_count'],
         license: info['license']['spdx_id'],
         langs: await getLanguage(username, repo),
-        // releases: (await cache.requestWithCache(`/repos/${username}/${repo}/releases`)).length,  - 700ms
-    });
+    };
+}
+
+app.get('/', function(req, res) {
+    res.render('index');
+})
+
+app.get('/user/:user/', async function (req, res) {
+    const username = req.params['user'];
+    if ( ! isAvailableUser(username) ) {
+        res.send('permission denied');
+        return;
+    }
+    res.type('svg');
+    res.render('user', await getAccount(username));
+});
+
+app.get('/repo/:user/:repo/', async function (req, res) {
+    const username = req.params['user'], repo = req.params['repo'];
+    if ( (! isAvailableUser(username)) || (! repo)) {
+        res.send('permission denied');
+        return;
+    }
+    res.type('svg');
+    res.send(await getRepository(username, repo));
 });
 
 
-
-logger.info(`Starting deployment server at http://${conf.host}:${conf.port}/.`)
-
-app.listen(conf.port, conf.host);
+app.listen(conf.port, conf.host, () =>
+  logger.info(`Starting deployment server at http://${conf.host}:${conf.port}/.`));
