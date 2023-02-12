@@ -6,6 +6,9 @@
             display: block;
             fill: #8b849e;
         }
+        .repo-color {
+            animation: fadeInAnimation 0.8s ease-in-out forwards;
+        }
         .header {
             font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
             fill: #2f80ed;
@@ -57,14 +60,6 @@
                 transform: translate(-5px, 5px) scale(1);
             }
         }
-        @keyframes fadeInAnimation {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
         @keyframes rankAnimation {
             from {
                 stroke-dashoffset: 251.32741228718345;
@@ -91,8 +86,8 @@
         }
     </style>
     <rect data-testid="card-bg" x="0.5" y="0.5" rx="4.5" height="99%" stroke="#e4e2e2" width="659" fill="#fffefe" stroke-opacity="1"/>
-    <g data-testid="card-title" transform="translate(25, 35)"><g transform="translate(0, 0)"><text x="0" y="0" class="header" data-testid="header"><a href="https://github.com/<%- username %>/<%- repo %>/"><%- username %> / <%- repo %></a></text></g></g>
-    <g data-testid="main-card-body" transform="translate(0, 55)"><svg x="0" y="0">
+    <g data-testid="card-title" transform="translate(40, 35)"><g transform="translate(0, 0)"><circle class="repo-color" cx="-10" cy="-5" r="5" fill="<%- color %>"/><text x="0" y="0" class="header" data-testid="header"><a href="https://github.com/<%- username %>/<%- repo %>/"><%- username %> / <%- repo %></a></text></g></g>
+    <g data-testid="main-card-info" transform="translate(0, 55)"><svg x="0" y="0">
             <g transform="translate(0, 0)">
                 <g class="stagger" style="animation-delay: 450ms" transform="translate(25, 0)">
                     <svg xmlns="http://www.w3.org/2000/svg" data-testid="icon" class="icon" viewBox="0 0 16 16" version="1.1" width="16" height="16">
@@ -138,22 +133,16 @@
             </g>
         </svg></g>
     <line x1="290" y1="40" x2="290" y2="186" stroke="#eeecec"></line>
-    <g xmlns="http://www.w3.org/2000/svg" transform="translate(300, 55)" data-testid="main-card-body">
+    <g xmlns="http://www.w3.org/2000/svg" transform="translate(300, 55)" data-testid="main-card-progress">
 
         <svg data-testid="lang-items" x="25">
             <mask id="rect-mask">
                 <rect x="0" y="0" width="300" height="8" fill="white" rx="5"/>
             </mask>
 
-            <rect mask="url(#rect-mask)" data-testid="lang-progress" x="0" y="0" width="230.36" height="8" fill="#f1e05a"/>
-
-            <rect mask="url(#rect-mask)" data-testid="lang-progress" x="230.36" y="0" width="30.53" height="8" fill="#e34c26"/>
-
-            <rect mask="url(#rect-mask)" data-testid="lang-progress" x="260.89" y="0" width="29.67" height="8" fill="#3178c6"/>
-
-            <rect mask="url(#rect-mask)" data-testid="lang-progress" x="290.56" y="0" width="18.08" height="8" fill="#563d7c"/>
-
-            <rect mask="url(#rect-mask)" data-testid="lang-progress" x="298.64" y="0" width="11.370000000000001" height="8" fill="#5686a5"/>
+            <% langs.forEach(function(lang){ %>
+                <rect mask="url(#rect-mask)" data-testid="lang-progress" x="<%- lang.cursor * 300 %>" y="0" width="<%- lang.ratio * 300 %>" height="8" fill="<%- lang.color %>"/>
+            <% }); %>
 
 
             <g transform="translate(0, 25)">

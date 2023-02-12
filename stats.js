@@ -591,20 +591,25 @@ async function langStatistics(queue) {
 }
 
 function langHandler(langs) {
+  langs = {...langs};  // 这里有一个很神奇的关于指针的Bug的回忆
+                       // (缓存与操作的Array指向一个列表, 导致了奇妙的事情发生, 有意者可以亲自拉下代码复刻这一[特性])
   const val_arr = Object.values(langs).sort().reverse();
   const total = val_arr.reduce((before, after) => before + after);
   for (let k in langs) {
     langs[langs[k]] = k;
     delete langs[k];
   }
+  let cursor = 0;
   return val_arr.map(key => {
     const lang = langs[key];
-    const percent = key / total * 100;
+    const ratio = key / total;
+    cursor += ratio;
     return {
       name: lang,
       color: lang_colors[lang],
-      percent: percent,
-      text: `${percent.toFixed(0)}% (${decConvert(key)})`,
+      cursor: cursor - ratio,
+      ratio: ratio,
+      text: `${(ratio*100).toFixed(0)}% (${decConvert(key)})`,
     }
   });
 }
@@ -633,7 +638,7 @@ async function getRepository(username, repo) {
     stars: decConvert(info['stargazers_count']),
     watchers: decConvert(info['watchers_count']),
     license: info['license']['spdx_id'],
-    language: info['language'],
+    color: lang_colors[info['language']],
     langs: langHandler(await getLanguage(username, repo)),
   };
 }
