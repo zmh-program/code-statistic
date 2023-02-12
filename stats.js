@@ -597,11 +597,16 @@ function langHandler(langs) {
     langs[langs[k]] = k;
     delete langs[k];
   }
-  return val_arr.map(key => ({
-    name: langs[key],
-    color: lang_colors[langs[key]],
-    percent: `${(key / total * 100).toFixed(0)}% (${decConvert(key)})`,
-  }));
+  return val_arr.map(key => {
+    const lang = langs[key];
+    const percent = key / total * 100;
+    return {
+      name: lang,
+      color: lang_colors[lang],
+      percent: percent,
+      text: `${percent.toFixed(0)}% (${decConvert(key)})`,
+    }
+  });
 }
 async function getAccount(username) {
   const response = await cache.requestWithCache(`/users/${username}`);
