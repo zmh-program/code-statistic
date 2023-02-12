@@ -18,7 +18,8 @@
             .header { font-size: 15.5px; }
         }
         .stat {
-            font: 600 14px 'Segoe UI', Ubuntu, "Helvetica Neue", Sans-Serif; fill: #434d58;
+            font: 600 14px 'Segoe UI', Ubuntu, "Helvetica Neue", Sans-Serif;
+            fill: <%- dark ? "#fff" : "#434d58" %>;
         }
         @supports(-moz-appearance: auto) {
             .stat { font-size:12px; }
@@ -42,7 +43,7 @@
         }
         .lang-name {
             font: 400 11px "Segoe UI", Ubuntu, Sans-Serif;
-            fill: #434d58;
+            fill: <%- dark ? "#fff" : "#434d58" %>;
         }
         .stagger {
             opacity: 0;
@@ -85,7 +86,7 @@
             }
         }
     </style>
-    <rect data-testid="card-bg" x="0.5" y="0.5" rx="4.5" height="99%" stroke="#e4e2e2" width="659" fill="<%- dark ? "#e4e2e2" : "#000" %>" stroke-opacity="1"/>
+    <rect data-testid="card-bg" x="0.5" y="0.5" rx="4.5" height="99%" stroke="#e4e2e2" width="659" fill="<%- dark ? "#000" : "#fffefe" %>" stroke-opacity="1"/>
     <g data-testid="card-title" transform="translate(40, 35)"><g transform="translate(0, 0)"><circle class="repo-color" cx="-10" cy="-5" r="5" fill="<%- color %>"/><text x="0" y="0" class="header" data-testid="header"><a href="https://github.com/<%- username %>/<%- repo %>/"><%- username %> / <%- repo %></a></text></g></g>
     <g data-testid="main-card-info" transform="translate(0, 55)"><svg x="0" y="0">
             <g transform="translate(0, 0)">
