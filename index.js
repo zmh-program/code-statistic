@@ -1,8 +1,12 @@
 const express = require('express');
 const cache = new (require('./cache').ApiCache)();
+const logger = (require("log4js")).getLogger("Backend");
 const utils = require('./utils');
 const conf = require('./config');
 const app = express();
+
+logger.level = "debug";
+app.set("view engine","ejs");
 
 
 const isAvailableUser = (username) => {
@@ -29,13 +33,18 @@ async function langStatistics(queue) {
     return res;
 }
 
-app.get('/:user/', async function (req, res) {
+app.get('/', function(req, res) {
+    res.send("<p>User Code Analysis: <strong>/user/:user/</strong> (e.g. /user/zmh-program/)</p>" +
+      "<p>Repo Code Statistic: <strong>/repo/:user/:repo/</strong> (e.g. /repo/zmh-program/admin-pages/)</p>")
+})
+app.get('/user/:user/', async function (req, res) {
     const username = req.params['user'];
     if ( ! isAvailableUser(username) ) {
         res.send('permission denied');
         return;
     }
     const response = await cache.requestWithCache(`/users/${username}`);
+    res.type('svg');
     res.send({
         followers: response['followers'],
         repos: response['public_repos'],
@@ -47,14 +56,14 @@ app.get('/:user/', async function (req, res) {
     });
 });
 
-app.get('/:user/:repo/', async function (req, res) {
+app.get('/repo/:user/:repo/', async function (req, res) {
     const username = req.params['user'], repo = req.params['repo'];
     if ( ! isAvailableUser(username) ) {
         res.send('permission denied');
         return;
     }
     const info = await cache.requestWithCache(`/repos/${username}/${repo}`);
-
+    res.type('svg');
     res.send({
         size: utils.storeConvert(info['size'], 1),
         forks: info['forks'],
@@ -67,4 +76,7 @@ app.get('/:user/:repo/', async function (req, res) {
 });
 
 
-app.listen(conf.port);
+
+logger.info(`Starting deployment server at http://${conf.host}:${conf.port}/.`)
+
+app.listen(conf.port, conf.host);
