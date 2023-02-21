@@ -3,34 +3,50 @@
 ![Code Statistic](/logo.png)
   
 </div>
-🔎 Dynamically analysis the code for each language in the repository/user and generate the results for your github account and repo README.
 
-# Initialization
+# 🍏 Quickstart
+*Use [Replit](https://replit.com) Server **[stats.deeptrain.net](https://stats.deeptrain.net/)***
+
+
+Example:
+
+### 🍊 Repo
+```markdown
+[![code statistic](https://stats.deeptrain.net/repo/zmh-program/Zh-Website/)](https://github.com/zmh-program/code-statistic)
+```
+[![code statistic](https://stats.deeptrain.net/repo/zmh-program/Zh-Website/)](https://github.com/zmh-program/code-statistic)
+
+### 🍉 User
+```markdown
+[![code statistic](https://stats.deeptrain.net/user/zmh-program/)](https://github.com/zmh-program/code-statistic)
+```
+[![code statistic](https://stats.deeptrain.net/user/zmh-program/)](https://github.com/zmh-program/code-statistic)
+
+### 🥝 Dark Mode
+```markdown
+[![code statistic](https://stats.deeptrain.net/repo/zmh-program/Zh-Website/?theme=dark)](https://github.com/zmh-program/code-statistic)
+```
+[![code statistic](https://stats.deeptrain.net/repo/zmh-program/Zh-Website/?theme=dark)](https://github.com/zmh-program/code-statistic)
+
+### Ref as HTML
+```html
+<a href="https://github.com/zmh-program/code-statistic">
+  <img src="https://stats.deeptrain.net/repo/zmh-program/Zh-Website/?theme=dark">
+</a>
+```
+
+<a href="https://github.com/zmh-program/code-statistic"><img src="https://stats.deeptrain.net/repo/zmh-program/Zh-Website/?theme=dark"></a>
+
+# 🍎 Build Your Own Server
+### 🍒 Initialization
 ```shell
 npm install
 ```
 
-# Production & Deployment
+### 🍬 Configuration
+
+
+### 🍇 Run
 ```shell
 node index
 ```
-
-# Example
-
-### Repository Code Statistics
-```
-![code statistic](https://stats.deeptrain.net/repo/zmh-program/Zh-Website/)
-```
-![code statistic](https://stats.deeptrain.net/repo/zmh-program/Zh-Website/)
-
-### User Code Statistics
-```
-![code statistic](https://stats.deeptrain.net/user/zmh-program/)
-```
-![code statistic](https://stats.deeptrain.net/user/zmh-program/)
-
-### Dark Mode
-```
-![code statistic](https://stats.deeptrain.net/repo/zmh-program/Zh-Website/?theme=dark)
-```
-![code statistic](https://stats.deeptrain.net/repo/zmh-program/Zh-Website/?theme=dark)
