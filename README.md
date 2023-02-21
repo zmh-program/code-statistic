@@ -5,7 +5,7 @@
 </div>
 
 # 🍏 Quickstart
-*Use [Replit](https://replit.com) Server **[stats.deeptrain.net](https://stats.deeptrain.net/)***
+*Use [Replit](https://replit.com/@zmh-program/code-stats) Server **[stats.deeptrain.net](https://stats.deeptrain.net/)***
 
 
 Example:
@@ -38,6 +38,7 @@ Example:
 <a href="https://github.com/zmh-program/code-statistic"><img src="https://stats.deeptrain.net/repo/zmh-program/Zh-Website/?theme=dark"></a>
 
 # 🍎 Build Your Own Server
+##### 👉 *Build a [Free Server](https://replit.com/@zmh-program/code-stats) using the template ([Replit](https://replit.com))*
 ### 🍒 Initialization
 ```shell
 npm install
