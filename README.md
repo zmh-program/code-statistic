@@ -44,7 +44,7 @@ npm install
 ```
 
 ### 🍬 Configuration
-
+https://github.com/zmh-program/code-statistic/blob/f9b182767796fc5aef57d241fb5910a1dd293dbd/config.js#L1-L6
 
 ### 🍇 Run
 ```shell
