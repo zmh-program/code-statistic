@@ -1,4 +1,8 @@
-# code-statistic
+<div class="center">
+  
+![Code Statistic](/logo.png)
+  
+</div>
 🔎 Dynamically analysis the code for each language in the repository/user and generate the results for your github account and repo README.
 
 # Initialization
