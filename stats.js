@@ -620,11 +620,11 @@ function langHandler(langs) {
     }
   });
 }
-async function getAccount(username, query={}) {
+async function getAccount(username, dark=false) {
   const response = await cache.requestWithCache(`/users/${username}`);
   const repos = Object.values(await cache.requestWithCache(`/users/${username}/repos`)).filter(repo => !repo.fork);
   return {
-    dark : query['theme'] === 'dark',
+    dark : dark,
     locs: response['location'],
     stars: repos.map(repo => repo['stargazers_count']).reduce((a, b) => a + b),
     forks: repos.map(repo => repo['forks_count']).reduce((a, b) => a + b),
@@ -640,11 +640,11 @@ async function getAccount(username, query={}) {
   };
 }
 
-async function getRepository(username, repo, query={}) {
+async function getRepository(username, repo, dark=false) {
   // get releases (700ms): (await cache.requestWithCache(`/repos/${username}/${repo}/releases`)).length
   const info = await cache.requestWithCache(`/repos/${username}/${repo}`);
   return {
-    dark : query['theme'] === 'dark',
+    dark : dark,
     username: username,
     repo: repo,
     size: storeConvert(info['size'], 1),

@@ -19,22 +19,20 @@ app.get('/', function(req, res) {
 
 app.get('/user/:user/', async function (req, res) {
     const username = req.params['user'];
-    if ( ! isAvailableUser(username) ) {
-        res.send('permission denied');
-        return;
-    }
+
     res.type('svg');
-    res.render('user', await stats.getAccount(username, req.query));
+    isAvailableUser(username) ?
+      res.render('user', await stats.getAccount(username, req.query['theme'] === 'dark')):
+      res.render('error', {dark: req.query['theme'] === 'dark'});
 });
 
 app.get('/repo/:user/:repo/', async function (req, res) {
     const username = req.params['user'], repo = req.params['repo'];
-    if ( (! isAvailableUser(username)) || (! repo)) {
-        res.send('permission denied');
-        return;
-    }
+
     res.type('svg');
-    res.render('repo', await stats.getRepository(username, repo, req.query));
+    isAvailableUser(username) && repo.length ?
+      res.render('repo', await stats.getRepository(username, repo, req.query['theme'] === 'dark'))
+      : res.render('error', {dark: req.query['theme'] === 'dark'});
 });
 
 
