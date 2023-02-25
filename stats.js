@@ -601,7 +601,7 @@ function langHandler(langs) {
   langs = {...langs};  // 这里有一个很神奇的关于指针的Bug的回忆
                        // (缓存与操作的对象指向一个Array, 导致了奇妙的事情发生, 有意者可以亲自拉下代码复刻这一[特性])
   const val_arr = sort(Object.values(langs)).reverse();
-  const total = val_arr.reduce((before, after) => before + after);
+  const total = val_arr.length ? val_arr.reduce((before, after) => before + after) : 0;
   for (let k in langs) {
     langs[langs[k]] = k;
     delete langs[k];
@@ -622,14 +622,19 @@ function langHandler(langs) {
 }
 async function getAccount(username, query={}) {
   const response = await cache.requestWithCache(`/users/${username}`);
+  const repos = Object.values(await cache.requestWithCache(`/users/${username}/repos`)).filter(repo => !repo.fork);
   return {
     dark : query['theme'] === 'dark',
+    locs: response['location'],
+    stars: repos.map(repo => repo['stargazers_count']).reduce((a, b) => a + b),
+    forks: repos.map(repo => repo['forks_count']).reduce((a, b) => a + b),
+    issues: repos.map(repo => repo['open_issues_count']).reduce((a, b) => a + b),
+    watchers: repos.map(repo => repo['watchers_count']).reduce((a, b) => a + b),
     username: username,
     followers: decConvert(response['followers']),
     repos: response['public_repos'],
     langs: await langStatistics(
-      Object.values(await cache.requestWithCache(`/users/${username}/repos`)
-      ).map(async (resp) => {
+      repos.map(async (resp) => {
         return await getLanguage(username, resp['name']);
       })),
   };
@@ -653,6 +658,6 @@ async function getRepository(username, repo, query={}) {
 }
 
 module.exports = {
-  getAccount: getAccount,
-  getRepository: getRepository,
+  getAccount,
+  getRepository,
 }
