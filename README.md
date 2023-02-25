@@ -1,6 +1,6 @@
 <div class="center">
   
-![Code Statistic](/logo.png)
+![Code Statistic](/docs/icon.png)
   
 </div>
 
