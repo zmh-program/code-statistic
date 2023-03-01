@@ -22,7 +22,7 @@
 </head>
 <body>
 <div id="app">
-    <el-card class="card">
+    <el-card>
         <el-form label-width="auto">
             <el-form-item label="Username"><el-input v-model="form.username"></el-input></el-form-item>
             <el-form-item label="Repo" v-if="isRepo"><el-input v-model="form.repo"></el-input></el-form-item>
@@ -31,6 +31,7 @@
         </el-form>
         <code>{{ link }}</code><img :src="link">
     </el-card>
+    <el-card></el-card>
 </div>
 <script>
     const form = Vue.ref({
@@ -40,15 +41,21 @@
     })
     const link = Vue.ref("");
     const isRepo = Vue.computed(() => form.value.type !== "User");
+    const throwWarning = msg => ElementPlus.ElMessage({grouping: true, message: msg,  showClose: false, type: "warning"})
     Vue.createApp({
         data() {
             return {
                 form: form,
                 link: link,
                 isRepo: isRepo,
-                generate: () => link.value =
-                    location.origin +
-                    ((!isRepo.value) ? `/user/${form.value.username}/` : `/repo/${form.value.username}/${form.value.repo}`)
+                generate: () => {
+                    const username = form.value.username.trim(),
+                        repo = form.value.repo.trim();
+
+                    if (! username) {throwWarning("username is empty."); return }
+                    if (isRepo.value && ! repo) {throwWarning("repo is empty."); return }
+                    link.value = location.origin + ((!isRepo.value) ? `/user/${username}/` : `/repo/${username}/${repo}`)
+                }
             }
         }
     }).use(ElementPlus).mount('#app');

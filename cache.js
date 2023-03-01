@@ -47,12 +47,12 @@ class ApiCache extends LightCache {
     // 类似于 Service Worker 缓存机制
     const cache = this.getCache(url);
     if (cache === undefined) {
-      logger.info("Request GitHub API address: ", url);
+      logger.info("Request GitHub API: ", url);
       const response = await this.syncAxios(url);
       this.setCache(url, response, this.expiration);
       return response;
     } else {
-      logger.debug("Cached GitHub API address: ", url);
+      logger.debug("Cached GitHub API: ", url);
       return cache;
     }
   }
