@@ -4,17 +4,30 @@
     <title>Code Statistic</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/element-plus/2.2.32/index.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/element-plus/2.2.32/theme-chalk/base.css">
     <style>
         html, body {
-            display: grid;
             padding: 0;
             margin: 0;
-            place-items: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             width: 100%;
             height: 100%;
         }
+        #app {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 30px 0;
+        }
+        #generate {
+            margin: 0 auto;
+            transform: translateY(20px);
+        }
         * {
-            font-family: "Comic Sans MS", Consolas, monospace, Serif;
+            font-family: Consolas, Nunito, monospace, Serif;
         }
     </style>
     <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.47/vue.global.js"></script>
@@ -27,17 +40,21 @@
             <el-form-item label="Username"><el-input v-model="form.username"></el-input></el-form-item>
             <el-form-item label="Repo" v-if="isRepo"><el-input v-model="form.repo"></el-input></el-form-item>
             <el-form-item label="Type"><el-radio-group v-model="form.type"><el-radio border label="User"></el-radio><el-radio border label="Repo"></el-radio></el-radio-group></el-form-item>
-            <el-form-item><el-button type="primary" @click="generate">Generate</el-button></el-form-item>
+            <el-form-item label="Dark Mode"><el-switch v-model="form.dark"></el-switch></el-form-item>
+            <el-form-item><el-button type="primary" @click="generate" id="generate">Generate</el-button></el-form-item>
         </el-form>
-        <code>{{ link }}</code><img :src="link">
     </el-card>
-    <el-card></el-card>
+    <el-card>
+        <template v-if="! link"><el-empty image-size="80"></el-empty></template>
+        <template v-else><el-form-item label="Link"><el-input readonly v-model="link"></el-input></el-form-item><br><img :src="link" alt></template>
+    </el-card>
 </div>
 <script>
     const form = Vue.ref({
         username: "",
         repo: "",
         type: "User",
+        dark: false,
     })
     const link = Vue.ref("");
     const isRepo = Vue.computed(() => form.value.type !== "User");
@@ -50,11 +67,14 @@
                 isRepo: isRepo,
                 generate: () => {
                     const username = form.value.username.trim(),
-                        repo = form.value.repo.trim();
+                        repo = form.value.repo.trim(),
+                        dark = !!form.value.dark;
 
                     if (! username) {throwWarning("username is empty."); return }
                     if (isRepo.value && ! repo) {throwWarning("repo is empty."); return }
-                    link.value = location.origin + ((!isRepo.value) ? `/user/${username}/` : `/repo/${username}/${repo}`)
+                    link.value = location.origin +
+                        ((!isRepo.value) ? `/user/${username}/` : `/repo/${username}/${repo}`) +
+                        (dark ? "?theme=dark" : "");
                 }
             }
         }
