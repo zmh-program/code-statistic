@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <title>Code Statistic</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="//unpkg.com/element-plus/dist/index.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/element-plus/2.2.32/index.css">
     <style>
         html, body {
             display: grid;
@@ -13,39 +13,45 @@
             width: 100%;
             height: 100%;
         }
-        .card {
-            place-items: center;
+        * {
+            font-family: "Comic Sans MS", Consolas, monospace, Serif;
         }
     </style>
-    <script src="//unpkg.com/vue@3"></script>
-    <script src="//unpkg.com/element-plus"></script>
-    <script>
-      const username = Vue.ref("1");
-      const type = Vue.ref("1");
-    </script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.47/vue.global.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/element-plus/2.2.32/index.full.js"></script>
 </head>
 <body>
 <div id="app">
     <el-card class="card">
         <el-form label-width="auto">
-            <el-form-item label="Activity name">
-                <el-input v-model="username"></el-input>
-            </el-form-item>
-            <el-form-item label="Resources">
-                <el-radio-group v-model="type">
-                    <el-radio border label="User"></el-radio>
-                    <el-radio border label="Repo"></el-radio>
-                </el-radio-group>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="onSubmit">Create</el-button>
-                <el-button>Cancel</el-button>
-            </el-form-item>
+            <el-form-item label="Username"><el-input v-model="form.username"></el-input></el-form-item>
+            <el-form-item label="Repo" v-if="isRepo"><el-input v-model="form.repo"></el-input></el-form-item>
+            <el-form-item label="Type"><el-radio-group v-model="form.type"><el-radio border label="User"></el-radio><el-radio border label="Repo"></el-radio></el-radio-group></el-form-item>
+            <el-form-item><el-button type="primary" @click="generate">Generate</el-button></el-form-item>
         </el-form>
-        <strong>/user/:user/</strong> (e.g. <a href="https://stats.deeptrain.net/user/zmh-program/">/user/zmh-program/</a>) <br>
-        <strong>/repo/:user/:repo/</strong> (e.g. <a href="https://stats.deeptrain.net/repo/zmh-program/admin-pages/">/repo/zmh-program/admin-pages/</a>)
+        <code>{{ link }}</code><img :src="link">
     </el-card>
 </div>
-<script> Vue.createApp().use(ElementPlus).mount('#app') </script>
+<script>
+    const form = Vue.ref({
+        username: "",
+        repo: "",
+        type: "User",
+    })
+    const link = Vue.ref("");
+    const isRepo = Vue.computed(() => form.value.type !== "User");
+    Vue.createApp({
+        data() {
+            return {
+                form: form,
+                link: link,
+                isRepo: isRepo,
+                generate: () => link.value =
+                    location.origin +
+                    ((!isRepo.value) ? `/user/${form.value.username}/` : `/repo/${form.value.username}/${form.value.repo}`)
+            }
+        }
+    }).use(ElementPlus).mount('#app');
+</script>
 </body>
 </html>
