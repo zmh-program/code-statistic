@@ -562,7 +562,6 @@ function storeConvert(size, idx=0) {
   if (size <= 0) {
     return "0";
   }
-
   while (idx < (store_units.length - 1) && size > 1024) {
     size /= 1024;
     idx ++;
@@ -575,6 +574,17 @@ function decConvert(n, allowed_pre=true) {
   let condition = allowed_pre ? 100 : 1000;
   while (idx < (dec_units.length - 1) && n > condition) { n /= 1000 ; idx ++ }
   return idx === 0 ? n : n.toFixed(1) + dec_units[idx];
+}
+
+function sum(arr) {
+  switch (arr.length) {
+    case 0 :
+      return 0;
+    case 1:
+      return arr[0];
+    default:
+      return arr.reduce((a, b) => a + b);
+  }
 }
 
 async function getLanguage(user, repo) {
@@ -598,16 +608,15 @@ async function langStatistics(queue) {
 }
 
 function langHandler(langs) {
-  langs = {...langs};  // 这里有一个很神奇的关于指针的Bug的回忆
-                       // (缓存与操作的对象指向一个Array, 导致了奇妙的事情发生, 有意者可以亲自拉下代码复刻这一[特性])
-  const val_arr = sort(Object.values(langs)).reverse();
-  const total = val_arr.length ? val_arr.reduce((before, after) => before + after) : 0;
+  langs = {...langs};  // deep copy
+  const arr = sort(Object.values(langs)).reverse();
+  const total = sum(arr);
   for (let k in langs) {
     langs[langs[k]] = k;
     delete langs[k];
   }
   let cursor = 0;
-  return val_arr.map(key => {
+  return arr.map(key => {
     const lang = langs[key];
     const ratio = key / total;
     cursor += ratio;
@@ -626,10 +635,10 @@ async function getAccount(username, dark=false) {
   return {
     dark : dark,
     locs: response['location'],
-    stars: repos.map(repo => repo['stargazers_count']).reduce((a, b) => a + b),
-    forks: repos.map(repo => repo['forks_count']).reduce((a, b) => a + b),
-    issues: repos.map(repo => repo['open_issues_count']).reduce((a, b) => a + b),
-    watchers: repos.map(repo => repo['watchers_count']).reduce((a, b) => a + b),
+    stars: decConvert(sum(repos.map(repo => repo['stargazers_count']))),
+    forks: decConvert(sum(repos.map(repo => repo['forks_count']))),
+    issues: decConvert(sum(repos.map(repo => repo['open_issues_count']))),
+    watchers: decConvert(sum(repos.map(repo => repo['watchers_count']))),
     username: username,
     followers: decConvert(response['followers']),
     repos: response['public_repos'],
@@ -641,18 +650,18 @@ async function getAccount(username, dark=false) {
 }
 
 async function getRepository(username, repo, dark=false) {
-  // get releases (700ms): (await cache.requestWithCache(`/repos/${username}/${repo}/releases`)).length
-  const info = await cache.requestWithCache(`/repos/${username}/${repo}`);
+  const res = await cache.requestWithCache(`/repos/${username}/${repo}`);
+  const license = res['license'];
   return {
     dark : dark,
     username: username,
     repo: repo,
-    size: storeConvert(info['size'], 1),
-    forks: decConvert(info['forks']),
-    stars: decConvert(info['stargazers_count']),
-    watchers: decConvert(info['watchers_count']),
-    license: info['license']['spdx_id'],
-    color: lang_colors[info['language']],
+    size: storeConvert(res['size'], 1),
+    forks: decConvert(res['forks']),
+    stars: decConvert(res['stargazers_count']),
+    watchers: decConvert(res['watchers_count']),
+    license: license ? license['spdx_id'] : "Empty",
+    color: lang_colors[res['language']],
     langs: langHandler(await getLanguage(username, repo)),
   };
 }
