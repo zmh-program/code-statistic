@@ -48,27 +48,27 @@ export async function request(url: string): Promise<any> {
     return response.data;
 }
 
-export async function requestUser(user): Promise<any> {
+export async function requestUser(user: string): Promise<any> {
     return await request(`/users/${user}`);
 }
 
-export async function listRepos(user): Promise<object> {
-    return Object.values(await request(`/users/${user}/repos`)).filter(repo => !repo['fork']);
+export async function listRepos(user: string): Promise<object> {
+    return Object.values(await request(`/users/${user}/repos`)).filter((repo: object): boolean => !repo['fork']);
 }
 
-export async function requestRepo(user, repo): Promise<any> {
+export async function requestRepo(user: string, repo: string): Promise<any> {
     return await request(`/repos/${user}/${repo}`);
 }
 
-export async function requestLanguage(user, repo): Promise<any> {
+export async function requestLanguage(user: string, repo: string): Promise<any> {
     return await request(`/repos/${user}/${repo}/languages`);
 }
 
-export function getLicense(license: object | undefined | null): string {
+export function getLicense(license: any): string {
     return license ? license['spdx_id'] : "Empty";
 }
 
-async function _isAuthenticated(user): Promise<boolean> {
+async function _isAuthenticated(user: string): Promise<boolean> {
     user = user.trim();
     try {
         return (!!user.length) &&
@@ -80,10 +80,11 @@ async function _isAuthenticated(user): Promise<boolean> {
 }
 export const isAuthenticated = cache.wrap(_isAuthenticated);
 
-async function _isExistRepo(user, repo): Promise<boolean> {
+async function _isExistRepo(user: string, repo: string): Promise<boolean> {
     user = user.trim(); repo = repo.trim();
     try {
-        return await isAuthenticated(user) &&
+        return (await isAuthenticated(user)) &&
+            (!!repo.length) &&
             ((await requestRepo(user, repo))['message'] !== "Not Found");
     } catch {
         return false;

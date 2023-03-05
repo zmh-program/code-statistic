@@ -1,40 +1,37 @@
-const express = require('express');
+import {isExistRepo} from "./utils";
+
 const logger = (require("log4js")).getLogger("Backend");
 const stats = require('./stats');
 const conf = require('./config');
-const app = express();
+const utils = require('./utils');
+const app = require('express')();
 
 logger.level = "debug";
 app.set('views',__dirname + '/views');
 app.set("view engine","ejs");
 
-
-const notAccess = (username) => {
-    return ( ! username ) || (! ( conf.requires.includes("*") || conf.requires.includes(username)));
-}
-
-app.get('/', function(req, res) {
+app.get('/', function(req: any, res: any) {
     res.render('index');
 })
 
-app.get('/user/:user/', async function (req, res) {
+app.get('/user/:user/', async function (req: any, res: any) {
   res.type('svg');
 
   try {
     const username = req.params['user'];
-    if (notAccess(username)) throw new Error();
+    if (await utils.isAuthenticated(username)) throw new Error();
     res.render('user', await stats.getAccount(username, req.query['theme'] === 'dark'));
   } catch (e) {
     res.render('error', {dark: req.query['theme'] === 'dark'});
   }
 });
 
-app.get('/repo/:user/:repo/', async function (req, res) {
+app.get('/repo/:user/:repo/', async function (req: any, res: any) {
   res.type('svg');
   try {
     const username = req.params['user'], repo = req.params['repo'];
 
-    if (notAccess(username) || (!repo.length)) throw new Error();
+    if (await isExistRepo(username, repo)) throw new Error();
     res.render('repo', await stats.getRepository(username, repo, req.query['theme'] === 'dark'))
   } catch (e) {
     res.render('error', {dark: req.query['theme'] === 'dark'});
