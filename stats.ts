@@ -7,7 +7,7 @@ const colors = {"1C Enterprise":"#814CCC","2-Dimensional Array":"#38761D","4D":"
 async function analysis(queue: Promise<object>[]) {
   const res: object = {};
   for (const idx in queue) {
-    const resp: object = await queue[idx];
+    const resp: object = await queue[idx]; //@ts-ignore
     for (const lang in resp) lang in res ? res[lang] += resp[lang] : res[lang] = resp[lang];
   }
   return formatter(res);
@@ -15,41 +15,41 @@ async function analysis(queue: Promise<object>[]) {
 
 function formatter(langs: object): object[] {
   const arr: number[] = utils.sort(Object.values(langs)).reverse();
-  const total: number = utils.sum(arr);
+  const total: number = utils.sum(arr);  //@ts-ignore
   for (let k in langs) { langs[langs[k]] = k; delete langs[k] }
   let cursor: number = 0;
-  return arr.map((key: number): object => {
+  return arr.map((key: number): object => {  //@ts-ignore
     const lang: string = langs[key];
     const ratio: number = key / total; cursor += ratio;
-    return {
+    return {  //@ts-ignore
       name: lang,                color: colors[lang],
       cursor: cursor - ratio,    ratio: ratio,
       text: `${lang} ${(ratio * 100).toFixed(0)}% (${utils.decConvert(key, false)})`,
     }});
 }
 
-export async function getAccount(username, dark=false) {
-  const response = await cache.requestWithCache(`/users/${username}`);
+export async function getAccount(username: string, dark: boolean = false) {
+  const response = await utils.requestUser(username);
   const repos = await utils.listRepos(username);
   return {
     dark: dark,
     org: response['type'] !== 'User',
-    location: response['location'],
-    stars: utils.decConvert(utils.sum(repos.map(repo => repo['stargazers_count']))),
-    forks: utils.decConvert(utils.sum(repos.map(repo => repo['forks_count']))),
-    issues: utils.decConvert(utils.sum(repos.map(repo => repo['open_issues_count']))),
-    watchers: utils.decConvert(utils.sum(repos.map(repo => repo['watchers_count']))),
+    location: response['location'],  //@ts-ignore
+    stars: utils.decConvert(utils.sum(repos.map(repo => repo['stargazers_count']))),  //@ts-ignore
+    forks: utils.decConvert(utils.sum(repos.map(repo => repo['forks_count']))),  //@ts-ignore
+    issues: utils.decConvert(utils.sum(repos.map(repo => repo['open_issues_count']))),  //@ts-ignore
+    watchers: utils.decConvert(utils.sum(repos.map(repo => repo['watchers_count']))),  //@ts-ignore
     username: username,
     followers: utils.decConvert(response['followers']),
     repos: response['public_repos'],
-    langs: await analysis(
+    langs: await analysis(  //@ts-ignore
       repos.map(async (resp) => {
         return await utils.requestLanguage(username, resp['name']);
       })),
   };
 }
 
-export async function getRepository(username, repo, dark=false) {
+export async function getRepository(username: string, repo: string, dark: boolean = false) {
   const res = await utils.requestRepo(username, repo);
   return {
     dark : dark,
@@ -59,7 +59,7 @@ export async function getRepository(username, repo, dark=false) {
     forks: utils.decConvert(res['forks']),
     stars: utils.decConvert(res['stargazers_count']),
     watchers: utils.decConvert(res['watchers_count']),
-    license: utils.getLicense(res['license']),
+    license: utils.getLicense(res['license']),  //@ts-ignore
     color: colors[res['language']],
     langs: formatter(await utils.requestLanguage(username, repo)),
   };

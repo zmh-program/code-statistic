@@ -13,26 +13,26 @@ class Cache {
     this.uptime();
   }
 
-  get(key: string): undefined | any {
+  get(key: string): undefined | any { //@ts-ignore
     const value = this.caches[key];
-    if (this.exist(key)) {
+    if (this.exist(key)) {  //@ts-ignore
       return JSON.parse(value.value);
     }
   }
 
-  set(key: string, value: any): void {
+  set(key: string, value: any): void {  //@ts-ignore
     this.caches[key] = {
       value: JSON.stringify(value),
       expiration: (new Date().getTime() / 1000) + this.expiration,
     }
   }
 
-  exist(key: string): boolean {
+  exist(key: string): boolean {  //@ts-ignore
     const value = this.caches[key];
     return (!!value) && (value.expiration > (new Date().getTime() / 1000));
   }
 
-  remove(key: string): boolean {
+  remove(key: string): boolean {  //@ts-ignore
     return delete this.caches[key];
   }
 
@@ -40,7 +40,7 @@ class Cache {
     const _this = this;
     setInterval(function (){
       let n: number = 0;
-      for (const key in _this.caches) {
+      for (const key in _this.caches) {  //@ts-ignore
         if (_this.caches[key].expiration < (new Date().getTime() / 1000)) {
           _this.remove(key); n++;
         }

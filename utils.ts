@@ -52,8 +52,8 @@ export async function requestUser(user: string): Promise<any> {
     return await request(`/users/${user}`);
 }
 
-export async function listRepos(user: string): Promise<object> {
-    return Object.values(await request(`/users/${user}/repos`)).filter((repo: object): boolean => !repo['fork']);
+export async function listRepos(user: string): Promise<any> {
+    return Object.values(await request(`/users/${user}/repos`)).filter((repo: any): boolean => !repo['fork']);
 }
 
 export async function requestRepo(user: string, repo: string): Promise<any> {

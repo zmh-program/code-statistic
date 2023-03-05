@@ -38,6 +38,5 @@ app.get('/repo/:user/:repo/', async function (req: any, res: any) {
   }
 });
 
-
 app.listen(conf.port, () =>
   logger.info(`Starting deployment server at http://127.0.0.1:${conf.port}/.`));
