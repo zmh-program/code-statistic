@@ -46,7 +46,7 @@ class Cache {
         }
         if (n > 0) logger.debug(`Clean ${n} Caches`);
       }
-    }, 1800);
+    }, this.expiration / 2);
   }
 
   wrap(func: (...params: any[]) => Promise<any>): (...params: any[]) => Promise<any> {
@@ -54,14 +54,15 @@ class Cache {
      * Async Function Cache.
      */
 
-    const _this = this;
+    const _this: Cache = this;
+    const name: string = func.name[0] === "_" ? func.name.slice(1) : func.name;
     return async function (...params : any[]) {
-      const key: string = func.name + JSON.stringify(params);
+      const key: string = name + JSON.stringify(params);
       if (_this.exist(key)) {
-        logger.debug(`Hit Cache <${func.name}>`)
+        logger.debug(`Hit Cache <${name}>`)
         return _this.get(key);
       } else {
-        logger.info(`Cache Response ${func.name}`); // @ts-ignore
+        logger.info(`Cache Response <${name}>`); // @ts-ignore
         const response: any = await func(...params);
         _this.set(key, response);
         return response;
