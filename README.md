@@ -5,7 +5,7 @@
 </div>
 
 # 🍏 Quickstart
-##### Rapid generation 👉 **[stats.deeptrain.net](https://stats.deeptrain.net/)** 👈
+#### Rapid generation 👉 **[stats.deeptrain.net](https://stats.deeptrain.net/)** 👈
 
 
 ### 🍊 Repo
