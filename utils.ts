@@ -8,7 +8,7 @@ export function sort(arr: number[]): number[] {
     return arr
 }
 
-const store_units = ["b", "KiB", "MiB", "GiB", "TiB", "PiB"];
+const store_units = ["B", "KiB", "MiB", "GiB", "TiB", "PiB"];
 export function storeConvert(size: number, idx: number = 0): string {
     if (size <= 0) {
         return "0";
@@ -40,7 +40,7 @@ export async function request(url: string): Promise<any> {
     const response = await axios.get(url, {
         headers: {
             Accept: "application/json",
-            Authorization: `Bearer ${this.token}`,
+            Authorization: `Bearer ${conf.token}`,
         },
     });
     return response.data;
@@ -60,6 +60,10 @@ export async function requestRepo(user, repo): Promise<any> {
 
 export async function requestLanguage(user, repo): Promise<any> {
     return await request(`/repos/${user}/${repo}/languages`);
+}
+
+export function getLicense(license: object | undefined | null): string {
+    return license ? license['spdx_id'] : "Empty";
 }
 
 export async function isAuthenticated(user): Promise<boolean> {
