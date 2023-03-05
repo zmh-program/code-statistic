@@ -50,7 +50,7 @@ npm install
 ```
 
 ### 🍬 Configuration
-https://github.com/zmh-program/code-statistic/blob/cfe70d2f7e657723d6fdf59a9a7a928504f962d7/config.ts#L1-L5
+https://github.com/zmh-program/code-statistic/blob/a3841c2eefcda8484f94f56724d8d6c2c015cd7c/config.ts#L1-L4
 
 ### 🎄 Environment Variable
 `CODE_STATISTIC`: your GitHub Access Token
