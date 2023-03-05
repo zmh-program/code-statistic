@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
-<head><title>Code Statistic</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/element-plus/2.2.32/index.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/element-plus/2.2.32/theme-chalk/base.css"><style>html, body {padding: 0;margin: 0;display: flex;align-items: center;justify-content: center;gap: 8px;width: 100%;height: 100%;overflow: auto;background: #fafcf1;}#app {position: absolute;top: 8px;display: flex;flex-direction: column;gap: 8px;margin: 30px;width: 80%;min-width: 220px;max-width: 500px}#generate {margin: 0 auto;transform: translateY(20px)}#preview {width: 100%}* {font-family: Consolas, Nunito, monospace, Serif}</style><script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.47/vue.global.js"></script><script src="https://cdn.bootcdn.net/ajax/libs/element-plus/2.2.32/index.full.js"></script></head>
+<head><title>Code Statistic</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/element-plus/2.2.32/index.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/element-plus/2.2.32/theme-chalk/base.css"><style>html, body {padding: 0;margin: 0;display: flex;align-items: center;justify-content: center;gap: 8px;width: 100%;height: 100%;overflow: auto;background: #fafcf1;}#app {position: absolute;top: 8px;display: flex;flex-direction: column;gap: 8px;margin: 30px;width: 80%;min-width: 220px;max-width: 500px}#generate {margin: 0 auto;transform: translateY(20px)}#preview {width: 100%}#format {width: 100%; justify-content: center; margin-bottom: 8px}* {font-family: Consolas, Nunito, monospace, Serif}</style><script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.47/vue.global.js"></script><script src="https://cdn.bootcdn.net/ajax/libs/element-plus/2.2.32/index.full.js"></script></head>
 <body>
 <div id="app">
   <el-card>
@@ -8,13 +8,13 @@
       <el-form-item label="Username"><el-input v-model="form.username"></el-input></el-form-item>
       <el-form-item label="Repo" v-if="isRepo"><el-input v-model="form.repo"></el-input></el-form-item>
       <el-form-item label="Type"><el-radio-group v-model="form.type"><el-radio-button border label="User"></el-radio-button><el-radio-button border label="Repo"></el-radio-button></el-radio-group></el-form-item>
-      <el-form-item label="Theme"><el-radio-group v-model="form.theme"><el-radio-button border label="Light"></el-radio-button><el-radio-button border label="Dark"></el-radio-button></el-radio-group></el-form-item>
+      <el-form-item label="Theme"><el-radio-group v-model="form.theme"><el-radio border label="Light"></el-radio><el-radio border label="Dark"></el-radio></el-radio-group></el-form-item>
       <el-form-item><el-button type="primary" @click="generate" id="generate">Generate</el-button></el-form-item>
     </el-form>
   </el-card>
-  <el-card>
-    <template v-if="! link"><el-empty image-size="80"></el-empty></template>
-    <template v-else><el-radio-group @change="refresh" class="type" v-model="form.format"><el-radio-button border label="URL"></el-radio-button><el-radio-button border label="Markdown"></el-radio-button><el-radio-button border label="HTML"></el-radio-button><el-radio-button border label="AsciiDoc"></el-radio-button></el-radio-group><el-input readonly v-model="content"></el-input><img id="preview" :src="link" alt></template>
+  <el-card style="display: grid">
+    <template v-if="! link"><el-empty image-size=80></el-empty></template>
+    <template v-else><el-radio-group @change="refresh" id="format" v-model="form.format"><el-radio-button border label="URL"></el-radio-button><el-radio-button border label="Markdown"></el-radio-button><el-radio-button border label="HTML"></el-radio-button><el-radio-button border label="AsciiDoc"></el-radio-button></el-radio-group><el-input readonly v-model="content"></el-input><img id="preview" :src="link" alt></template>
   </el-card>
 </div>
 <script>
