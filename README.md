@@ -57,5 +57,5 @@ https://github.com/zmh-program/code-statistic/blob/a3841c2eefcda8484f94f56724d8d
 
 ### 🍇 Run
 ```shell
-node index
+ts-node index
 ```

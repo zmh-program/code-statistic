@@ -28,11 +28,10 @@ function formatter(langs: object): object[] {
     }});
 }
 
-export async function getAccount(username: string, dark: boolean = false) {
+async function _analyseUser(username: string) {
   const response = await utils.requestUser(username);
   const repos = await utils.listRepos(username);
   return {
-    dark: dark,
     org: response['type'] !== 'User',
     location: response['location'],  //@ts-ignore
     stars: utils.decConvert(utils.sum(repos.map(repo => repo['stargazers_count']))),  //@ts-ignore
@@ -48,11 +47,11 @@ export async function getAccount(username: string, dark: boolean = false) {
       })),
   };
 }
+export const analyseUser = cache.wrap(_analyseUser);
 
-export async function getRepository(username: string, repo: string, dark: boolean = false) {
+async function _analyseRepo(username: string, repo: string) {
   const res = await utils.requestRepo(username, repo);
   return {
-    dark : dark,
     username: username,
     repo: repo,
     size: utils.storeConvert(res['size'], 1),
@@ -64,3 +63,4 @@ export async function getRepository(username: string, repo: string, dark: boolea
     langs: formatter(await utils.requestLanguage(username, repo)),
   };
 }
+export const analyseRepo = cache.wrap(_analyseRepo);
