@@ -25,5 +25,8 @@
     "ejs-locals": "^1.0.2",
     "express": "^4.18.2",
     "log4js": "^6.7.1"
+  },
+  "devDependencies": {
+    "@types/node": "^18.14.6"
   }
 }

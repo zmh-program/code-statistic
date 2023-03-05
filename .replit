@@ -1,6 +1,6 @@
 
 hidden = [".config", "package-lock.json"]
-run = "node index"
+run = "ts-node index"
 
 [[hints]]
 regex = "Error \\[ERR_REQUIRE_ESM\\]"
@@ -62,7 +62,7 @@ support = true
       cwd = "."
       environment = []
       pauseForSourceMap = false
-      program = "./index.js"
+      program = "./index.ts"
       request = "launch"
       sourceMaps = true
       stopOnEntry = false

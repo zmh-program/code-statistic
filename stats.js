@@ -1,9 +1,6 @@
-const cache = new (require('./cache').ApiCache)();
+const cache = require('./cache').cache;
 
-const store_units = ["b", "KiB", "MiB", "GiB", "TiB", "PiB"];
-const dec_units = ["", "k", "m"];
-
-const lang_colors = {  /** thanks, @anuraghazra's github-readme-stats **/
+const colors = {  /** thanks, @anuraghazra's github-readme-stats **/
   "1C Enterprise": "#814CCC",
   "2-Dimensional Array": "#38761D",
   "4D": "#004289",
@@ -552,45 +549,6 @@ const lang_colors = {  /** thanks, @anuraghazra's github-readme-stats **/
   "xBase": "#403a40"
 }
 
-function sort(arr) {
-  const len = arr.length - 1;
-  for (let i = 0; i <= len; i++) {for (let j = 0; j < len - i; j++) {if (arr[j] > arr[j + 1]) {[arr[j], arr[j + 1]] = [arr[j + 1], arr[j]]}}}
-  return arr
-}
-
-function storeConvert(size, idx=0) {
-  if (size <= 0) {
-    return "0";
-  }
-  while (idx < (store_units.length - 1) && size > 1024) {
-    size /= 1024;
-    idx ++;
-  }
-  return `${size.toFixed(1)} ${store_units[idx]}`;
-}
-
-function decConvert(n, allowed_pre=true) {
-  let idx = 0;
-  let condition = allowed_pre ? 100 : 1000;
-  while (idx < (dec_units.length - 1) && n > condition) { n /= 1000 ; idx ++ }
-  return idx === 0 ? n : n.toFixed(1) + dec_units[idx];
-}
-
-function sum(arr) {
-  switch (arr.length) {
-    case 0 :
-      return 0;
-    case 1:
-      return arr[0];
-    default:
-      return arr.reduce((a, b) => a + b);
-  }
-}
-
-async function getLanguage(user, repo) {
-  return await cache.requestWithCache(`/repos/${user}/${repo}/languages`);
-}
-
 async function langStatistics(queue) {
   const res = {};
   for (const idx in queue) {
@@ -622,7 +580,7 @@ function langHandler(langs) {
     cursor += ratio;
     return {
       name: lang,
-      color: lang_colors[lang],
+      color: colors[lang],
       cursor: cursor - ratio,
       ratio: ratio,
       text: `${lang} ${(ratio * 100).toFixed(0)}% (${decConvert(key, false)})`,
@@ -662,7 +620,7 @@ async function getRepository(username, repo, dark=false) {
     stars: decConvert(res['stargazers_count']),
     watchers: decConvert(res['watchers_count']),
     license: license ? license['spdx_id'] : "Empty",
-    color: lang_colors[res['language']],
+    color: colors[res['language']],
     langs: langHandler(await getLanguage(username, repo)),
   };
 }
