@@ -5,7 +5,7 @@
 </div>
 
 # 🍏 Quickstart
-#### Rapid generation 👉 **[stats.deeptrain.net](https://stats.deeptrain.net/)** 👈
+### Rapid generation 👉 **[stats.deeptrain.net](https://stats.deeptrain.net/)** 👈
 
 
 ### 🍊 Repo
@@ -46,7 +46,7 @@ npm install
 ```
 
 ### 🍬 Configuration
-https://github.com/zmh-program/code-statistic/blob/f9b182767796fc5aef57d241fb5910a1dd293dbd/config.js#L1-L6
+https://github.com/zmh-program/code-statistic/blob/cfe70d2f7e657723d6fdf59a9a7a928504f962d7/config.js#L1-L5
 
 ### 🎄 Environment Variable
 `CODE_STATISTIC`: your GitHub Access Token
