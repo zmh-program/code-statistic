@@ -633,8 +633,8 @@ async function getAccount(username, dark=false) {
   const response = await cache.requestWithCache(`/users/${username}`);
   const repos = Object.values(await cache.requestWithCache(`/users/${username}/repos`)).filter(repo => !repo.fork);
   return {
-    dark : dark,
-    org: response['type'] !== 'user',
+    dark: dark,
+    org: response['type'] !== 'User',
     location: response['location'],
     stars: decConvert(sum(repos.map(repo => repo['stargazers_count']))),
     forks: decConvert(sum(repos.map(repo => repo['forks_count']))),
