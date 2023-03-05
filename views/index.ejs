@@ -1,94 +1,68 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
-<head>
-    <title>Code Statistic</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/element-plus/2.2.32/index.css">
-    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/element-plus/2.2.32/theme-chalk/base.css">
-    <style>
-        html, body {
-            padding: 0;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background: #fafcf1;
-        }
-        #app {
-            position: absolute;
-            top: 8px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin: 30px;
-            width: 80%;
-            min-width: 220px;
-            max-width: 500px;
-        }
-        #generate {
-            margin: 0 auto;
-            transform: translateY(20px);
-        }
-        #preview {
-            width: 100%;
-        }
-        * {
-            font-family: Consolas, Nunito, monospace, Serif;
-        }
-    </style>
-    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.47/vue.global.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/element-plus/2.2.32/index.full.js"></script>
-</head>
+<head><title>Code Statistic</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/element-plus/2.2.32/index.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/element-plus/2.2.32/theme-chalk/base.css"><style>html, body {padding: 0;margin: 0;display: flex;align-items: center;justify-content: center;gap: 8px;width: 100%;height: 100%;overflow: auto;background: #fafcf1;}#app {position: absolute;top: 8px;display: flex;flex-direction: column;gap: 8px;margin: 30px;width: 80%;min-width: 220px;max-width: 500px}#generate {margin: 0 auto;transform: translateY(20px)}#preview {width: 100%}* {font-family: Consolas, Nunito, monospace, Serif}</style><script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.47/vue.global.js"></script><script src="https://cdn.bootcdn.net/ajax/libs/element-plus/2.2.32/index.full.js"></script></head>
 <body>
 <div id="app">
-    <el-card>
-        <el-form label-width="auto">
-            <el-form-item label="Username"><el-input v-model="form.username"></el-input></el-form-item>
-            <el-form-item label="Repo" v-if="isRepo"><el-input v-model="form.repo"></el-input></el-form-item>
-            <el-form-item label="Type"><el-radio-group v-model="form.type"><el-radio border label="User"></el-radio><el-radio border label="Repo"></el-radio></el-radio-group></el-form-item>
-            <el-form-item label="Dark Mode"><el-switch v-model="form.dark"></el-switch></el-form-item>
-            <el-form-item><el-button type="primary" @click="generate" id="generate">Generate</el-button></el-form-item>
-        </el-form>
-    </el-card>
-    <el-card>
-        <template v-if="! link"><el-empty image-size="80"></el-empty></template>
-        <template v-else><el-form-item label="Link"><el-input readonly v-model="link"></el-input></el-form-item><img id="preview" :src="link" alt></template>
-    </el-card>
+  <el-card>
+    <el-form label-width="auto">
+      <el-form-item label="Username"><el-input v-model="form.username"></el-input></el-form-item>
+      <el-form-item label="Repo" v-if="isRepo"><el-input v-model="form.repo"></el-input></el-form-item>
+      <el-form-item label="Type"><el-radio-group v-model="form.type"><el-radio-button border label="User"></el-radio-button><el-radio-button border label="Repo"></el-radio-button></el-radio-group></el-form-item>
+      <el-form-item label="Theme"><el-radio-group v-model="form.theme"><el-radio-button border label="Light"></el-radio-button><el-radio-button border label="Dark"></el-radio-button></el-radio-group></el-form-item>
+      <el-form-item><el-button type="primary" @click="generate" id="generate">Generate</el-button></el-form-item>
+    </el-form>
+  </el-card>
+  <el-card>
+    <template v-if="! link"><el-empty image-size="80"></el-empty></template>
+    <template v-else><el-radio-group @change="refresh" class="type" v-model="form.format"><el-radio-button border label="URL"></el-radio-button><el-radio-button border label="Markdown"></el-radio-button><el-radio-button border label="HTML"></el-radio-button><el-radio-button border label="AsciiDoc"></el-radio-button></el-radio-group><el-input readonly v-model="content"></el-input><img id="preview" :src="link" alt></template>
+  </el-card>
 </div>
 <script>
-    const form = Vue.ref({
-        username: "",
-        repo: "",
-        type: "User",
-        dark: false,
-    })
-    const link = Vue.ref("");
-    const isRepo = Vue.computed(() => form.value.type !== "User");
-    const throwWarning = msg => ElementPlus.ElMessage({grouping: true, message: msg,  showClose: false, type: "warning"})
-    Vue.createApp({
-        data() {
-            return {
-                form: form,
-                link: link,
-                isRepo: isRepo,
-                generate: () => {
-                    const username = form.value.username.trim(),
-                        repo = form.value.repo.trim(),
-                        dark = !!form.value.dark;
-
-                    if (! username) {throwWarning("username is empty."); return }
-                    if (isRepo.value && ! repo) {throwWarning("repo is empty."); return }
-                    link.value = location.origin +
-                        ((!isRepo.value) ? `/user/${username}/` : `/repo/${username}/${repo}`) +
-                        (dark ? "?theme=dark" : "");
-                }
-            }
+  const form = Vue.ref({
+    username: "",
+    repo: "",
+    type: "User",
+    theme: "Light",
+    format: "URL",
+  })
+  const link = Vue.ref("");
+  const content = Vue.ref("");
+  const isRepo = Vue.computed(() => form.value.type !== "User");
+  const throwWarning = msg => ElementPlus.ElMessage({grouping: true, message: msg,  showClose: false, type: "warning"});
+  const refresh = () => {
+    const username = form.value.username.trim(),
+      repo = form.value.repo.trim(),
+      format = form.value.format;
+    const target = isRepo.value ? `${username}/${repo}` : username
+    switch (format) {
+      case "URL": content.value = link.value;break;
+      case "Markdown": content.value = `[![${target}'s Github Stats](${link.value})](https://github.com/zmh-program/code-statistic)`;break;
+      case "HTML": content.value = `<a href="https://github.com/zmh-program/code-statistic"><img src="${link.value}" alt="${target}'s Github Stats"></a>`;break;
+      case "AsciiDoc": content.value = `image:${link.value}[${target}'s Github Stats]`;break;
+    }
+  }
+  Vue.createApp({
+    data() {
+      return {
+        form: form,
+        link: link,
+        content: content,
+        isRepo: isRepo,
+        refresh: refresh,
+        generate: () => {
+          const username = form.value.username.trim(),
+            repo = form.value.repo.trim(),
+            dark = form.value.theme === "Dark";
+          if (! username) {throwWarning("username is empty."); return }
+          if (isRepo.value && ! repo) {throwWarning("repo is empty."); return }
+          link.value = location.origin +
+            ((!isRepo.value) ? `/user/${username}/` : `/repo/${username}/${repo}`) +
+            (dark ? "?theme=dark" : "");
+          refresh();
         }
-    }).use(ElementPlus).mount('#app');
+      }
+    }
+  }).use(ElementPlus).mount('#app');
 </script>
 </body>
 </html>
