@@ -49,7 +49,7 @@ class Cache {
     }, 1800);
   }
 
-  wrap(func: (params: any[]) => Promise<any>): (...params: any[]) => Promise<any> {
+  wrap(func: (...params: any[]) => Promise<any>): (...params: any[]) => Promise<any> {
     /**
      * Async Function Cache.
      */

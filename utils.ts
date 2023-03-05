@@ -1,5 +1,7 @@
 const axios = require("axios");
 const conf = require("./config");
+const cache = require("./cache").cache;
+
 axios.defaults.baseURL = "https://api.github.com";
 
 export function sort(arr: number[]): number[] {
@@ -66,9 +68,25 @@ export function getLicense(license: object | undefined | null): string {
     return license ? license['spdx_id'] : "Empty";
 }
 
-export async function isAuthenticated(user): Promise<boolean> {
+async function _isAuthenticated(user): Promise<boolean> {
     user = user.trim();
-    return (!! user.length) &&
-        (conf.requires.includes("*") || conf.requires.includes(user)) &&
-        ((await requestUser(user))['message'] !== "Not Found");
+    try {
+        return (!!user.length) &&
+            (conf.requires.includes("*") || conf.requires.includes(user)) &&
+            ((await requestUser(user))['message'] !== "Not Found");
+    } catch {
+        return false;
+    }
 }
+export const isAuthenticated = cache.wrap(_isAuthenticated);
+
+async function _isExistRepo(user, repo): Promise<boolean> {
+    user = user.trim(); repo = repo.trim();
+    try {
+        return await isAuthenticated(user) &&
+            ((await requestRepo(user, repo))['message'] !== "Not Found");
+    } catch {
+        return false;
+    }
+}
+export const isExistRepo = cache.wrap(_isExistRepo);
