@@ -16,13 +16,13 @@ class Cache {
   get(key: string): undefined | any { //@ts-ignore
     const value = this.caches[key];
     if (this.exist(key)) {  //@ts-ignore
-      return JSON.parse(value.value);
+      return value.value;
     }
   }
 
   set(key: string, value: any): void {  //@ts-ignore
     this.caches[key] = {
-      value: JSON.stringify(value),
+      value: value,
       expiration: (new Date().getTime() / 1000) + this.expiration,
     }
   }
@@ -57,7 +57,7 @@ class Cache {
     const _this: Cache = this;
     const name: string = func.name[0] === "_" ? func.name.slice(1) : func.name;
     return async function (...params : any[]) {
-      const key: string = name + JSON.stringify(params);
+      const key: string = name + params.toString();
       if (_this.exist(key)) {
         logger.debug(`Hit Cache <${name}>`)
         return _this.get(key);

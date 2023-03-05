@@ -2,7 +2,7 @@
   "name": "code-statistic",
   "version": "1.0.0",
   "description": "Parse the lines of code for each language in the repository/account and generate the results. ",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
