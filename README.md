@@ -3,8 +3,8 @@
 ![Code Statistic](/public/favicon.png)
 # Code Statistic
 
-##### Dynamically analysis the code for each language in the repository/user and generate the results for your GitHub account and repo README. 
-##### 动态生成用户/仓库中的语言统计，可以作为图片装饰在个人首页和仓库README中
+#### Dynamically analysis the code for each language in the repository/user and generate the results for your GitHub account and repo README. 
+#### 动态生成用户/仓库中的语言统计，可以作为图片装饰在个人首页和仓库README中
 
 
 ### Rapid generation | 快速生成 👉 **[stats.deeptrain.net](https://stats.deeptrain.net/)** 👈
