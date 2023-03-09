@@ -10,7 +10,8 @@
 
 ### Rapid generation | 快速生成 👉 **[stats.deeptrain.net](https://stats.deeptrain.net/)** 👈
 
-<br></div>
+<br>
+</div>
 
 ## 🍏 Quickstart | 快速开始
 
