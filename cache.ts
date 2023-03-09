@@ -59,10 +59,9 @@ class Cache {
     return async function (...params : any[]) {
       const key: string = name + params.toString();
       if (_this.exist(key)) {
-        logger.debug(`Hit Cache <${name}>`);
         return _this.get(key);
       } else {
-        logger.info(`Cache Response <${name}>`); // @ts-ignore
+        /** @ts-ignore **/
         const response: any = await func(...params);
         _this.set(key, response);
         return response;
