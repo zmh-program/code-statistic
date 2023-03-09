@@ -2,61 +2,66 @@
 
 ![Code Statistic](/public/favicon.png)
 # Code Statistic
-</div>
+
+##### Dynamically analysis the code for each language in the repository/user and generate the results for your GitHub account and repo README. 
+##### 动态生成用户/仓库中的语言统计，可以作为图片装饰在个人首页和仓库README中
 
 
-## 🍏 Quickstart
-
-<div align="center">
-
-### Rapid generation 👉 **[stats.deeptrain.net](https://stats.deeptrain.net/)** 👈
+### Rapid generation | 快速生成 👉 **[stats.deeptrain.net](https://stats.deeptrain.net/)** 👈
 
 </div>
 
-### 🍊 Repo
+## 🍏 Quickstart | 快速开始
+
+### 🍊 Repo | 仓库
 */repo/**username**/**repo**/*
 ```markdown
-[![code statistic](https://stats.deeptrain.net/repo/zmh-program/Zh-Website/)](https://github.com/zmh-program/code-statistic)
+[![zmh-program's Github Stats](https://stats.deeptrain.net/repo/zmh-program/Zh-Website/)](https://github.com/zmh-program/code-statistic)
 ```
-[![code statistic](https://stats.deeptrain.net/repo/zmh-program/Zh-Website/)](https://github.com/zmh-program/code-statistic)
+[![zmh-program's Github Stats](https://stats.deeptrain.net/repo/zmh-program/Zh-Website/)](https://github.com/zmh-program/code-statistic)
 
-### 🍉 User
+### 🍉 User | 用户
 */user/**username**/*
 ```markdown
-[![code statistic](https://stats.deeptrain.net/user/zmh-program/)](https://github.com/zmh-program/code-statistic)
+[![zmh-program's Github Stats](https://stats.deeptrain.net/user/zmh-program/)](https://github.com/zmh-program/code-statistic)
 ```
-[![code statistic](https://stats.deeptrain.net/user/zmh-program/)](https://github.com/zmh-program/code-statistic)
+[![zmh-program's Github Stats](https://stats.deeptrain.net/user/zmh-program/)](https://github.com/zmh-program/code-statistic)
 
-### 🥝 Dark Mode
+### 🥝 Dark Theme | 暗系主题
 *.../**?theme=dark***
 ```markdown
-[![code statistic](https://stats.deeptrain.net/repo/zmh-program/Zh-Website/?theme=dark)](https://github.com/zmh-program/code-statistic)
+[![zmh-program's Github Stats](https://stats.deeptrain.net/repo/zmh-program/Zh-Website/?theme=dark)](https://github.com/zmh-program/code-statistic)
 ```
-[![code statistic](https://stats.deeptrain.net/repo/zmh-program/Zh-Website/?theme=dark)](https://github.com/zmh-program/code-statistic)
+[![zmh-program's Github Stats](https://stats.deeptrain.net/repo/zmh-program/Zh-Website/?theme=dark)](https://github.com/zmh-program/code-statistic)
 
-### Ref as HTML
+### Ref as HTML | 作为HTML引用
 ```html
 <a href="https://github.com/zmh-program/code-statistic">
-  <img src="https://stats.deeptrain.net/repo/zmh-program/Zh-Website/?theme=dark">
+  <img src="https://stats.deeptrain.net/repo/zmh-program/Zh-Website/?theme=dark" alt="zmh-program's Github Stats">
 </a>
 ```
 
-<a href="https://github.com/zmh-program/code-statistic"><img src="https://stats.deeptrain.net/repo/zmh-program/Zh-Website/?theme=dark"></a>
+### Ref as AsciiDoc | 作为AsciiDoc使用
+```
+image:https://stats.deeptrain.net/user/zmh-program/[zmh-program's Github Stats]
+```
 
-## 🍎 Build Your Own Server
-##### 👉 *Build a [Free Server](https://replit.com/@zmh-program/code-stats) using the template ([Replit](https://replit.com))*
-### 🍒 Initialization
+### 🍎 Build Your Own Server | 搭建自己的服务器
+#### 🍒 Initialization | 初始化
 ```shell
 npm install
 ```
 
-### 🍬 Configuration
+#### 🍬 Configuration | 配置
 https://github.com/zmh-program/code-statistic/blob/a3841c2eefcda8484f94f56724d8d6c2c015cd7c/config.ts#L1-L4
 
-### 🎄 Environment Variable
-`CODE_STATISTIC`: your GitHub Access Token
+#### 🎄 Environment Variable | 环境变量
 
-### 🍇 Run
+| `CODE_STATISTIC` | GitHub Access Token |
+|------------------|---------------------|
+
+
+#### 🍇 Deployment | 部署
 ```shell
 ts-node index
 ```

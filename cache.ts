@@ -13,7 +13,7 @@ class Cache {
     this.uptime();
   }
 
-  get(key: string): undefined | any { //@ts-ignore
+  get(key: string): undefined | any { /** @ts-ignore **/
     const value = this.caches[key];
     if (this.exist(key)) {  //@ts-ignore
       return JSON.parse(value.value);
