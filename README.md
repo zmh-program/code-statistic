@@ -6,10 +6,11 @@
 #### Dynamically analysis the code for each language in the repository/user and generate the results for your GitHub account and repo README. 
 #### 动态生成用户/仓库中的语言统计，可以作为图片装饰在个人首页和仓库README中
 
+<br>
 
 ### Rapid generation | 快速生成 👉 **[stats.deeptrain.net](https://stats.deeptrain.net/)** 👈
 
-</div>
+<br></div>
 
 ## 🍏 Quickstart | 快速开始
 
@@ -39,11 +40,6 @@
 <a href="https://github.com/zmh-program/code-statistic">
   <img src="https://stats.deeptrain.net/repo/zmh-program/Zh-Website/?theme=dark" alt="zmh-program's Github Stats">
 </a>
-```
-
-### Ref as AsciiDoc | 作为AsciiDoc使用
-```
-image:https://stats.deeptrain.net/user/zmh-program/[zmh-program's Github Stats]
 ```
 
 ### 🍎 Build Your Own Server | 搭建自己的服务器
