@@ -36,9 +36,8 @@ export function createServer(): void {
     app.set('views', __dirname + '/views');
     app.set("view engine", "ejs");
 
-    app.get('/', function (req: any, res: any) {
-        res.render('index');
-    });
+    app.use(express.static('public'));
+
 
     app.get('/user/:user/', async function (req: any, res: any) {
         res.type('svg');

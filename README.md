@@ -1,6 +1,6 @@
 <div align="center"> 
 
-![Code Statistic](/public/logo.png)
+![Code Statistic](/public/favicon.png)
 # Code Statistic
 </div>
 
