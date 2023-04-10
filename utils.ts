@@ -1,6 +1,7 @@
-const axios = require("axios");
-const conf = require("./config");
-const cache = require("./cache").cache;
+import axios from "axios";
+import * as conf from "./config";
+import { cache } from "./cache";
+
 
 axios.defaults.baseURL = "https://api.github.com";
 

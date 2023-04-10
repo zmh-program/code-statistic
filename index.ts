@@ -1,3 +1,3 @@
-const server = require("./server");
+import { createServer } from "./server";
 
-server.createServer();
+createServer();

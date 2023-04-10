@@ -1,6 +1,6 @@
 <div align="center"> 
 
-[![Code Statistic](/public/favicon.png)](https://stats.deeptrain.net)
+[<img src="public/favicon.png" alt="Code Statistic" width="64" height="64" style="transform: translateY(50px);">](https://stats.deeptrain.net)
 # [Code Statistic](https://stats.deeptrain.net)
 
 #### Dynamically analysis the code for each language in the repository/user and generate the results for your GitHub account and repo README. 

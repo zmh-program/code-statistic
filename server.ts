@@ -1,35 +1,14 @@
-const logger = (require("log4js")).getLogger("Backend");
-const stats = require('./stats');
-const conf = require('./config');
-const utils = require('./utils');
-const express = require('express');
+import { getLogger } from "log4js";
+import { isAuthenticated, isExistRepo } from "./utils";
+import { analyseRepo, analyseUser } from "./stats";
+import { port } from "./config";
 
+
+const express = require('express');
+const logger = getLogger("Backend");
 logger.level = "debug";
 
 
-function renderError(res: any, dark: boolean = false): void {
-    return res.render('error', {dark: dark});
-}
-
-async function renderUser(res: any, username: string, dark: boolean = false): Promise<void> {
-    if (! await utils.isAuthenticated(username)) {
-        renderError(res, dark);
-    } else {
-        const resp = await stats.analyseUser(username);
-        resp['dark'] = dark;
-        res.render('user', resp);
-    }
-}
-
-async function renderRepo(res: any, username: string, repo: string, dark: boolean = false): Promise<void> {
-    if (! await utils.isExistRepo(username, repo)) {
-        renderError(res, dark);
-    } else {
-        const resp = await stats.analyseRepo(username, repo);
-        resp['dark'] = dark;
-        res.render('repo', resp);
-    }
-}
 export function createServer(): void {
     const app = express();
 
@@ -45,7 +24,17 @@ export function createServer(): void {
         const dark: boolean = req.query['theme'] === 'dark',
             username: string = req.params['user'];
 
-        try { await renderUser(res, username, dark) } catch { renderError(res, dark) }
+        try {
+            if (! await isAuthenticated(username)) {
+                res.render('error', { dark: dark });
+            } else {
+                const resp = await analyseUser(username);
+                resp['dark'] = dark;
+                res.render('user', resp);
+            }
+        } catch {
+            res.render('error', {dark: dark});
+        }
     });
 
     app.get('/repo/:user/:repo/', async function (req: any, res: any) {
@@ -55,9 +44,19 @@ export function createServer(): void {
             username = req.params['user'],
             repo = req.params['repo'];
 
-        try { await renderRepo(res, username, repo, dark) } catch { renderError(res, dark) }
+        try {
+            if (! await isExistRepo(username, repo)) {
+                res.render('error', {dark: dark});
+            } else {
+                const resp = await analyseRepo(username, repo);
+                resp['dark'] = dark;
+                res.render('repo', resp);
+            }
+        } catch {
+            res.render('error', {dark: dark});
+        }
     });
 
-    app.listen(conf.port, () =>
-        logger.info(`Starting deployment server at http://127.0.0.1:${conf.port}/.`));
+    app.listen(port, () =>
+        logger.info(`Starting deployment server at http://127.0.0.1:${port}/.`));
 }
