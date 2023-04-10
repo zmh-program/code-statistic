@@ -4,7 +4,7 @@
 # [Code Statistic](https://stats.deeptrain.net)
 
 #### Dynamically analysis the code for each language in the repository/user and generate the results for your GitHub account and repo README. 
-#### 动态生成用户/仓库中的语言统计，可以作为图片装饰在个人首页和仓库README中
+#### 动态生成GitHub用户/仓库中的语言统计，可以作为图片装饰在个人首页和仓库README中
 
 ### [| 👀 |](https://stats.deeptrain.net)
 <br>
