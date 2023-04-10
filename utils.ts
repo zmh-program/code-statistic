@@ -60,7 +60,7 @@ export async function requestRepo(user: string, repo: string): Promise<any> {
     return await request(`/repos/${user}/${repo}`);
 }
 
-export async function requestLanguage(user: string, repo: string): Promise<any> {
+export async function requestLanguage(user: string, repo: string): Promise<Record<string, any>> {
     return await request(`/repos/${user}/${repo}/languages`);
 }
 
@@ -68,7 +68,7 @@ export function getLicense(license: any): string {
     return license ? license['spdx_id'] : "Empty";
 }
 
-async function _isAuthenticated(user: string): Promise<boolean> {
+export const isAuthenticated = cache.cache("auth", async (user: string): Promise<boolean> => {
     user = user.trim();
     try {
         return (!!user.length) &&
@@ -77,10 +77,9 @@ async function _isAuthenticated(user: string): Promise<boolean> {
     } catch {
         return false;
     }
-}
-export const isAuthenticated = cache.wrap(_isAuthenticated);
+});
 
-async function _isExistRepo(user: string, repo: string): Promise<boolean> {
+export const isExistRepo = cache.cache("exist", async (user: string, repo: string): Promise<boolean> => {
     user = user.trim(); repo = repo.trim();
     try {
         return (await isAuthenticated(user)) &&
@@ -89,5 +88,4 @@ async function _isExistRepo(user: string, repo: string): Promise<boolean> {
     } catch {
         return false;
     }
-}
-export const isExistRepo = cache.wrap(_isExistRepo);
+});
