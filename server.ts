@@ -37,6 +37,22 @@ export function createServer(): void {
         }
     });
 
+    app.get('/api/user/:user/', async function (req: any, res: any) {
+        const username: string = req.params['user'];
+
+        try {
+            if (! await isAuthenticated(username)) {
+                res.send({'status': false});
+            } else {
+                const resp = await analyseUser(username);
+                resp['status'] = true;
+                res.send(resp);
+            }
+        } catch {
+            res.send({'status': false});
+        }
+    })
+
     app.get('/repo/:user/:repo/', async function (req: any, res: any) {
         res.type('svg');
 
@@ -54,6 +70,23 @@ export function createServer(): void {
             }
         } catch {
             res.render('error', {dark: dark});
+        }
+    });
+
+    app.get('/api/repo/:user/:repo/', async function (req: any, res: any) {
+        const username = req.params['user'],
+            repo = req.params['repo'];
+
+        try {
+            if (! await isExistRepo(username, repo)) {
+                res.send({'status': false});
+            } else {
+                const resp = await analyseRepo(username, repo);
+                resp['status'] = true;
+                res.send(resp);
+            }
+        } catch {
+            res.send({'status': false});
         }
     });
 

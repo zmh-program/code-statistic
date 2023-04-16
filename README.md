@@ -40,10 +40,14 @@
 </a>
 ```
 
+### API
+/api/user/*username*/
+/api/repo/*username*/*repo*/
+
 ### 🍎 Build Your Own Server | 搭建自己的服务器
 #### 🍒 Initialization | 初始化
 ```shell
-npm install
+pnpm install
 ```
 
 #### 🍬 Configuration | 配置
