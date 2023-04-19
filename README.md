@@ -55,8 +55,8 @@ https://github.com/zmh-program/code-statistic/blob/a3841c2eefcda8484f94f56724d8d
 
 #### 🎄 Environment Variable | 环境变量
 
-| `CODE_STATISTIC` | GitHub Access Token |
-|------------------|---------------------|
+| `TOKEN` | GitHub Access Token |
+|---------|---------------------|
 
 
 #### 🍇 Deployment | 部署
