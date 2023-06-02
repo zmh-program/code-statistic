@@ -21,3 +21,21 @@ func GetLanguages(username string, repo string) (data map[string]interface{}, er
 	err = Get(fmt.Sprintf("repos/%s/%s/languages", username, repo), &data)
 	return data, err
 }
+
+func GetUserExist(username string) bool {
+	res, err := GetUser(username)
+	if err != nil {
+		return false
+	}
+	val, ok := res["message"]
+	return !(ok && val == "Not Found")
+}
+
+func GetRepoExist(username string, repo string) bool {
+	res, err := GetRepo(username, repo)
+	if err != nil {
+		return false
+	}
+	val, ok := res["message"]
+	return !(ok && val == "Not Found")
+}
