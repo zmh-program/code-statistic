@@ -7,6 +7,8 @@ import (
 	"time"
 )
 
+var logger = logrus.New()
+
 type Formatter struct {
 }
 
