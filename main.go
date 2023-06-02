@@ -10,5 +10,4 @@ func main() {
 
 	tokenList = GetTokenFromEnv()
 	ValidateToken()
-
 }

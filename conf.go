@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"math/rand"
 	"os"
 	"strings"
@@ -31,7 +30,7 @@ func GetTokenFromEnv() []string {
 
 func ValidateToken() {
 	if len(tokenList) == 0 {
-		log.Fatal("No token found!")
+		logger.Fatal("No token found! Please set TOKEN environment variable.")
 	}
 	logger.Debug(fmt.Sprintf("Found %d available token(s).", len(tokenList)))
 }
