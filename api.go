@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func GetUser(username string) (data map[string]interface{}, err error) {
 	err = Get(fmt.Sprintf("users/%s", username), &data)
@@ -38,4 +40,18 @@ func GetRepoExist(username string, repo string) bool {
 	}
 	val, ok := res["message"]
 	return !(ok && val == "Not Found")
+}
+
+func CollectLanguages(username string, repos []string) (data map[string]int, err error) {
+	data = make(map[string]int)
+	for _, repo := range repos {
+		languages, err := GetLanguages(username, repo)
+		if err != nil {
+			return data, err
+		}
+		for k, v := range languages {
+			data[k] += v.(int)
+		}
+	}
+	return data, nil
 }

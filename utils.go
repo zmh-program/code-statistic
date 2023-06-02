@@ -63,14 +63,12 @@ func Get(uri string, ptr interface{}) (err error) {
 	}
 
 	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			logrus.Infoln()
+		if err := Body.Close(); err != nil {
+			logrus.Infoln(err)
 		}
 	}(resp.Body)
 
-	err = json.NewDecoder(resp.Body).Decode(ptr)
-	if err != nil {
+	if err = json.NewDecoder(resp.Body).Decode(ptr); err != nil {
 		return err
 	}
 	return nil
