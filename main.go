@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/sirupsen/logrus"
 )
 
@@ -11,5 +10,4 @@ func main() {
 
 	tokenList = GetTokenFromEnv()
 	ValidateToken()
-	fmt.Println(GetRepos("zmh-program"))
 }
