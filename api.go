@@ -2,18 +2,22 @@ package main
 
 import "fmt"
 
-func GetUser(username string) (res []interface{}, err error) {
-	return Get(fmt.Sprintf("users/%s", username))
+func GetUser(username string) (data map[string]interface{}, err error) {
+	err = Get(fmt.Sprintf("users/%s", username), &data)
+	return data, err
 }
 
-func GetRepos(username string) (res []interface{}, err error) {
-	return Get(fmt.Sprintf("users/%s/repos", username))
+func GetRepos(username string) (data []interface{}, err error) {
+	err = Get(fmt.Sprintf("users/%s/repos", username), &data)
+	return data, err
 }
 
-func GetRepo(username string, repo string) (res []interface{}, err error) {
-	return Get(fmt.Sprintf("repos/%s/%s", username, repo))
+func GetRepo(username string, repo string) (data map[string]interface{}, err error) {
+	err = Get(fmt.Sprintf("repos/%s/%s", username, repo), &data)
+	return data, err
 }
 
-func GetLanguages(username string, repo string) (res []interface{}, err error) {
-	return Get(fmt.Sprintf("repos/%s/%s/languages", username, repo))
+func GetLanguages(username string, repo string) (data map[string]interface{}, err error) {
+	err = Get(fmt.Sprintf("repos/%s/%s/languages", username, repo), &data)
+	return data, err
 }

@@ -47,10 +47,10 @@ func ScaleConvert(n float64, useSmallScale bool) string {
 	return fmt.Sprintf("%.1f%s", n, scaleUnits[idx])
 }
 
-func Get(uri string) (res []interface{}, err error) {
+func Get(uri string, ptr interface{}) (err error) {
 	req, err := http.NewRequest("GET", "https://api.github.com/"+uri, nil)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	req.Header.Set("Accept", "application/json")
@@ -59,7 +59,7 @@ func Get(uri string) (res []interface{}, err error) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	defer func(Body io.ReadCloser) {
@@ -69,10 +69,9 @@ func Get(uri string) (res []interface{}, err error) {
 		}
 	}(resp.Body)
 
-	var data []interface{}
-	err = json.NewDecoder(resp.Body).Decode(&data)
+	err = json.NewDecoder(resp.Body).Decode(ptr)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return data, nil
+	return nil
 }
