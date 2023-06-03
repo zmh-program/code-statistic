@@ -19,3 +19,8 @@ func (f *Formatter) Format(entry *logrus.Entry) ([]byte, error) {
 
 	return []byte(fmt.Sprintf("[%s] %s - %s\n", level, timestamp, message)), nil
 }
+
+func SetupLogger() {
+	logger.SetLevel(logrus.DebugLevel)
+	logger.SetFormatter(&Formatter{})
+}

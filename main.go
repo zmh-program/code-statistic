@@ -1,8 +1,8 @@
 package main
 
 import (
+	"fmt"
 	"github.com/kataras/iris/v12"
-	"github.com/sirupsen/logrus"
 )
 
 func main() {
@@ -12,13 +12,11 @@ func main() {
 		app.Get("/repo/{username:string}/{repo:string}", RepoAPI)
 	}
 
-	logger.SetLevel(logrus.DebugLevel)
-	logger.SetFormatter(&Formatter{})
+	SetupLogger()
+	ReadConfig()
+	ReadToken()
 
-	tokenList = GetTokenFromEnv()
-	ValidateToken()
-
-	app.Listen(":8080")
+	app.Listen(fmt.Sprintf(":%d", conf.Server.Port))
 }
 
 func UserAPI(ctx iris.Context) {
