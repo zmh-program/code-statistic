@@ -29,21 +29,27 @@ func AnalyseUser(ctx iris.Context) {
 			ThrowError(ctx, iris.StatusInternalServerError, err.Error())
 			return
 		}
-		repo, err := iterRepos(username)
+		repos, err := iterRepos(username)
+		if err != nil {
+			ThrowError(ctx, iris.StatusInternalServerError, err.Error())
+			return
+		}
+		langs, err := CollectLanguages(username, repos)
 		if err != nil {
 			ThrowError(ctx, iris.StatusInternalServerError, err.Error())
 			return
 		}
 		ctx.JSON(iris.Map{
-			"username": username,
-			"location": res["location"],
-			"org":      res["type"] != "User",
-			"repos":    res["public_repos"],
-			"follower": ScaleConvert(res["followers"].(float64), true),
-			"stars":    ScaleConvert(Sum(repo, "stargazers_count"), true),
-			"forks":    ScaleConvert(Sum(repo, "forks_count"), true),
-			"issues":   ScaleConvert(Sum(repo, "open_issues_count"), true),
-			"watchers": ScaleConvert(Sum(repo, "watchers_count"), true),
+			"username":  username,
+			"location":  res["location"],
+			"org":       res["type"] != "User",
+			"repos":     res["public_repos"],
+			"follower":  ScaleConvert(res["followers"].(float64), true),
+			"stars":     ScaleConvert(Sum(repos, "stargazers_count"), true),
+			"forks":     ScaleConvert(Sum(repos, "forks_count"), true),
+			"issues":    ScaleConvert(Sum(repos, "open_issues_count"), true),
+			"watchers":  ScaleConvert(Sum(repos, "watchers_count"), true),
+			"languages": langs,
 		})
 		return
 	}

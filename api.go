@@ -59,8 +59,8 @@ func iterRepos(username string) (data []interface{}, err error) {
 	return res, nil
 }
 
-func CollectLanguages(username string, repos []string) (data map[string]int, err error) {
-	data = make(map[string]int)
+func CollectLanguages(username string, repos []interface{}) (data map[string]float64, err error) {
+	data = make(map[string]float64)
 	channel := make(chan map[string]interface{}, len(repos))
 
 	for _, repo := range repos {
@@ -70,14 +70,14 @@ func CollectLanguages(username string, repos []string) (data map[string]int, err
 				return
 			}
 			channel <- languages
-		}(username, repo)
+		}(username, repo.(map[string]interface{})["name"].(string))
 	}
 
 	for range repos {
 		select {
 		case languages := <-channel:
 			for k, v := range languages {
-				data[k] += v.(int)
+				data[k] += v.(float64)
 			}
 		}
 	}
