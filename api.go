@@ -42,16 +42,45 @@ func GetRepoExist(username string, repo string) bool {
 	return !(ok && val == "Not Found")
 }
 
-func CollectLanguages(username string, repos []string) (data map[string]int, err error) {
-	data = make(map[string]int)
+func iterRepos(username string) (data []interface{}, err error) {
+	repos, err := GetRepos(username)
+	if err != nil {
+		logger.Error(err)
+		return nil, err
+	}
+
+	var res []interface{}
 	for _, repo := range repos {
-		languages, err := GetLanguages(username, repo)
-		if err != nil {
-			return data, err
-		}
-		for k, v := range languages {
-			data[k] += v.(int)
+		repo := repo.(map[string]interface{})
+		if !repo["fork"].(bool) {
+			res = append(res, repo)
 		}
 	}
+	return res, nil
+}
+
+func CollectLanguages(username string, repos []string) (data map[string]int, err error) {
+	data = make(map[string]int)
+	channel := make(chan map[string]interface{}, len(repos))
+
+	for _, repo := range repos {
+		go func(username string, repo string) {
+			languages, err := GetLanguages(username, repo)
+			if err != nil {
+				return
+			}
+			channel <- languages
+		}(username, repo)
+	}
+
+	for range repos {
+		select {
+		case languages := <-channel:
+			for k, v := range languages {
+				data[k] += v.(int)
+			}
+		}
+	}
+
 	return data, nil
 }

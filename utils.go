@@ -3,15 +3,16 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/kataras/iris/v12"
 	"github.com/sirupsen/logrus"
 	"io"
 	"net/http"
 )
 
-func Sum(array []int) int {
-	total := 0
-	for _, v := range array {
-		total += v
+func Sum(m []interface{}, k string) float64 {
+	total := 0.
+	for _, v := range m {
+		total += v.(map[string]interface{})[k].(float64)
 	}
 	return total
 }
@@ -72,4 +73,11 @@ func Get(uri string, ptr interface{}) (err error) {
 		return err
 	}
 	return nil
+}
+
+func ThrowError(ctx iris.Context, code int, message string) {
+	ctx.StatusCode(code)
+	ctx.JSON(iris.Map{
+		"message": message,
+	})
 }

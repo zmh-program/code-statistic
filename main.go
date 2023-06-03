@@ -1,19 +1,17 @@
 package main
 
 import (
-	"fmt"
 	"github.com/kataras/iris/v12"
 	"github.com/sirupsen/logrus"
 )
 
 func main() {
-	app := iris.New()
-	route := app.Party("/api")
+	app := iris.Default()
 	{
-		route.Use(iris.Compression)
-		route.Get("/user/{username:string}", AnalyseUser)
-		route.Get("/repo/{username:string}/{repo:string}", AnalyseRepo)
+		app.Get("/user/{username:string}", AnalyseUser)
+		app.Get("/repo/{username:string}/{repo:string}", AnalyseRepo)
 	}
+
 	logger.SetLevel(logrus.DebugLevel)
 	logger.SetFormatter(&Formatter{})
 
@@ -28,19 +26,28 @@ func AnalyseUser(ctx iris.Context) {
 	if GetUserExist(username) {
 		res, err := GetUser(username)
 		if err != nil {
-			ctx.StatusCode(iris.StatusInternalServerError)
-			ctx.JSON(iris.Map{
-				"message": err.Error(),
-			})
+			ThrowError(ctx, iris.StatusInternalServerError, err.Error())
 			return
 		}
-		fmt.Println(res)
-		ctx.JSON(iris.Map{})
+		repo, err := iterRepos(username)
+		if err != nil {
+			ThrowError(ctx, iris.StatusInternalServerError, err.Error())
+			return
+		}
+		ctx.JSON(iris.Map{
+			"username": username,
+			"location": res["location"],
+			"org":      res["type"] != "User",
+			"repos":    res["public_repos"],
+			"follower": ScaleConvert(res["followers"].(float64), true),
+			"stars":    ScaleConvert(Sum(repo, "stargazers_count"), true),
+			"forks":    ScaleConvert(Sum(repo, "forks_count"), true),
+			"issues":   ScaleConvert(Sum(repo, "open_issues_count"), true),
+			"watchers": ScaleConvert(Sum(repo, "watchers_count"), true),
+		})
+		return
 	}
-	ctx.StatusCode(iris.StatusNotFound)
-	ctx.JSON(iris.Map{
-		"message": "User not found.",
-	})
+	ThrowError(ctx, iris.StatusNotFound, "User not found.")
 }
 
 func AnalyseRepo(ctx iris.Context) {
