@@ -75,7 +75,7 @@ func Get(uri string, ptr interface{}) (err error) {
 	return nil
 }
 
-func ThrowError(ctx iris.Context, code int, message string) {
+func ThrowError(ctx iris.Context, message string, code int) {
 	ctx.StatusCode(code)
 	ctx.JSON(iris.Map{
 		"message": message,
