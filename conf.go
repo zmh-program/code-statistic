@@ -15,9 +15,11 @@ type Config struct {
 		Port int
 	}
 	Redis struct {
-		Host string
-		Port int
-		DB   int
+		Host       string
+		Port       int
+		Password   string
+		DB         int
+		Expiration int
 	}
 }
 

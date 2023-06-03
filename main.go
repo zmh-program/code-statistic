@@ -15,6 +15,7 @@ func main() {
 	SetupLogger()
 	ReadConfig()
 	ReadToken()
+	SetupCache()
 
 	app.Listen(fmt.Sprintf(":%d", conf.Server.Port))
 }
