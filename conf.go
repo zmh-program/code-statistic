@@ -19,7 +19,7 @@ type Config struct {
 		Port       int
 		Password   string
 		DB         int
-		Expiration int
+		Expiration time.Duration
 	}
 }
 
