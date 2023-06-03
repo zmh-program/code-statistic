@@ -62,6 +62,13 @@ func ScaleConvert(n float64, useSmallScale bool) string {
 	return fmt.Sprintf("%.1f%s", n, scaleUnits[idx])
 }
 
+func ThrowError(ctx iris.Context, message string, code int) {
+	ctx.StatusCode(code)
+	ctx.JSON(iris.Map{
+		"message": message,
+	})
+}
+
 func Get(uri string, ptr interface{}) (err error) {
 	req, err := http.NewRequest("GET", "https://api.github.com/"+uri, nil)
 	if err != nil {
@@ -89,9 +96,14 @@ func Get(uri string, ptr interface{}) (err error) {
 	return nil
 }
 
-func ThrowError(ctx iris.Context, message string, code int) {
-	ctx.StatusCode(code)
-	ctx.JSON(iris.Map{
-		"message": message,
-	})
+func CountLanguages(languages map[string]float64) map[string]string {
+	total := 0.
+	res := map[string]string{}
+	for _, v := range languages {
+		total += v
+	}
+	for k, v := range languages {
+		res[k] = fmt.Sprintf("%.0f%% (%s)", v/total*100, ScaleConvert(v, false))
+	}
+	return res
 }

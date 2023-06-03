@@ -21,7 +21,7 @@ func GetRepo(username string, repo string) (data map[string]interface{}, err err
 	return data, err
 }
 
-func GetLanguages(username string, repo string) (data map[string]interface{}, err error) {
+func GetLanguages(username string, repo string) (data map[string]float64, err error) {
 	err = Get(fmt.Sprintf("repos/%s/%s/languages", username, repo), &data)
 	return data, err
 }
@@ -70,7 +70,7 @@ func iterRepos(username string) (data []interface{}, err error) {
 
 func CollectLanguages(username string, repos []interface{}) (data map[string]float64, err error) {
 	data = make(map[string]float64)
-	channel := make(chan map[string]interface{}, len(repos))
+	channel := make(chan map[string]float64, len(repos))
 
 	for _, repo := range repos {
 		go func(username string, repo string) {
@@ -86,7 +86,7 @@ func CollectLanguages(username string, repos []interface{}) (data map[string]flo
 		select {
 		case languages := <-channel:
 			for k, v := range languages {
-				data[k] += v.(float64)
+				data[k] += v
 			}
 		}
 	}
@@ -118,7 +118,7 @@ func AnalysisUser(username string) (data iris.Map, err error, code int) {
 			"forks":     ScaleConvert(Sum(repos, "forks_count"), true),
 			"issues":    ScaleConvert(Sum(repos, "open_issues_count"), true),
 			"watchers":  ScaleConvert(Sum(repos, "watchers_count"), true),
-			"languages": languages,
+			"languages": CountLanguages(languages),
 		}, nil, iris.StatusOK
 	}
 	return nil, errors.New("user not found"), iris.StatusNotFound
@@ -144,7 +144,7 @@ func AnalysisRepo(username string, repo string) (data iris.Map, err error, code 
 			"issues":    ScaleConvert(res["open_issues_count"].(float64), false),
 			"color":     GetColor(res["language"]),
 			"license":   getLicense(res["license"]),
-			"languages": languages,
+			"languages": CountLanguages(languages),
 		}, nil, iris.StatusOK
 	}
 	return nil, errors.New("repo not found"), iris.StatusNotFound
