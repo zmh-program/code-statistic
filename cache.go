@@ -14,7 +14,7 @@ func SetupCache() {
 		Password: conf.Redis.Password,
 		DB:       conf.Redis.DB,
 	})
-	pong, err := client.Ping(context.Background()).Result()
+	_, err := client.Ping(context.Background()).Result()
 	if err != nil {
 		logger.Fatal("Failed to connect to Redis server: ", err)
 	} else {
