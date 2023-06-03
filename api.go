@@ -142,6 +142,7 @@ func AnalysisRepo(username string, repo string) (data iris.Map, err error, code 
 			"forks":     ScaleConvert(res["forks_count"].(float64), true),
 			"watchers":  ScaleConvert(res["watchers_count"].(float64), true),
 			"issues":    ScaleConvert(res["open_issues_count"].(float64), false),
+			"color":     GetColor(res["language"]),
 			"license":   getLicense(res["license"]),
 			"languages": languages,
 		}, nil, iris.StatusOK
