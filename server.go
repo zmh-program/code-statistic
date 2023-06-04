@@ -8,8 +8,8 @@ import (
 func RunServer() {
 	app := iris.Default()
 	{
-		app.Get("/user/{username:string}", UserAPI)
-		app.Get("/repo/{username:string}/{repo:string}", RepoAPI)
+		app.Get("/user/{username:string}", CachedHandler(UserAPI, "username"))
+		app.Get("/repo/{username:string}/{repo:string}", CachedHandler(RepoAPI, "username", "password"))
 	}
 	app.Listen(fmt.Sprintf(":%d", conf.Server.Port))
 }
@@ -20,7 +20,7 @@ func UserAPI(ctx iris.Context) {
 	if err != nil {
 		ThrowError(ctx, err.Error(), code)
 	} else {
-		ctx.JSON(data)
+		EndBody(ctx, data, "username")
 	}
 }
 
@@ -30,6 +30,6 @@ func RepoAPI(ctx iris.Context) {
 	if err != nil {
 		ThrowError(ctx, err.Error(), code)
 	} else {
-		ctx.JSON(data)
+		EndBody(ctx, data, "username", "repo")
 	}
 }

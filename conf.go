@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"math/rand"
 	"os"
@@ -65,9 +64,9 @@ func ReadConfig() {
 
 	viper.SetConfigFile("config.yaml")
 	if err := viper.ReadInConfig(); err != nil {
-		logrus.Fatalf("Failed to read config file: %v", err)
+		logger.Fatalf("Failed to read config file: %v", err)
 	}
 	if err := viper.Unmarshal(&conf); err != nil {
-		logrus.Fatalf("Failed to unmarshal config file: %v", err)
+		logger.Fatalf("Failed to unmarshal config file: %v", err)
 	}
 }
