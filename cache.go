@@ -53,14 +53,14 @@ func SetJSONCache(ctx iris.Context, key string, value interface{}) error {
 	return SetCache(ctx, key, string(val))
 }
 
-func GetJSONCache(ctx iris.Context, key string) (value iris.Map, ok bool) {
+func GetJSONCache(ctx iris.Context, key string) (value AnalysisData, ok bool) {
 	val, ok := GetCache(ctx, key)
 	if !ok {
-		return nil, false
+		return AnalysisData{}, false
 	}
 	err := json.Unmarshal([]byte(val), &value)
 	if err != nil {
-		return nil, false
+		return AnalysisData{}, false
 	}
 	return value, true
 }
@@ -79,22 +79,29 @@ func CachedHandler(h iris.Handler, params ...string) iris.Handler {
 	return func(ctx iris.Context) {
 		key := GenerateKey(ctx, params...)
 
-		result, ok := GetJSONCache(ctx, key)
+		data, ok := GetJSONCache(ctx, key)
 		if ok {
-			ctx.JSON(result)
-			return
+			EndBody(ctx, data)
+		} else {
+			h(ctx)
 		}
-
-		h(ctx)
 	}
 }
 
-func EndBody(ctx iris.Context, value iris.Map, params ...string) {
-	err := SetJSONCache(ctx, GenerateKey(ctx, params...), value)
+func EndBody(ctx iris.Context, data AnalysisData) {
+	if data.Err != nil {
+		ThrowError(ctx, data.Err.Error(), data.Code)
+	} else {
+		ctx.JSON(data.Data)
+	}
+}
+
+func EndBodyWithCache(ctx iris.Context, data AnalysisData, params ...string) {
+	err := SetJSONCache(ctx, GenerateKey(ctx, params...), data)
 	if err != nil {
 		logger.Errorf("Failed to set cache: %s", err.Error())
 		ThrowError(ctx, err.Error(), iris.StatusInternalServerError)
 		return
 	}
-	ctx.JSON(value)
+	EndBody(ctx, data)
 }
