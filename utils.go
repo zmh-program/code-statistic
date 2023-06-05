@@ -105,11 +105,16 @@ func CountLanguages(languages map[string]float64) []map[string]any {
 		total += v
 	}
 
+	var cursor float64
+
 	for k, v := range languages {
+		ratio := v / total
+		cursor += ratio
 		res = append(res, map[string]any{
 			"lang":    k,
 			"value":   v,
-			"percent": v / total * 100,
+			"percent": ratio * 100,
+			"cursor":  cursor,
 			"color":   GetColor(k),
 			"text":    fmt.Sprintf("%.0f%% (%s)", v/total*100, ScaleConvert(v, false)),
 		})
