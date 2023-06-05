@@ -94,58 +94,68 @@ func CollectLanguages(username string, repos []interface{}) (data map[string]flo
 	return data, nil
 }
 
-func AnalysisUser(username string) (data iris.Map, err error, code int) {
+type AnalysisData struct {
+	Data iris.Map
+	Err  error
+	Code int
+}
+
+func AnalysisUser(username string) AnalysisData {
 	if GetUserExist(username) {
 		res, err := GetUser(username)
 		if err != nil {
-			return nil, err, iris.StatusInternalServerError
+			return AnalysisData{nil, err, iris.StatusInternalServerError}
 		}
 		repos, err := iterRepos(username)
 		if err != nil {
-			return nil, err, iris.StatusInternalServerError
+			return AnalysisData{nil, err, iris.StatusInternalServerError}
 		}
 		languages, err := CollectLanguages(username, repos)
 		if err != nil {
-			return nil, err, iris.StatusInternalServerError
+			return AnalysisData{nil, err, iris.StatusInternalServerError}
 		}
-		return iris.Map{
-			"username":  username,
-			"location":  res["location"],
-			"org":       res["type"] != "User",
-			"repos":     res["public_repos"],
-			"follower":  ScaleConvert(res["followers"].(float64), true),
-			"stars":     ScaleConvert(Sum(repos, "stargazers_count"), true),
-			"forks":     ScaleConvert(Sum(repos, "forks_count"), true),
-			"issues":    ScaleConvert(Sum(repos, "open_issues_count"), true),
-			"watchers":  ScaleConvert(Sum(repos, "watchers_count"), true),
-			"languages": CountLanguages(languages),
-		}, nil, iris.StatusOK
+		return AnalysisData{
+			iris.Map{
+				"username":  username,
+				"location":  res["location"],
+				"org":       res["type"] != "User",
+				"repos":     res["public_repos"],
+				"follower":  ScaleConvert(res["followers"].(float64), true),
+				"stars":     ScaleConvert(Sum(repos, "stargazers_count"), true),
+				"forks":     ScaleConvert(Sum(repos, "forks_count"), true),
+				"issues":    ScaleConvert(Sum(repos, "open_issues_count"), true),
+				"watchers":  ScaleConvert(Sum(repos, "watchers_count"), true),
+				"languages": CountLanguages(languages),
+			}, nil, iris.StatusOK,
+		}
 	}
-	return nil, errors.New("user not found"), iris.StatusNotFound
+	return AnalysisData{nil, errors.New("user not found"), iris.StatusNotFound}
 }
 
-func AnalysisRepo(username string, repo string) (data iris.Map, err error, code int) {
+func AnalysisRepo(username string, repo string) AnalysisData {
 	if GetRepoExist(username, repo) {
 		res, err := GetRepo(username, repo)
 		if err != nil {
-			return nil, err, iris.StatusInternalServerError
+			return AnalysisData{nil, err, iris.StatusInternalServerError}
 		}
 		languages, err := GetLanguages(username, repo)
 		if err != nil {
-			return nil, err, iris.StatusInternalServerError
+			return AnalysisData{nil, err, iris.StatusInternalServerError}
 		}
-		return iris.Map{
-			"username":  username,
-			"repo":      repo,
-			"size":      SizeConvert(res["size"].(float64), 1),
-			"stars":     ScaleConvert(res["stargazers_count"].(float64), true),
-			"forks":     ScaleConvert(res["forks_count"].(float64), true),
-			"watchers":  ScaleConvert(res["watchers_count"].(float64), true),
-			"issues":    ScaleConvert(res["open_issues_count"].(float64), false),
-			"color":     GetColor(res["language"]),
-			"license":   getLicense(res["license"]),
-			"languages": CountLanguages(languages),
-		}, nil, iris.StatusOK
+		return AnalysisData{
+			iris.Map{
+				"username":  username,
+				"repo":      repo,
+				"size":      SizeConvert(res["size"].(float64), 1),
+				"stars":     ScaleConvert(res["stargazers_count"].(float64), true),
+				"forks":     ScaleConvert(res["forks_count"].(float64), true),
+				"watchers":  ScaleConvert(res["watchers_count"].(float64), true),
+				"issues":    ScaleConvert(res["open_issues_count"].(float64), false),
+				"color":     GetColor(res["language"]),
+				"license":   getLicense(res["license"]),
+				"languages": CountLanguages(languages),
+			}, nil, iris.StatusOK,
+		}
 	}
-	return nil, errors.New("repo not found"), iris.StatusNotFound
+	return AnalysisData{nil, errors.New("repo not found"), iris.StatusNotFound}
 }

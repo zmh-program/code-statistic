@@ -16,20 +16,20 @@ func RunServer() {
 
 func UserAPI(ctx iris.Context) {
 	username := ctx.Params().Get("username")
-	data, err, code := AnalysisUser(username)
-	if err != nil {
-		ThrowError(ctx, err.Error(), code)
+	data := AnalysisUser(username)
+	if data.Err != nil {
+		ThrowError(ctx, data.Err.Error(), data.Code)
 	} else {
-		EndBody(ctx, data, "username")
+		EndBody(ctx, data.Data, "username")
 	}
 }
 
 func RepoAPI(ctx iris.Context) {
 	username, repo := ctx.Params().Get("username"), ctx.Params().Get("repo")
-	data, err, code := AnalysisRepo(username, repo)
-	if err != nil {
-		ThrowError(ctx, err.Error(), code)
+	data := AnalysisRepo(username, repo)
+	if data.Err != nil {
+		ThrowError(ctx, data.Err.Error(), data.Code)
 	} else {
-		EndBody(ctx, data, "username", "repo")
+		EndBody(ctx, data.Data, "username", "repo")
 	}
 }
