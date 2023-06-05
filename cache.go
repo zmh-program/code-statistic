@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/go-redis/redis/v8"
 	"github.com/kataras/iris/v12"
+	"time"
 )
 
 var cache *redis.Client
@@ -29,7 +30,7 @@ func SetupCache() {
 }
 
 func SetCache(ctx iris.Context, key string, value string) error {
-	return cache.Set(ctx.Request().Context(), key, value, conf.Redis.Expiration).Err()
+	return cache.Set(ctx.Request().Context(), key, value, conf.Redis.Expiration*time.Second).Err()
 }
 
 func GetCache(ctx iris.Context, key string) (val string, ok bool) {
