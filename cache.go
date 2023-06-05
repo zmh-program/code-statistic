@@ -65,22 +65,16 @@ func GetJSONCache(ctx iris.Context, key string) (value AnalysisData, ok bool) {
 	return value, true
 }
 
-func GenerateKey(ctx iris.Context, keys ...string) string {
-	param := ""
-	for _, key := range keys {
-		value := ctx.Params().GetString(key)
-		param += fmt.Sprintf("%s=%s;", key, value)
-	}
-	return fmt.Sprintf("%s?%s", ctx.Path(), param)
-}
-
 // CachedHandler is a decorator for handlers to enable caching their response.
-func CachedHandler(h iris.Handler, params ...string) iris.Handler {
+func CachedHandler(h iris.Handler) iris.Handler {
 	return func(ctx iris.Context) {
-		key := GenerateKey(ctx, params...)
+		path := ctx.Path()
 
-		data, ok := GetJSONCache(ctx, key)
+		data, ok := GetJSONCache(ctx, path)
 		if ok {
+			if conf.Debug {
+				logger.Debugf("Hit cache of %s", path)
+			}
 			EndBody(ctx, data)
 		} else {
 			h(ctx)
@@ -96,8 +90,8 @@ func EndBody(ctx iris.Context, data AnalysisData) {
 	}
 }
 
-func EndBodyWithCache(ctx iris.Context, data AnalysisData, params ...string) {
-	err := SetJSONCache(ctx, GenerateKey(ctx, params...), data)
+func EndBodyWithCache(ctx iris.Context, data AnalysisData) {
+	err := SetJSONCache(ctx, ctx.Path(), data)
 	if err != nil {
 		logger.Errorf("Failed to set cache: %s", err.Error())
 		ThrowError(ctx, err.Error(), iris.StatusInternalServerError)
