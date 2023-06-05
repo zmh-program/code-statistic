@@ -10,9 +10,12 @@ import (
 )
 
 type Config struct {
+	Debug bool
+
 	Server struct {
 		Port int
 	}
+
 	Redis struct {
 		Host       string
 		Port       int
@@ -48,7 +51,7 @@ func ValidateToken() {
 	if len(tokenList) == 0 {
 		logger.Fatal("No token found! Please set TOKEN environment variable.")
 	}
-	logger.Debug(fmt.Sprintf("Found %d available token(s).", len(tokenList)))
+	logger.Debug(fmt.Sprintf("Found %d available token(s)", len(tokenList)))
 }
 
 func ReadToken() {

@@ -7,6 +7,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"io"
 	"net/http"
+	"sort"
 )
 
 // generate at https://github.com/ozh/github-colors/blob/master/colors.json
@@ -96,14 +97,27 @@ func Get(uri string, ptr interface{}) (err error) {
 	return nil
 }
 
-func CountLanguages(languages map[string]float64) map[string]string {
+func CountLanguages(languages map[string]float64) []map[string]any {
 	total := 0.
-	res := map[string]string{}
+
+	var res []map[string]any
 	for _, v := range languages {
 		total += v
 	}
+
 	for k, v := range languages {
-		res[k] = fmt.Sprintf("%.0f%% (%s)", v/total*100, ScaleConvert(v, false))
+		res = append(res, map[string]any{
+			"lang":    k,
+			"value":   v,
+			"percent": v / total * 100,
+			"color":   GetColor(k),
+			"text":    fmt.Sprintf("%.0f%% (%s)", v/total*100, ScaleConvert(v, false)),
+		})
 	}
+
+	sort.Slice(res, func(i, j int) bool {
+		return res[i]["value"].(float64) > res[j]["value"].(float64)
+	})
+
 	return res
 }

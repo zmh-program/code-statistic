@@ -20,7 +20,11 @@ func SetupCache() {
 	if err != nil {
 		logger.Fatal("Failed to connect to Redis server: ", err)
 	} else {
-		logger.Debug("Connected to Redis server successfully.")
+		logger.Debug("Connected to Redis server successfully")
+	}
+	if conf.Debug {
+		cache.FlushAll(context.Background())
+		logger.Debug("Flushed all cache")
 	}
 }
 
