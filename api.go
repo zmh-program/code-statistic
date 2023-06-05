@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"github.com/kataras/iris/v12"
 )
@@ -96,7 +95,7 @@ func CollectLanguages(username string, repos []interface{}) (data map[string]flo
 
 type AnalysisData struct {
 	Data iris.Map
-	Err  error
+	Err  string
 	Code int
 }
 
@@ -104,15 +103,15 @@ func AnalysisUser(username string) AnalysisData {
 	if GetUserExist(username) {
 		res, err := GetUser(username)
 		if err != nil {
-			return AnalysisData{nil, err, iris.StatusInternalServerError}
+			return AnalysisData{nil, err.Error(), iris.StatusInternalServerError}
 		}
 		repos, err := iterRepos(username)
 		if err != nil {
-			return AnalysisData{nil, err, iris.StatusInternalServerError}
+			return AnalysisData{nil, err.Error(), iris.StatusInternalServerError}
 		}
 		languages, err := CollectLanguages(username, repos)
 		if err != nil {
-			return AnalysisData{nil, err, iris.StatusInternalServerError}
+			return AnalysisData{nil, err.Error(), iris.StatusInternalServerError}
 		}
 		return AnalysisData{
 			iris.Map{
@@ -126,21 +125,21 @@ func AnalysisUser(username string) AnalysisData {
 				"issues":    ScaleConvert(Sum(repos, "open_issues_count"), true),
 				"watchers":  ScaleConvert(Sum(repos, "watchers_count"), true),
 				"languages": CountLanguages(languages),
-			}, nil, iris.StatusOK,
+			}, "", iris.StatusOK,
 		}
 	}
-	return AnalysisData{nil, errors.New("user not found"), iris.StatusNotFound}
+	return AnalysisData{nil, "user not found", iris.StatusNotFound}
 }
 
 func AnalysisRepo(username string, repo string) AnalysisData {
 	if GetRepoExist(username, repo) {
 		res, err := GetRepo(username, repo)
 		if err != nil {
-			return AnalysisData{nil, err, iris.StatusInternalServerError}
+			return AnalysisData{nil, err.Error(), iris.StatusInternalServerError}
 		}
 		languages, err := GetLanguages(username, repo)
 		if err != nil {
-			return AnalysisData{nil, err, iris.StatusInternalServerError}
+			return AnalysisData{nil, err.Error(), iris.StatusInternalServerError}
 		}
 		return AnalysisData{
 			iris.Map{
@@ -154,8 +153,8 @@ func AnalysisRepo(username string, repo string) AnalysisData {
 				"color":     GetColor(res["language"]),
 				"license":   getLicense(res["license"]),
 				"languages": CountLanguages(languages),
-			}, nil, iris.StatusOK,
+			}, "", iris.StatusOK,
 		}
 	}
-	return AnalysisData{nil, errors.New("repo not found"), iris.StatusNotFound}
+	return AnalysisData{nil, "repo not found", iris.StatusNotFound}
 }

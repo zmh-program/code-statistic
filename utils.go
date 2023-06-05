@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/kataras/iris/v12"
-	"github.com/sirupsen/logrus"
 	"io"
 	"net/http"
 	"sort"
@@ -87,7 +86,7 @@ func Get(uri string, ptr interface{}) (err error) {
 
 	defer func(Body io.ReadCloser) {
 		if err := Body.Close(); err != nil {
-			logrus.Infoln(err)
+			logger.Infoln(err)
 		}
 	}(resp.Body)
 
@@ -105,16 +104,11 @@ func CountLanguages(languages map[string]float64) []map[string]any {
 		total += v
 	}
 
-	var cursor float64
-
 	for k, v := range languages {
-		ratio := v / total
-		cursor += ratio
 		res = append(res, map[string]any{
 			"lang":    k,
 			"value":   v,
-			"percent": ratio * 100,
-			"cursor":  cursor,
+			"percent": v / total * 100,
 			"color":   GetColor(k),
 			"text":    fmt.Sprintf("%.0f%% (%s)", v/total*100, ScaleConvert(v, false)),
 		})

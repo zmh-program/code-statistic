@@ -89,8 +89,8 @@ func CachedHandler(h iris.Handler, params ...string) iris.Handler {
 }
 
 func EndBody(ctx iris.Context, data AnalysisData) {
-	if data.Err != nil {
-		ThrowError(ctx, data.Err.Error(), data.Code)
+	if data.Err != "" {
+		ThrowError(ctx, data.Err, data.Code)
 	} else {
 		ctx.JSON(data.Data)
 	}
