@@ -1,5 +1,5 @@
 <?php
-header('Content-Type: image/svg+xml');
+//header('Content-Type: image/svg+xml');
 header('Cache-Control: no-cache');
 
 function compress($buffer)
@@ -19,8 +19,9 @@ function fetch($uri)
     );
 
     $context  = stream_context_create($opts);
-    $response = file_get_contents("http://localhost:8080/api/" . $uri, false, $context);
-    return json_decode($response);
+    $response = @file_get_contents("http://localhost:8080/api/" . $uri, false, $context);
+    $ok = $response !== false;
+    return $ok ? json_decode($response, true) : null;
 }
 
 function get($param, $default = null)

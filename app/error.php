@@ -1,5 +1,5 @@
 <?php
-include 'utils.php';
+include_once 'utils.php';
 $dark = isset($_GET['theme']) && $_GET['theme'] === 'dark';
 
 $header = $dark ? "#fff" : "#434d58";

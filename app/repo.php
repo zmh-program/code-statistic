@@ -6,10 +6,15 @@ $username = get('username', 'zmh-program');
 $repo = get('repo', 'code-statistic');
 
 $stats = fetch("repo/$username/$repo");
-echo $stats->color;
+if (!$stats) {
+    include 'error.php';
+    exit;
+}
 $header = $dark ? "#fff" : "#434d58";
 $background = $dark ? "#000" : "#fffefe";
 
+$bar = count($stats->languages);
+echo $bar;
 ob_start('compress');
 ?>
 <% const left = Math.ceil(langs.length / 2); const height = 215 + (left > 4 ? (left - 4) * 20 : 0)  %>
