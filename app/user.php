@@ -9,9 +9,8 @@ if (!$stats) {
     include 'error.php';
     exit;
 }
-$langs = $stats['languages'];
 
-list($bar, $height, $header, $background) = extracted($stats['languages'], $dark);
+list($langs, $bar, $height, $header, $background) = extracted($stats['languages'], $dark);
 ?>
 <svg width="540" viewBox="0 0 660 <?php echo $height + 1 ?>" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="descId">
     <title id="titleId"><?php echo $username ?>'s Code Stats</title>
@@ -132,31 +131,42 @@ list($bar, $height, $header, $background) = extracted($stats['languages'], $dark
             </g>
         </svg>
     </g>
-    <line x1="290" y1="40" x2="290" y2="<%- height - 40 %>" stroke="#eeecec"></line>
+    <line x1="290" y1="40" x2="290" y2="<?php echo $height - 40 ?>" stroke="#eeecec"></line>
     <g xmlns="http://www.w3.org/2000/svg" transform="translate(300, 55)" data-testid="main-card-progress">
         <svg data-testid="lang-items" x="25">
             <mask id="rect-mask"><rect x="0" y="0" width="300" height="8" fill="white" rx="5"/></mask>
-            <% langs.forEach(function(lang){ %><rect mask="url(#rect-mask)" data-testid="lang-progress" x="<%- lang.cursor * 300 %>" y="0" width="<%- lang.ratio * 300 %>" height="8" fill="<%- lang.color %>"/><% }); %>
+            <?php $cursor = 0. ?>
+            <?php foreach ($langs as $lang) { ?>
+                <rect
+                        mask="url(#rect-mask)"
+                        data-testid="lang-progress"
+                        x="<?php echo $cursor * 3 ?>"
+                        y="0" width="<?php echo $lang['percent'] * 3 ?>"
+                        height="8"
+                        fill="<?php echo $lang['color'] ?>"
+                />
+                <?php $cursor += $lang['percent'] ?>
+            <?php } ?>
             <g transform="translate(0, 25)">
                 <g transform="translate(0, 0)">
-                    <% langs.splice(0, left).forEach(function (lang, idx) { %>
-                    <g transform="translate(0, <%- idx * 25 %>)">
-                        <g class="stagger" style="animation-delay: <%- 450 + (idx * 150) %>ms">
-                            <circle cx="5" cy="6" r="5" fill="<%- lang.color %>"/>
-                            <text data-testid="lang-name" x="15" y="10" class="lang"><%- lang.text %></text>
+                    <?php foreach (array_splice($langs, 0, $bar) as $idx => $lang) { ?>
+                        <g transform="translate(0, <?php echo $idx * 25 ?>)">
+                            <g class="stagger" style="animation-delay: <?php echo 450 + ($idx * 150) ?>ms">
+                                <circle cx="5" cy="6" r="5" fill="<?php echo $lang['color'] ?>"/>
+                                <text data-testid="lang-name" x="15" y="10" class="lang"><?php echo $lang['text'] ?></text>
+                            </g>
                         </g>
-                    </g>
-                    <% });%>
+                    <?php } ?>
                 </g>
                 <g transform="translate(150, 0)">
-                    <% langs.splice(0, left).forEach(function (lang, idx) { %>
-                    <g transform="translate(0, <%- idx * 25 %>)">
-                        <g class="stagger" style="animation-delay: <%- 450 + (idx * 150) %>ms">
-                            <circle cx="5" cy="6" r="5" fill="<%- lang.color %>"/>
-                            <text data-testid="lang-name" x="15" y="10" class="lang"><%- lang.text %></text>
+                    <?php foreach (array_splice($langs, 0, $bar) as $idx => $lang) { ?>
+                        <g transform="translate(0, <?php echo $idx * 25 ?>)">
+                            <g class="stagger" style="animation-delay: <?php echo 450 + ($idx * 150) ?>ms">
+                                <circle cx="5" cy="6" r="5" fill="<?php echo $lang['color'] ?>"/>
+                                <text data-testid="lang-name" x="15" y="10" class="lang"><?php echo $lang['text'] ?></text>
+                            </g>
                         </g>
-                    </g>
-                    <% });%>
+                    <?php } ?>
                 </g>
             </g>
         </svg>

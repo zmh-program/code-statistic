@@ -13,7 +13,7 @@ if (!$stats) {
 $langs = $stats['languages'];
 $name = "$username/$repo";
 
-list($bar, $height, $header, $background) = extracted($stats['languages'], $dark);
+list($langs, $bar, $height, $header, $background) = extracted($stats['languages'], $dark);
 ?>
 <svg width="540" viewBox="0 0 660 <?php echo $height + 1 ?>" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="descId">
     <title id="titleId"><?php echo $name ?>'s Code Stats</title>
