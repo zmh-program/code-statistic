@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/kataras/iris/v12"
+	"sort"
 )
 
 func GetUser(username string) (data map[string]interface{}, err error) {
@@ -82,6 +83,31 @@ func CollectLanguages(username string, repos []interface{}) (data map[string]flo
 	return data, nil
 }
 
+func CountLanguages(languages map[string]float64) []map[string]any {
+	total := 0.
+
+	var res []map[string]any
+	for _, v := range languages {
+		total += v
+	}
+
+	for k, v := range languages {
+		res = append(res, map[string]any{
+			"lang":    k,
+			"value":   v,
+			"percent": v / total * 100,
+			"color":   GetColor(k),
+			"text":    fmt.Sprintf("%s %.0f%% (%s)", k, v/total*100, ScaleConvert(v, false)),
+		})
+	}
+
+	sort.Slice(res, func(i, j int) bool {
+		return res[i]["value"].(float64) > res[j]["value"].(float64)
+	})
+
+	return res
+}
+
 type AnalysisData struct {
 	Data iris.Map
 	Err  string
@@ -104,10 +130,10 @@ func AnalysisUser(username string) AnalysisData {
 	return AnalysisData{
 		iris.Map{
 			"username":  username,
-			"location":  res["location"],
+			"location":  getDefault(res["location"], "unknown"),
 			"org":       res["type"] != "User",
 			"repos":     res["public_repos"],
-			"follower":  ScaleConvert(res["followers"].(float64), true),
+			"followers": ScaleConvert(res["followers"].(float64), true),
 			"stars":     ScaleConvert(Sum(repos, "stargazers_count"), true),
 			"forks":     ScaleConvert(Sum(repos, "forks_count"), true),
 			"issues":    ScaleConvert(Sum(repos, "open_issues_count"), true),

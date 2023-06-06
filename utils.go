@@ -6,7 +6,6 @@ import (
 	"github.com/kataras/iris/v12"
 	"io"
 	"net/http"
-	"sort"
 )
 
 // generate at https://github.com/ozh/github-colors/blob/master/colors.json
@@ -96,27 +95,9 @@ func Get(uri string, ptr interface{}) (err error) {
 	return nil
 }
 
-func CountLanguages(languages map[string]float64) []map[string]any {
-	total := 0.
-
-	var res []map[string]any
-	for _, v := range languages {
-		total += v
+func getDefault(value any, defaults any) any {
+	if value == nil || value == "" || value == 0 || value == false {
+		return defaults
 	}
-
-	for k, v := range languages {
-		res = append(res, map[string]any{
-			"lang":    k,
-			"value":   v,
-			"percent": v / total * 100,
-			"color":   GetColor(k),
-			"text":    fmt.Sprintf("%s %.0f%% (%s)", k, v/total*100, ScaleConvert(v, false)),
-		})
-	}
-
-	sort.Slice(res, func(i, j int) bool {
-		return res[i]["value"].(float64) > res[j]["value"].(float64)
-	})
-
-	return res
+	return value
 }

@@ -28,3 +28,19 @@ function get($param, $default = null)
 {
     return isset($_GET[$param]) ? $_GET[$param] : $default;
 }
+
+/**
+ * @param $languages
+ * @param $dark
+ * @return array
+ */
+function extracted($languages, $dark)
+{
+    $bar = ceil(count($languages) / 2);
+    $height = 215 + ($bar > 4 ? ($bar - 4) * 20 : 0);
+
+    $header = $dark ? "#fff" : "#434d58";
+    $background = $dark ? "#000" : "#fffefe";
+    ob_start('compress');
+    return array($bar, $height, $header, $background);
+}
