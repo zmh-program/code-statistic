@@ -5,7 +5,7 @@ $dark = isset($_GET['theme']) && $_GET['theme'] === 'dark';
 $header = $dark ? "#fff" : "#434d58";
 $background = $dark ? "#000" : "#fffefe";
 
-ob_start('compress_output');
+ob_start('compress');
 ?>
 
 <svg width="540" viewBox="0 0 660 216" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="descId">

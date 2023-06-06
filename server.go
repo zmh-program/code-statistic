@@ -8,8 +8,8 @@ import (
 func RunServer() {
 	app := iris.Default()
 	{
-		app.Get("/user/{username:string}", CachedHandler(UserAPI))
-		app.Get("/repo/{username:string}/{repo:string}", CachedHandler(RepoAPI))
+		app.Get("/api/user/{username:string}", CachedHandler(UserAPI))
+		app.Get("/api/repo/{username:string}/{repo:string}", CachedHandler(RepoAPI))
 	}
 	app.Listen(fmt.Sprintf(":%d", conf.Server.Port))
 }
