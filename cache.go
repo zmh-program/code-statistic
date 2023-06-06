@@ -92,6 +92,9 @@ func EndBody(ctx iris.Context, data AnalysisData) {
 
 func EndBodyWithCache(ctx iris.Context, data AnalysisData) {
 	err := SetJSONCache(ctx, ctx.Path(), data)
+	if conf.Debug {
+		logger.Debugf("Set cache of %s", ctx.Path())
+	}
 	if err != nil {
 		logger.Errorf("Failed to set cache: %s", err.Error())
 		ThrowError(ctx, err.Error(), iris.StatusInternalServerError)
