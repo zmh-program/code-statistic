@@ -36,9 +36,11 @@ function get($param, $default = null)
  */
 function extracted($languages, $dark)
 {
-    $languages = $languages ? $languages : array(
-        array("name" => "none", "percent" => 100, "color" => "#ebedf0", "text" => "empty"),
-    );
+    if (!$languages) {
+        $languages = array(
+            array("name" => "none", "percent" => 100, "color" => "#ebedf0", "text" => "empty"),
+        );
+    }
     $bar = ceil(count($languages) / 2);
     $height = 215 + ($bar > 4 ? ($bar - 4) * 20 : 0);
 
