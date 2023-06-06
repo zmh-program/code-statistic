@@ -14,7 +14,7 @@ ob_start('compress');
     <style>
         .header {
             font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
-            fill: <?php echo $header; ?>;
+            fill: <?php echo $header ?>;
             animation: fadeInAnimation 0.8s ease-in-out forwards
         }
         @supports(appearance: auto) {
@@ -27,10 +27,10 @@ ob_start('compress');
         }
         @keyframes fadeInAnimation {
             from {
-                opacity:0
+                opacity: 0
             }
             to {
-                opacity:1
+                opacity: 1
             }
         }
     </style>

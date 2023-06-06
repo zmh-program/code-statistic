@@ -110,7 +110,7 @@ func CountLanguages(languages map[string]float64) []map[string]any {
 			"value":   v,
 			"percent": v / total * 100,
 			"color":   GetColor(k),
-			"text":    fmt.Sprintf("%.0f%% (%s)", v/total*100, ScaleConvert(v, false)),
+			"text":    fmt.Sprintf("%s %.0f%% (%s)", k, v/total*100, ScaleConvert(v, false)),
 		})
 	}
 
