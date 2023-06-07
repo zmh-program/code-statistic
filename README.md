@@ -3,7 +3,7 @@
 [<img src="docs/icon.png" alt="Code Statistic" width="64" height="64" style="transform: translateY(50px);">](https://stats.deeptrain.net)
 # [Code Statistic](https://stats.deeptrain.net)
 
-#### Dynamically generate your GitHub statistic card!
+#### ⚡ Dynamically generate your github statistic card!
 
 ![License](https://img.shields.io/github/license/zmh-program/code-statistic?style=flat-square)
 ![GitHub release](https://img.shields.io/github/v/release/zmh-program/code-statistic?style=flat-square)
@@ -21,7 +21,7 @@ Use in your Github homepage! use it in your website! use it anywhere you want!
 [![zmh-program's Github Stats](https://stats.deeptrain.net/user/zmh-program/)](https://github.com/zmh-program/code-statistic)
 
 > **Note**
-> Currently only your own repositories as statistics, do not support the repositories **contributed** to others, do not support **private** repositories, excluding **fork** repositories.
+> currently only your own repositories as statistics, do not support the repositories **contributed** to others, do not support **private** repositories, excluding **fork** repositories.
 >
 > We will count all repository data such as stars, forks, open issues and output the statistic.
 
@@ -35,7 +35,7 @@ Use in repository introduction! use in pull request! use in issue! use it anywhe
 [![Deeptrain's Github Stats](https://stats.deeptrain.net/repo/zmh-program/Deeptrain)](https://github.com/zmh-program/code-statistic)
 
 > **Warning**
-> By default, we can't get the data of private repo, please use your own [token](https://github.com/settings/tokens/new) to deploy. Don't forget to check the box to access your private repositories!
+> by default, we can't get the data of private repo, please use your own [token](https://github.com/settings/tokens/new) to deploy. Don't forget to check the box to access your private repositories!
 
 ## 🥝 Dark Theme
 Very easy, just add `?theme=dark` after it in any kind of card!
