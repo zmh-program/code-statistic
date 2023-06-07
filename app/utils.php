@@ -1,5 +1,5 @@
 <?php
-//header('Content-Type: image/svg+xml');
+header('Content-Type: image/svg+xml');
 header('Cache-Control: no-cache');
 
 function compress($buffer)
