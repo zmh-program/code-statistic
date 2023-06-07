@@ -1,0 +1,10 @@
+debug: true
+server:
+  port: 8080
+
+redis:
+  host: localhost
+  port: 6379
+  password: ""
+  db: 0
+  expiration: 7200

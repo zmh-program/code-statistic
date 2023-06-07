@@ -1,0 +1,25 @@
+{
+  "name": "code-statistic",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "prepare": "node -e \"if(require('fs').existsSync('.git')){process.exit(1)}\" || is-ci || husky install"
+  },
+  "dependencies": {
+    "tdesign-icons-vue-next": "^0.1.5",
+    "tdesign-vue-next": "^0.21.1",
+    "vite-svg-loader": "^3.6.0",
+    "vue": "^3.2.37"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^3.1.0",
+    "typescript": "^4.6.4",
+    "vite": "^3.1.0",
+    "vue-tsc": "^0.40.4"
+  },
+  "description": "Dynamically analyse code, counts the amount of code in each language in a repository or user, and generates results."
+}
