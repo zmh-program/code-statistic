@@ -73,7 +73,7 @@ function generate() {
   <t-card class="response">
     <template v-if="link">
       <t-input v-model="link" readonly />
-      <img :src="link" alt>
+      <img :src="link" alt="">
     </template>
     <t-loading class="loading" v-else />
   </t-card>
