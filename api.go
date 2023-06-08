@@ -33,6 +33,21 @@ func GetLanguages(username string, repo string) (data map[string]float64, err er
 	return data, err
 }
 
+func getRelease(username string, repo string, tag string) (data map[string]float64, err error) {
+	err = Get(fmt.Sprintf("repos/%s/%s/releases/tags/%s", username, repo, tag), &data)
+	return data, err
+}
+
+func getLatestRelease(username string, repo string) (data map[string]float64, err error) {
+	err = Get(fmt.Sprintf("repos/%s/%s/releases/latest", username, repo), &data)
+	return data, err
+}
+
+func getContributors(username string, repo string) (data []interface{}, err error) {
+	err = Get(fmt.Sprintf("repos/%s/%s/contributors", username, repo), &data)
+	return data, err
+}
+
 func getLicense(license interface{}) string {
 	if license != nil {
 		return license.(map[string]interface{})["spdx_id"].(string)
@@ -164,6 +179,29 @@ func AnalysisRepo(username string, repo string) AnalysisData {
 			"color":     GetColor(res["language"]),
 			"license":   getLicense(res["license"]),
 			"languages": CountLanguages(languages),
+		}, "", iris.StatusOK,
+	}
+}
+
+func AnalysisContributor(username string, repo string) AnalysisData {
+	res, err := getContributors(username, repo)
+	if err != nil {
+		return AnalysisData{nil, err.Error(), iris.StatusNotFound}
+	}
+	var contributors []map[string]any
+	for _, v := range res {
+		v := v.(map[string]interface{})
+		contributors = append(contributors, map[string]any{
+			"username": v["login"],
+			"avatar":   v["avatar_url"],
+			"commits":  v["contributions"],
+		})
+	}
+	return AnalysisData{
+		iris.Map{
+			"username":     username,
+			"repo":         repo,
+			"contributors": contributors,
 		}, "", iris.StatusOK,
 	}
 }
