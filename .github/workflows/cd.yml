@@ -22,8 +22,9 @@ jobs:
       - name: Build Frontend
         run: |
           cd gui
-          npm install
-          npm run release
+          npm install -g pnpm
+          pnpm install
+          pnpm release
 
 
       - name: Use Golang
@@ -40,7 +41,7 @@ jobs:
       - name: Process Application
         run: |
           mkdir deploy/app
-          mv gui/dist deploy/app/
+          mv app deploy/app/
 
       - name: Commit Migration
         run: |
