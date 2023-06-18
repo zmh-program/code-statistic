@@ -35,29 +35,28 @@ var conf Config
 
 var tokenList []string
 
-func GetToken() string {
-	source := rand.NewSource(time.Now().UnixNano())
-	idx := rand.New(source).Intn(len(tokenList))
-	return tokenList[idx]
-}
-
-func GetTokenFromEnv() []string {
+func DetectToken() []string {
 	data := strings.TrimSpace(os.Getenv("TOKEN"))
-	tokenList = strings.Split(data, "|")
+	arr := strings.Split(data, "|")
 	result := make([]string, 0)
-	for _, token := range tokenList {
+	for _, token := range arr {
 		if strings.HasPrefix(token, "ghp_") {
-			result = append(result, token)
+			data, err := getRateLimit(token)
+			if err == nil {
+				remaining := data["rate"].(map[string]interface{})["remaining"].(float64)
+				if remaining > 0 {
+					result = append(result, token)
+					fmt.Printf("> Detected available token \u001B[33m%s\u001B[0m has \u001B[32m%d\u001B[0m remaining requests.\n", token[:10], int(remaining))
+				}
+			}
 		}
 	}
-	return result
-}
 
-func ValidateToken() {
-	if len(tokenList) == 0 {
+	if len(result) == 0 {
 		logger.Fatal("No token found! Please set TOKEN environment variable.")
 	}
 	logger.Debug(fmt.Sprintf("Found %d available token(s)", len(tokenList)))
+	return result
 }
 
 func GetColor(lang any) string {
@@ -117,14 +116,14 @@ func ThrowError(ctx iris.Context, message string, code int) {
 	})
 }
 
-func Get(uri string, ptr interface{}) (err error) {
+func NativeGet(uri string, token string, ptr interface{}) (err error) {
 	req, err := http.NewRequest("GET", "https://api.github.com/"+uri, nil)
 	if err != nil {
 		return err
 	}
 
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Authorization", "Bearer "+GetToken())
+	req.Header.Set("Authorization", "Bearer "+token)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -142,6 +141,12 @@ func Get(uri string, ptr interface{}) (err error) {
 		return err
 	}
 	return nil
+}
+
+func Get(uri string, ptr interface{}) (err error) {
+	source := rand.NewSource(time.Now().UnixNano())
+	idx := rand.New(source).Intn(len(tokenList))
+	return NativeGet(uri, tokenList[idx], ptr)
 }
 
 func getDefault(value any, defaults any) any {

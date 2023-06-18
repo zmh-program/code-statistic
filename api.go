@@ -7,6 +7,11 @@ import (
 	"sort"
 )
 
+func getRateLimit(token string) (data map[string]interface{}, err error) {
+	err = NativeGet("rate_limit", token, &data)
+	return data, err
+}
+
 func GetUser(username string) (data map[string]interface{}, err error) {
 	err = Get(fmt.Sprintf("users/%s", username), &data)
 	if err == nil && data["message"] == "Not Found" {
