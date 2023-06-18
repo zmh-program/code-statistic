@@ -175,4 +175,11 @@ html, body {
 .select * {
   font-family: 'Open Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
+@media (max-width: 320px) {
+  #app {
+    scale: .65;
+    width: 200%;
+  }
+}
 </style>

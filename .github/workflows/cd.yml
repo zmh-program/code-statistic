@@ -1,7 +1,9 @@
-name: Generate Package
+name: Deployment
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - main
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -30,9 +32,10 @@ jobs:
           go-version: '1.20'
 
       - name: Build Backend
-        run: go build .
+        run: | 
+          go build .
 
-      - name: Zip
+      - name: Pack
         run: |
           zip -r package.zip ./* -x "gui/*"
 
