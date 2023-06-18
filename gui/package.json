@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
+    "release": "vue-tsc --noEmit && vite build --emptyOutDir --outDir ../deploy/gui",
     "preview": "vite preview",
     "prepare": "node -e \"if(require('fs').existsSync('.git')){process.exit(1)}\" || is-ci || husky install"
   },

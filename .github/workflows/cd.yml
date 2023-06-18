@@ -23,9 +23,7 @@ jobs:
         run: |
           cd gui
           npm install
-          npm run build
-          mkdir -p deploy/gui
-          cd .. && mv gui/dist deploy/gui/
+          npm run release
 
 
       - name: Use Golang
