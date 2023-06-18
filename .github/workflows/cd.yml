@@ -25,7 +25,7 @@ jobs:
           npm install
           npm run build
           mkdir -p deploy/gui
-          mv gui/dist deploy/gui/
+          cd .. && mv gui/dist deploy/gui/
 
 
       - name: Use Golang
