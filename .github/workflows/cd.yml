@@ -51,4 +51,6 @@ jobs:
           git checkout -b deploy
           git add .
           git commit -m "deploy"
-          git push origin deploy
+          git push --force --set-upstream https://github.com/zmh-program/code-statistic.git HEAD:deploy
+    env:
+      GITHUB_TOKEN: ${{ secrets.TOKEN }}
