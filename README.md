@@ -37,6 +37,19 @@ Use in repository introduction! use in pull request! use in issue! use it anywhe
 > **Warning**
 > by default, we can't get the data of private repo, please use your own [token](https://github.com/settings/tokens/new) to deploy. Don't forget to check the box to access your private repositories!
 
+## 🍎 Contributor Card
+Use in repository introduction!
+```markdown
+[![Web ChatGPT QQ Bot's Contributors](https://stats.deeptrain.net/contributor/lss233/chatgpt-mirai-qq-bot)](https://github.com/zmh-program/code-statistic)
+```
+[![Web ChatGPT QQ Bot's Contributors](https://stats.deeptrain.net/contributor/lss233/chatgpt-mirai-qq-bot)](https://github.com/zmh-program/code-statistic)
+
+custom columns (min columns is *4*, default is *8*, max is *6*):
+```markdown
+[![Web ChatGPT QQ Bot's Contributors](https://stats.deeptrain.net/contributor/lss233/chatgpt-mirai-qq-bot?column=12)](https://github.com/zmh-program/code-statistic)
+```
+[![Web ChatGPT QQ Bot's Contributors](https://stats.deeptrain.net/contributor/lss233/chatgpt-mirai-qq-bot?column=12)](https://github.com/zmh-program/code-statistic)
+
 ## 🥝 Dark Theme
 Very easy, just add `?theme=dark` after it in any kind of card!
 ```markdown

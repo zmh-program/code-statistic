@@ -12,6 +12,20 @@ const repo = reactive({
   username: '',
   repo: '',
 });
+const contributor = reactive({
+  username: '',
+  repo: '',
+  column: 6,
+})
+
+function validate(map: Record<string, string>) {
+  for (const key in map) {
+    if (!map[key]) {
+      return false;
+    }
+  }
+  return true;
+}
 
 function tabChanged(value: string) {
   tab.value = value;
@@ -23,13 +37,16 @@ function join(src: string) {
 function generate() {
   switch (tab.value) {
     case 'user':
+      if (!validate(user)) return;
       link.value = join(`/user/${user.username}?theme=${theme.value}`);
       break;
     case 'repo':
+      if (!validate(repo)) return;
       link.value = join(`/repo/${repo.username}/${repo.repo}/?theme=${theme.value}`);
       break;
-    case 'release':
-      //link.value = `https://code-statistic.vercel.app/api?username=zmh-program&repo=code-statistic&theme=${theme}`;
+    case 'contributor':
+      if (!validate(contributor)) return;
+      link.value = join(`/contributor/${contributor.username}/${contributor.repo}/?column=${contributor.column}&theme=${theme.value}`);
       break;
   }
 }
@@ -53,6 +70,19 @@ function generate() {
           </t-form-item>
           <t-form-item label="Repo">
             <t-input placeholder="repository" v-model="repo.repo" />
+          </t-form-item>
+        </t-tab-panel>
+        <t-tab-panel value="contributor" label="Contributor"><br>
+          <t-form-item label="User">
+            <t-input-adornment prepend="github.com/">
+              <t-input placeholder="username" v-model="contributor.username" />
+            </t-input-adornment>
+          </t-form-item>
+          <t-form-item label="Repo">
+            <t-input placeholder="repository" v-model="contributor.repo" />
+          </t-form-item>
+          <t-form-item label="Column">
+            <t-input placeholder="repository" v-model="contributor.column" />
           </t-form-item>
         </t-tab-panel>
         <t-tab-panel value="release" label="Release">
