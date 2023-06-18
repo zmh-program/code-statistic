@@ -18,7 +18,7 @@ const contributor = reactive({
   column: 6,
 })
 
-function validate(map: Record<string, string>) {
+function validate(map: Record<string, any>) {
   for (const key in map) {
     if (!map[key]) {
       return false;
