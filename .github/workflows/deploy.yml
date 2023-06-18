@@ -38,9 +38,7 @@ jobs:
           mv stats deploy/
 
       - name: Process Application
-        run: |
-          mkdir deploy/app
-          mv app deploy/app/
+        run: mv app deploy/app/
 
       - name: Pack Application
         run: |
