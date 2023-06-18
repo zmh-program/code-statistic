@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"github.com/kataras/iris/v12"
@@ -154,6 +155,26 @@ func Get(uri string, ptr interface{}) (err error) {
 	source := rand.NewSource(time.Now().UnixNano())
 	idx := rand.New(source).Intn(len(tokenList))
 	return NativeGet(uri, tokenList[idx], ptr)
+}
+
+func GetImage(uri string) (string, error) {
+	resp, err := http.Get(uri)
+	if err != nil {
+		return "", err
+	}
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			return
+		}
+	}(resp.Body)
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	return base64.StdEncoding.EncodeToString(body), nil
 }
 
 func getDefault(value any, defaults any) any {

@@ -201,9 +201,15 @@ func AnalysisContributor(username string, repo string) AnalysisData {
 	var contributors []map[string]any
 	for _, v := range res {
 		v := v.(map[string]interface{})
+		avatar := v["avatar_url"].(string)
+		image, err := GetImage(avatar)
+		if err != nil {
+			return AnalysisData{nil, err.Error(), iris.StatusInternalServerError}
+		}
 		contributors = append(contributors, map[string]any{
 			"username": v["login"],
-			"avatar":   v["avatar_url"],
+			"avatar":   avatar,
+			"image":    image,
 			"commits":  v["contributions"],
 		})
 	}
