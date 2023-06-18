@@ -1,19 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"github.com/kataras/iris/v12"
 )
-
-func RunServer() {
-	app := iris.Default()
-	{
-		app.Get("/api/user/{username:string}", CachedHandler(UserAPI))
-		app.Get("/api/repo/{username:string}/{repo:string}", CachedHandler(RepoAPI))
-		app.Get("/api/contributor/{username:string}/{repo:string}", CachedHandler(ContributorAPI))
-	}
-	app.Listen(fmt.Sprintf(":%d", conf.Server.Port))
-}
 
 func UserAPI(ctx iris.Context) {
 	username := ctx.Params().Get("username")

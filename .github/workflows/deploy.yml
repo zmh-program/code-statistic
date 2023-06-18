@@ -1,8 +1,7 @@
 name: Deployment
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [published]
 
 jobs:
   release:
@@ -43,14 +42,16 @@ jobs:
           mkdir deploy/app
           mv app deploy/app/
 
-      - name: Commit Migration
+      - name: Pack Application
         run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-          cd deploy
-          git checkout -b deploy
-          git add .
-          git commit -m "deploy"
-          git push --force --quiet "https://${{ secrets.GITHUB_TOKEN }}@github.com/zmh-program/code-statistic.git"
-    env:
-      GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          zip -r deployment.zip ./deploy/*
+
+      - name: Upload Package
+        uses: actions/upload-release-asset@v1.0.2
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./deployment.zip
+          asset_name: deployment.zip
+          asset_content_type: application/zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
