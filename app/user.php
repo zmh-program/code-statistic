@@ -2,7 +2,7 @@
 include 'utils.php';
 
 $dark = isset($_GET['theme']) && $_GET['theme'] === 'dark';
-$username = get('username', 'zmh-program');
+$username = get('username', '');
 
 $stats = fetch("user/$username");
 if (!$stats) {

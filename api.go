@@ -194,6 +194,10 @@ func AnalysisContributor(username string, repo string) AnalysisData {
 	if err != nil {
 		return AnalysisData{nil, err.Error(), iris.StatusNotFound}
 	}
+	info, err := GetRepo(username, repo)
+	if err != nil {
+		return AnalysisData{nil, err.Error(), iris.StatusNotFound}
+	}
 	var contributors []map[string]any
 	for _, v := range res {
 		v := v.(map[string]interface{})
@@ -207,6 +211,7 @@ func AnalysisContributor(username string, repo string) AnalysisData {
 		iris.Map{
 			"username":     username,
 			"repo":         repo,
+			"color":        GetColor(info["language"]),
 			"contributors": contributors,
 		}, "", iris.StatusOK,
 	}

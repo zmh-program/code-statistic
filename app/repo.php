@@ -2,8 +2,8 @@
 include 'utils.php';
 
 $dark = isset($_GET['theme']) && $_GET['theme'] === 'dark';
-$username = get('username', 'zmh-program');
-$repo = get('repo', 'code-statistic');
+$username = get('username', '');
+$repo = get('repo', '');
 
 $stats = fetch("repo/$username/$repo");
 if (!$stats) {
@@ -11,7 +11,7 @@ if (!$stats) {
     exit;
 }
 $langs = $stats['languages'];
-$name = "$username/$repo";
+$name = "$username / $repo";
 
 list($langs, $bar, $height, $header, $background) = extracted($stats['languages'], $dark);
 ?>
