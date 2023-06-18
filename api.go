@@ -84,10 +84,11 @@ func CollectLanguages(username string, repos []interface{}) (data map[string]flo
 	for _, repo := range repos {
 		go func(username string, repo string) {
 			languages, err := GetLanguages(username, repo)
-			if err != nil {
-				return
+			if err != nil { // fix DMCA Takedown Bug
+				channel <- map[string]float64{}
+			} else {
+				channel <- languages
 			}
-			channel <- languages
 		}(username, repo.(map[string]interface{})["name"].(string))
 	}
 
