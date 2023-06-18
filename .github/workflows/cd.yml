@@ -24,6 +24,8 @@ jobs:
           cd gui
           npm install
           npm run build
+          mkdir -p deploy/gui
+          mv gui/dist deploy/gui/
 
 
       - name: Use Golang
@@ -34,17 +36,20 @@ jobs:
       - name: Build Backend
         run: | 
           go build .
+          mv code-statistic stats
+          mv stats deploy/
 
-      - name: Pack
+      - name: Process Application
         run: |
-          zip -r package.zip ./* -x "gui/*"
+          mkdir deploy/app
+          mv gui/dist deploy/app/
 
-      - name: Upload Package
-        uses: actions/upload-release-asset@v1.0.2
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./package.zip
-          asset_name: package.zip
-          asset_content_type: application/zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+      - name: Commit Migration
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          cd deploy
+          git checkout -b deploy
+          git add .
+          git commit -m "deploy"
+          git push origin deploy
