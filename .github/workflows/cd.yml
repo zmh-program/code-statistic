@@ -51,6 +51,6 @@ jobs:
           git checkout -b deploy
           git add .
           git commit -m "deploy"
-          git push --force --set-upstream https://github.com/zmh-program/code-statistic.git HEAD:deploy
+          git push --force --quiet "https://${{ secrets.GITHUB_TOKEN }}@github.com/zmh-program/code-statistic.git"
     env:
       GITHUB_TOKEN: ${{ secrets.TOKEN }}
