@@ -63,8 +63,9 @@ Very easy, just add `?theme=dark` after it in any kind of card!
 
 
 ## 👨‍💻 API
-1. `GET` `https://stats.deeptrain.net/api/user/{user}`
-
+1. User
+    > `GET` `https://stats.deeptrain.net/api/user/{user}`
+    > 
     > Example response:
     > ```json
     > {
@@ -97,8 +98,9 @@ Very easy, just add `?theme=dark` after it in any kind of card!
     > ```                  
     <br>
 
-2. `GET` `https://stats.deeptrain.net/api/repo/{user}/{repo}`
-    
+2. Repo 
+    >  `GET` `https://stats.deeptrain.net/api/repo/{user}/{repo}`
+    > 
     > Example response:
     > ```json
     > {
@@ -130,32 +132,23 @@ Very easy, just add `?theme=dark` after it in any kind of card!
     > }
     > ```
 
-3. `GET` `https://stats.deeptrain.net/api/repo/{user}/{repo}`
-
+3. Contributor
+   > `GET` `https://stats.deeptrain.net/api/contributor/{user}/{repo}`
+   >
    > Example response:
    > ```json
-    > {
-    >   "username": "zmh-program",
-    >   "license": "MIT",
-    >   "repo": "code-statistic",
-    >   "stars": "26",
-    >   "watchers": "26",
-    >   "color": "#a91e50",
-    >   "forks": "1",
-    >   "issues": "0",
-    >   "size": "1.0 MiB",
-    >   "languages": [
-    >     {
-    >       "color": "#3178c6",
-    >       "lang": "TypeScript",
-    >       "percent": 42.76333789329686,
-    >       "text": "TypeScript 43% (21.9k)",
-    >       "value": 21882
-    >     }, 
-    >     ...
-    >   ]
-    > }
-    > ```
+   > {
+   >   "color": "#d2cece",
+   >    "contributors": [{
+   >        "avatar": "https://avatars.githubusercontent.com/u/112773885?v=4",
+   >        "commits": 18,
+   >        "image": "iVBORw0KGgoAAAANSUhEUgAA…uxEC+HwAAAAAElFTkSuQmCC"
+   >        "username": "zmh-program"
+   >    }],
+   >    "repo": "zmh-program",
+   >    "username": "zmh-program"
+   > }
+   > ```
    > Error response:
    > ```json
     > {
