@@ -129,3 +129,36 @@ Very easy, just add `?theme=dark` after it in any kind of card!
     >   "message": "repo not found"
     > }
     > ```
+
+3. `GET` `https://stats.deeptrain.net/api/repo/{user}/{repo}`
+
+   > Example response:
+   > ```json
+    > {
+    >   "username": "zmh-program",
+    >   "license": "MIT",
+    >   "repo": "code-statistic",
+    >   "stars": "26",
+    >   "watchers": "26",
+    >   "color": "#a91e50",
+    >   "forks": "1",
+    >   "issues": "0",
+    >   "size": "1.0 MiB",
+    >   "languages": [
+    >     {
+    >       "color": "#3178c6",
+    >       "lang": "TypeScript",
+    >       "percent": 42.76333789329686,
+    >       "text": "TypeScript 43% (21.9k)",
+    >       "value": 21882
+    >     }, 
+    >     ...
+    >   ]
+    > }
+    > ```
+   > Error response:
+   > ```json
+    > {
+    >   "message": "repo not found"
+    > }
+    > ```

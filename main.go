@@ -62,6 +62,7 @@ func main() {
 		app.Get("/api/user/{username:string}", CachedHandler(UserAPI))
 		app.Get("/api/repo/{username:string}/{repo:string}", CachedHandler(RepoAPI))
 		app.Get("/api/contributor/{username:string}/{repo:string}", CachedHandler(ContributorAPI))
+		app.Get("/api/release/{username:string}/{repo:string}/{tag:string}", CachedHandler(ReleaseAPI))
 	}
 	app.Listen(fmt.Sprintf(":%d", conf.Server.Port))
 }
@@ -81,5 +82,11 @@ func RepoAPI(ctx iris.Context) {
 func ContributorAPI(ctx iris.Context) {
 	username, repo := ctx.Params().Get("username"), ctx.Params().Get("repo")
 	data := AnalysisContributor(username, repo)
+	EndBodyWithCache(ctx, data)
+}
+
+func ReleaseAPI(ctx iris.Context) {
+	username, repo, tag := ctx.Params().Get("username"), ctx.Params().Get("repo"), ctx.Params().Get("tag")
+	data := AnalysisRelease(username, repo, tag)
 	EndBodyWithCache(ctx, data)
 }

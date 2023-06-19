@@ -38,13 +38,12 @@ func GetLanguages(username string, repo string) (data map[string]float64, err er
 	return data, err
 }
 
-func getRelease(username string, repo string, tag string) (data map[string]float64, err error) {
-	err = Get(fmt.Sprintf("repos/%s/%s/releases/tags/%s", username, repo, tag), &data)
-	return data, err
-}
-
-func getLatestRelease(username string, repo string) (data map[string]float64, err error) {
-	err = Get(fmt.Sprintf("repos/%s/%s/releases/latest", username, repo), &data)
+func getRelease(username string, repo string, tag string) (data map[string]interface{}, err error) {
+	if tag == "latest" {
+		err = Get(fmt.Sprintf("repos/%s/%s/releases/latest", username, repo), &data)
+	} else {
+		err = Get(fmt.Sprintf("repos/%s/%s/releases/tags/%s", username, repo, tag), &data)
+	}
 	return data, err
 }
 
@@ -102,6 +101,19 @@ func CollectLanguages(username string, repos []interface{}) (data map[string]flo
 	}
 
 	return data, nil
+}
+
+func CountAssets(assets []interface{}) (data []interface{}) {
+	data = []interface{}{}
+	for _, asset := range assets {
+		asset := asset.(map[string]interface{})
+		data = append(data, map[string]interface{}{
+			"name": asset["name"],
+			"size": ScaleConvert(asset["size"].(float64), false),
+			"type": asset["content_type"],
+		})
+	}
+	return data
 }
 
 func CountLanguages(languages map[string]float64) []map[string]any {
@@ -198,21 +210,38 @@ func AnalysisContributor(username string, repo string) AnalysisData {
 	if err != nil {
 		return AnalysisData{nil, err.Error(), iris.StatusNotFound}
 	}
-	var contributors []map[string]any
-	for _, v := range res {
-		v := v.(map[string]interface{})
-		avatar := v["avatar_url"].(string)
-		image, err := GetImage(avatar)
-		if err != nil {
-			return AnalysisData{nil, err.Error(), iris.StatusInternalServerError}
-		}
-		contributors = append(contributors, map[string]any{
-			"username": v["login"],
-			"avatar":   avatar,
-			"image":    image,
-			"commits":  v["contributions"],
-		})
+
+	type result struct {
+		index       int
+		contributor map[string]any
 	}
+	contributors := make([]map[string]any, len(res))
+	channel := make(chan struct {
+		index       int
+		contributor map[string]any
+	}, len(res))
+
+	for i, v := range res {
+		go func(i int, v interface{}) {
+			m := v.(map[string]interface{})
+			avatar := m["avatar_url"].(string)
+			channel <- result{
+				index: i,
+				contributor: map[string]any{
+					"username": m["login"],
+					"avatar":   avatar,
+					"image":    GetImage(avatar),
+					"commits":  m["contributions"],
+				},
+			}
+		}(i, v)
+	}
+
+	for range res {
+		result := <-channel
+		contributors[result.index] = result.contributor
+	}
+
 	return AnalysisData{
 		iris.Map{
 			"username":     username,
@@ -220,5 +249,38 @@ func AnalysisContributor(username string, repo string) AnalysisData {
 			"color":        GetColor(info["language"]),
 			"contributors": contributors,
 		}, "", iris.StatusOK,
+	}
+}
+
+func AnalysisRelease(username string, repo string, tag string) AnalysisData {
+	res, err := getRelease(username, repo, tag)
+	if err != nil {
+		return AnalysisData{nil, err.Error(), iris.StatusNotFound}
+	}
+	info, err := GetRepo(username, repo)
+	if err != nil {
+		return AnalysisData{nil, err.Error(), iris.StatusNotFound}
+	}
+	author := res["author"].(map[string]interface{})
+	return AnalysisData{
+		Data: iris.Map{
+			"username":   username,
+			"repo":       repo,
+			"tag":        res["tag_name"],
+			"name":       res["name"],
+			"branch":     res["target_commitish"],
+			"date":       res["published_at"],
+			"draft":      res["draft"],
+			"prerelease": res["prerelease"],
+			"color":      GetColor(info["language"]),
+			"author": map[string]interface{}{
+				"username": author["login"],
+				"avatar":   author["avatar_url"],
+				"image":    GetImage(author["avatar_url"].(string)),
+				"type":     author["type"],
+			},
+			"text":   MarkdownConvert(res["body"].(string)),
+			"assets": CountAssets(res["assets"].([]interface{})),
+		}, Code: iris.StatusOK,
 	}
 }

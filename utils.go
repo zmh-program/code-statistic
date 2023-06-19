@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/kataras/iris/v12"
+	"github.com/russross/blackfriday/v2"
 	"io"
 	"math/rand"
 	"net/http"
@@ -157,10 +158,10 @@ func Get(uri string, ptr interface{}) (err error) {
 	return NativeGet(uri, tokenList[idx], ptr)
 }
 
-func GetImage(uri string) (string, error) {
+func GetImage(uri string) string {
 	resp, err := http.Get(uri)
 	if err != nil {
-		return "", err
+		return ""
 	}
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
@@ -171,10 +172,14 @@ func GetImage(uri string) (string, error) {
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return "", err
+		return ""
 	}
 
-	return base64.StdEncoding.EncodeToString(body), nil
+	return base64.StdEncoding.EncodeToString(body)
+}
+
+func MarkdownConvert(text string) string {
+	return string(blackfriday.Run([]byte(text)))
 }
 
 func getDefault(value any, defaults any) any {

@@ -86,7 +86,10 @@ func EndBody(ctx iris.Context, data AnalysisData) {
 	if data.Err != "" {
 		ThrowError(ctx, data.Err, data.Code)
 	} else {
-		ctx.JSON(data.Data)
+		err := ctx.JSON(data.Data)
+		if err != nil {
+			return
+		}
 	}
 }
 
