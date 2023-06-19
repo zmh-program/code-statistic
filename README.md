@@ -155,3 +155,46 @@ Very easy, just add `?theme=dark` after it in any kind of card!
     >   "message": "repo not found"
     > }
     > ```
+
+4. Release
+   > `GET` `https://stats.deeptrain.net/api/release/{user}/{repo}/{tag|latest}`
+   >
+   > Example response:
+   > ```json
+   > {
+   >   "assets": [
+   >     {
+   >       "name": "install.sh",
+   >       "size": "1.6k",
+   >       "type": "application/x-sh"
+   >     },
+   >     {
+   >       "name": "package.zip",
+   >       "size": "791.5k",
+   >       "type": "application/zip"
+   >     }
+   >   ],
+   >   "author": {
+   >     "avatar": "https://avatars.githubusercontent.com/u/112773885?v=4",
+   >     "image": "iVBORw0KGgoAAAANSUhEUgAA…uxEC+HwAAAAAElFTkSuQmCC",
+   >     "type": "User",
+   >     "username": "zmh-program"
+   >   },
+   >   "branch": "main",
+   >   "color": "#41b883",
+   >   "date": "2023-05-23T15:17:52Z",
+   >   "draft": false,
+   >   "name": "1.6",
+   >   "prerelease": false,
+   >   "repo": "web-chatgpt-qq-bot",
+   >   "tag": "1.6",
+   >   "text": "here is release description...",
+   >   "username": "zmh-program"
+   > }
+   > ```
+   > Error response:
+   > ```json
+    > {
+    >   "message": "repo not found"
+    > }
+    > ```
