@@ -19,10 +19,15 @@ $height = 100 + (ceil($number / $column) * 64);
 
 ob_start('compress');
 ?>
-<svg width="540" viewBox="0 0 <?php echo 100 + ($column * 64) ?> <?php echo $height + 1 ?>" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="descId">
+<svg width="540" viewBox="0 0 <?php echo 100 + ($column * 64) ?> <?php echo $height + 1 ?>" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-labelledby="descId">
     <title id="titleId"><?php echo $name ?>'s Contributors</title>
     <desc id="descId">Repository Contributors</desc>
-    <defs><mask id="circle-mask"><circle cx="25" cy="25" r="25" fill="white" /></mask></defs>
+    <defs>
+        <mask id="circle-mask"><circle cx="25" cy="25" r="25" fill="white" /></mask>
+        <?php foreach ($stats['contributors'] as $idx => $contributor) { ?>
+            <image id="image-<?php echo $idx ?>" height="50" width="50" xlink:href="data:image/png;base64,<?php echo $contributor['image'] ?>"></image>
+        <?php } ?>
+    </defs>
     <style>
         .circle {
             animation: fadeInAnimation 0.8s ease-in-out forwards;
@@ -73,7 +78,7 @@ ob_start('compress');
             <mask id="rect-mask"><rect x="0" y="0" width="300" height="8" fill="white" rx="5"/></mask>
             <?php foreach ($stats['contributors'] as $idx => $contributor) { ?>
                 <g class="avatar" transform="translate(<?php echo ($idx % $column) * 64 ?>, <?php echo (int)($idx / $column) * 64 ?>)">
-                    <image height="50" width="50" href="<?php echo $contributor['avatar'] ?>" mask="url(#circle-mask)" />
+                    <use xlink:href="#image-<?php echo $idx ?>" mask="url(#circle-mask)" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-labelledby="avatar" />
                 </g>
             <?php } ?>
         </svg>
