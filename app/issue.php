@@ -18,7 +18,7 @@ $background = $dark ? "#000" : "#fffefe";
 
 ob_start('compress');
 ?>
-    <svg width="540" viewBox="0 0 420 320" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-labelledby="descId">
+    <svg width="540" viewBox="0 0 420 190" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-labelledby="descId">
         <title id="titleId"><?php echo $repo ?>'s Issue #<?php echo $id ?></title>
         <desc id="descId">Issue Card</desc>
         <defs>
@@ -119,7 +119,7 @@ ob_start('compress');
                     </svg>
                 <?php endif; ?>
                 <text x="22" y="24" class="stat id" data-testid="header">#<?php echo $stats['id'] ?></text>
-                <text x="<?php echo strlen($stats['id']) * 10 + 36 ?>" y="24" class="stat header" data-testid="header"><?php echo truncate($stats['title'], 46) ?></text>
+                <text x="<?php echo strlen($stats['id']) * 10 + 36 ?>" y="24" class="stat header" data-testid="header"><?php echo truncate($stats['title'], 38) ?></text>
             </g>
         </g>
         <line x1="30" y1="60" x2="390" y2="60" stroke="#eeecec"></line>
@@ -139,6 +139,12 @@ ob_start('compress');
                     <g class="stagger" style="animation-delay: 900ms" transform="translate(25, 0)">
                         <svg class="oct-icon" x="0" aria-hidden="true" height="16" viewBox="0 0 16 16" width="16" data-view-component="true"><path d="m.427 1.927 1.215 1.215a8.002 8.002 0 1 1-1.6 5.685.75.75 0 1 1 1.493-.154 6.5 6.5 0 1 0 1.18-4.458l1.358 1.358A.25.25 0 0 1 3.896 6H.25A.25.25 0 0 1 0 5.75V2.104a.25.25 0 0 1 .427-.177ZM7.75 4a.75.75 0 0 1 .75.75v2.992l2.028.812a.75.75 0 0 1-.557 1.392l-2.5-1A.751.751 0 0 1 7 8.25v-3.5A.75.75 0 0 1 7.75 4Z"></path></svg>
                         <text class="stat" x="20" y="12.5" data-testid="tag"><?php echo datetime($stats['date']) ?></text>
+                    </g>
+                </g>
+                <g transform="translate(160, 78)">
+                    <g class="stagger" style="animation-delay: 900ms" transform="translate(25, 0)">
+                        <svg class="oct-icon" x="0" aria-hidden="true" height="16" viewBox="0 0 16 16" width="16" data-view-component="true"><path d="M1 2.75C1 1.784 1.784 1 2.75 1h10.5c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 13.25 12H9.06l-2.573 2.573A1.458 1.458 0 0 1 4 13.543V12H2.75A1.75 1.75 0 0 1 1 10.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h4.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg>
+                        <text class="stat" x="20" y="12.5" data-testid="tag"><?php echo $stats['comments'] ?></text>
                     </g>
                 </g>
             </svg>

@@ -13,7 +13,7 @@ func getRateLimit(token string) (data map[string]interface{}, err error) {
 	return data, err
 }
 
-func GetUser(username string) (data map[string]interface{}, err error) {
+func getUser(username string) (data map[string]interface{}, err error) {
 	err = Get(fmt.Sprintf("users/%s", username), &data)
 	if err == nil && data["message"] == "Not Found" {
 		return nil, errors.New("user not found")
@@ -26,7 +26,7 @@ func GetRepos(username string) (data []interface{}, err error) {
 	return data, err
 }
 
-func GetRepo(username string, repo string) (data map[string]interface{}, err error) {
+func getRepo(username string, repo string) (data map[string]interface{}, err error) {
 	err = Get(fmt.Sprintf("repos/%s/%s", username, repo), &data)
 	if err == nil && data["message"] == "Not Found" {
 		return nil, errors.New("repo not found")
@@ -34,7 +34,7 @@ func GetRepo(username string, repo string) (data map[string]interface{}, err err
 	return data, err
 }
 
-func GetLanguages(username string, repo string) (data map[string]float64, err error) {
+func getLanguages(username string, repo string) (data map[string]float64, err error) {
 	err = Get(fmt.Sprintf("repos/%s/%s/languages", username, repo), &data)
 	return data, err
 }
@@ -80,12 +80,21 @@ func getIssueLabels(username string, repo string, id int) []interface{} {
 		m := v.(map[string]interface{})
 		result[i] = map[string]any{
 			"name":        m["name"],
-			"color":       m["color"],
+			"color":       "#" + m["color"].(string),
 			"description": m["description"],
 			"default":     m["default"],
 		}
 	}
 	return result
+}
+
+func countIssueComments(username string, repo string, id int) int {
+	var data []interface{}
+	err := Get(fmt.Sprintf("repos/%s/%s/issues/%d/comments", username, repo, id), &data)
+	if err != nil {
+		return 0
+	}
+	return len(data)
 }
 
 func getPullRequest(username string, repo string, id int) (data map[string]interface{}, err error) {
@@ -120,13 +129,13 @@ func iterRepos(username string) (data []interface{}, err error) {
 	return res, nil
 }
 
-func CollectLanguages(username string, repos []interface{}) (data map[string]float64, err error) {
+func collectLanguages(username string, repos []interface{}) (data map[string]float64, err error) {
 	data = make(map[string]float64)
 	channel := make(chan map[string]float64, len(repos))
 
 	for _, repo := range repos {
 		go func(username string, repo string) {
-			languages, err := GetLanguages(username, repo)
+			languages, err := getLanguages(username, repo)
 			if err != nil { // fix DMCA Takedown Bug
 				channel <- map[string]float64{}
 			} else {
@@ -147,7 +156,7 @@ func CollectLanguages(username string, repos []interface{}) (data map[string]flo
 	return data, nil
 }
 
-func CountAssets(assets []interface{}) (data []interface{}) {
+func countAssets(assets []interface{}) (data []interface{}) {
 	data = []interface{}{}
 	for _, asset := range assets {
 		asset := asset.(map[string]interface{})
@@ -160,7 +169,7 @@ func CountAssets(assets []interface{}) (data []interface{}) {
 	return data
 }
 
-func CountLanguages(languages map[string]float64) []map[string]any {
+func countLanguages(languages map[string]float64) []map[string]any {
 	total := 0.
 
 	var res []map[string]any
@@ -192,7 +201,7 @@ type AnalysisData struct {
 }
 
 func AnalysisUser(username string) AnalysisData {
-	res, err := GetUser(username)
+	res, err := getUser(username)
 	if err != nil {
 		return AnalysisData{nil, err.Error(), iris.StatusNotFound}
 	}
@@ -200,7 +209,7 @@ func AnalysisUser(username string) AnalysisData {
 	if err != nil {
 		return AnalysisData{nil, err.Error(), iris.StatusInternalServerError}
 	}
-	languages, err := CollectLanguages(username, repos)
+	languages, err := collectLanguages(username, repos)
 	if err != nil {
 		return AnalysisData{nil, err.Error(), iris.StatusInternalServerError}
 	}
@@ -215,17 +224,17 @@ func AnalysisUser(username string) AnalysisData {
 			"forks":     ScaleConvert(Sum(repos, "forks_count"), true),
 			"issues":    ScaleConvert(Sum(repos, "open_issues_count"), true),
 			"watchers":  ScaleConvert(Sum(repos, "watchers_count"), true),
-			"languages": CountLanguages(languages),
+			"languages": countLanguages(languages),
 		}, Code: iris.StatusOK,
 	}
 }
 
 func AnalysisRepo(username string, repo string) AnalysisData {
-	res, err := GetRepo(username, repo)
+	res, err := getRepo(username, repo)
 	if err != nil {
 		return AnalysisData{nil, err.Error(), iris.StatusNotFound}
 	}
-	languages, err := GetLanguages(username, repo)
+	languages, err := getLanguages(username, repo)
 	if err != nil {
 		return AnalysisData{nil, err.Error(), iris.StatusInternalServerError}
 	}
@@ -240,7 +249,7 @@ func AnalysisRepo(username string, repo string) AnalysisData {
 			"issues":    ScaleConvert(res["open_issues_count"].(float64), false),
 			"color":     GetColor(res["language"]),
 			"license":   getLicense(res["license"]),
-			"languages": CountLanguages(languages),
+			"languages": countLanguages(languages),
 		}, Code: iris.StatusOK,
 	}
 }
@@ -250,7 +259,7 @@ func AnalysisContributor(username string, repo string) AnalysisData {
 	if err != nil {
 		return AnalysisData{nil, err.Error(), iris.StatusNotFound}
 	}
-	info, err := GetRepo(username, repo)
+	info, err := getRepo(username, repo)
 	if err != nil {
 		return AnalysisData{nil, err.Error(), iris.StatusNotFound}
 	}
@@ -301,7 +310,7 @@ func AnalysisRelease(username string, repo string, tag string) AnalysisData {
 	if err != nil {
 		return AnalysisData{nil, err.Error(), iris.StatusNotFound}
 	}
-	info, err := GetRepo(username, repo)
+	info, err := getRepo(username, repo)
 	if err != nil {
 		return AnalysisData{nil, err.Error(), iris.StatusNotFound}
 	}
@@ -324,7 +333,7 @@ func AnalysisRelease(username string, repo string, tag string) AnalysisData {
 				"type":     author["type"],
 			},
 			"description": MarkdownConvert(res["body"].(string)),
-			"assets":      CountAssets(res["assets"].([]interface{})),
+			"assets":      countAssets(res["assets"].([]interface{})),
 		}, Code: iris.StatusOK,
 	}
 }
@@ -338,7 +347,7 @@ func AnalysisIssue(username string, repo string, _id string) AnalysisData {
 	if err != nil {
 		return AnalysisData{nil, err.Error(), iris.StatusNotFound}
 	}
-	info, err := GetRepo(username, repo)
+	info, err := getRepo(username, repo)
 	if err != nil {
 		return AnalysisData{nil, err.Error(), iris.StatusNotFound}
 	}
@@ -357,6 +366,7 @@ func AnalysisIssue(username string, repo string, _id string) AnalysisData {
 			"date":     res["created_at"],
 			"color":    GetColor(info["language"]),
 			"labels":   getIssueLabels(username, repo, id),
+			"comments": countIssueComments(username, repo, id),
 			"opener": map[string]interface{}{
 				"username": opener["login"],
 				"avatar":   opener["avatar_url"],
@@ -377,7 +387,7 @@ func AnalysisPullRequest(username string, repo string, _id string) AnalysisData 
 	if err != nil {
 		return AnalysisData{nil, err.Error(), iris.StatusNotFound}
 	}
-	info, err := GetRepo(username, repo)
+	info, err := getRepo(username, repo)
 	if err != nil {
 		return AnalysisData{nil, err.Error(), iris.StatusNotFound}
 	}
