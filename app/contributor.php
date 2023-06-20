@@ -77,7 +77,7 @@ ob_start('compress');
         <svg data-testid="contributors" x="25">
             <mask id="rect-mask"><rect x="0" y="0" width="300" height="8" fill="white" rx="5"/></mask>
             <?php foreach ($stats['contributors'] as $idx => $contributor) { ?>
-                <g class="avatar" transform="translate(<?php echo ($idx % $column) * 64 ?>, <?php echo (int)($idx / $column) * 64 ?>)">
+                <g class="avatar" transform="translate(<?php echo ($idx % $column) * 64 ?>, <?php echo (int)($idx / $column) * 64 ?>)" style="animation-duration: <?php echo $idx * 50 + 800 ?>ms">
                     <use xlink:href="#image-<?php echo $idx ?>" mask="url(#circle-mask)" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-labelledby="avatar" />
                 </g>
             <?php } ?>

@@ -279,8 +279,8 @@ func AnalysisRelease(username string, repo string, tag string) AnalysisData {
 				"image":    GetImage(author["avatar_url"].(string)),
 				"type":     author["type"],
 			},
-			"text":   MarkdownConvert(res["body"].(string)),
-			"assets": CountAssets(res["assets"].([]interface{})),
+			"description": MarkdownConvert(res["body"].(string)),
+			"assets":      CountAssets(res["assets"].([]interface{})),
 		}, Code: iris.StatusOK,
 	}
 }

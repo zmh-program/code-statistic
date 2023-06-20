@@ -142,7 +142,7 @@ Very easy, just add `?theme=dark` after it in any kind of card!
    >    "contributors": [{
    >        "avatar": "https://avatars.githubusercontent.com/u/112773885?v=4",
    >        "commits": 18,
-   >        "image": "iVBORw0KGgoAAAANSUhEUgAA…uxEC+HwAAAAAElFTkSuQmCC"
+   >        "image": "iVBORw0KGgoAAAANSUhEUgAA…uxEC+HwAAAAAElFTkSuQmCC",
    >        "username": "zmh-program"
    >    }],
    >    "repo": "zmh-program",
