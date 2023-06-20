@@ -1,5 +1,5 @@
 <?php
-//header('Content-Type: image/svg+xml');
+header('Content-Type: image/svg+xml');
 header('Cache-Control: no-cache');
 
 function compress($buffer)
@@ -48,4 +48,11 @@ function extracted($languages, $dark)
     $background = $dark ? "#000" : "#fffefe";
     ob_start('compress');
     return array($languages, $bar, $height, $header, $background);
+}
+
+function truncate($string, $max) {
+    if (strlen($string) > $max) {
+        return substr($string, 0, $max - 3) . '...';
+    }
+    return $string;
 }
