@@ -17,6 +17,11 @@ const contributor = reactive({
   repo: '',
   column: 6,
 })
+const release = reactive({
+  username: '',
+  repo: '',
+  tag: 'latest'
+})
 
 function validate(map: Record<string, any>) {
   for (const key in map) {
@@ -47,6 +52,10 @@ function generate() {
     case 'contributor':
       if (!validate(contributor)) return;
       link.value = join(`/contributor/${contributor.username}/${contributor.repo}/?column=${contributor.column}&theme=${theme.value}`);
+      break;
+    case 'release':
+      if (!validate(release)) return;
+      link.value = join(`/release/${release.username}/${release.repo}/?tag=${release.tag}&theme=${theme.value}`);
       break;
   }
 }
@@ -82,10 +91,21 @@ function generate() {
             <t-input placeholder="repository" v-model="contributor.repo" />
           </t-form-item>
           <t-form-item label="Column">
-            <t-input placeholder="repository" v-model="contributor.column" />
+            <t-input placeholder="column" v-model="contributor.column" />
           </t-form-item>
         </t-tab-panel>
-        <t-tab-panel value="release" label="Release">
+        <t-tab-panel value="release" label="Release"><br>
+          <t-form-item label="User">
+            <t-input-adornment prepend="github.com/">
+              <t-input placeholder="username" v-model="release.username" />
+            </t-input-adornment>
+          </t-form-item>
+          <t-form-item label="Repo">
+            <t-input placeholder="repository" v-model="release.repo" />
+          </t-form-item>
+          <t-form-item label="Tag">
+            <t-input placeholder="tag" v-model="release.tag" />
+          </t-form-item>
         </t-tab-panel>
       </t-tabs>
       <t-form-item label="Theme" name="theme" initial-data="dark">
