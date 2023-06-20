@@ -63,6 +63,8 @@ func main() {
 		app.Get("/api/repo/{username:string}/{repo:string}", CachedHandler(RepoAPI))
 		app.Get("/api/contributor/{username:string}/{repo:string}", CachedHandler(ContributorAPI))
 		app.Get("/api/release/{username:string}/{repo:string}/{tag:string}", CachedHandler(ReleaseAPI))
+		app.Get("/api/issue/{username:string}/{repo:string}/{id:string}", CachedHandler(IssueAPI))
+		app.Get("/api/pull/{username:string}/{repo:string}/{id:string}", CachedHandler(PullRequestAPI))
 	}
 	app.Listen(fmt.Sprintf(":%d", conf.Server.Port))
 }
@@ -88,5 +90,17 @@ func ContributorAPI(ctx iris.Context) {
 func ReleaseAPI(ctx iris.Context) {
 	username, repo, tag := ctx.Params().Get("username"), ctx.Params().Get("repo"), ctx.Params().Get("tag")
 	data := AnalysisRelease(username, repo, tag)
+	EndBodyWithCache(ctx, data)
+}
+
+func IssueAPI(ctx iris.Context) {
+	username, repo, id := ctx.Params().Get("username"), ctx.Params().Get("repo"), ctx.Params().Get("id")
+	data := AnalysisIssue(username, repo, id)
+	EndBodyWithCache(ctx, data)
+}
+
+func PullRequestAPI(ctx iris.Context) {
+	username, repo, id := ctx.Params().Get("username"), ctx.Params().Get("repo"), ctx.Params().Get("id")
+	data := AnalysisPullRequest(username, repo, id)
 	EndBodyWithCache(ctx, data)
 }

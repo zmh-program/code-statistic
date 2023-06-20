@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/kataras/iris/v12"
 	"sort"
+	"strconv"
 )
 
 func getRateLimit(token string) (data map[string]interface{}, err error) {
@@ -38,6 +39,11 @@ func GetLanguages(username string, repo string) (data map[string]float64, err er
 	return data, err
 }
 
+func getContributors(username string, repo string) (data []interface{}, err error) {
+	err = Get(fmt.Sprintf("repos/%s/%s/contributors", username, repo), &data)
+	return data, err
+}
+
 func getRelease(username string, repo string, tag string) (data map[string]interface{}, err error) {
 	if tag == "latest" {
 		err = Get(fmt.Sprintf("repos/%s/%s/releases/latest", username, repo), &data)
@@ -47,8 +53,13 @@ func getRelease(username string, repo string, tag string) (data map[string]inter
 	return data, err
 }
 
-func getContributors(username string, repo string) (data []interface{}, err error) {
-	err = Get(fmt.Sprintf("repos/%s/%s/contributors", username, repo), &data)
+func getIssue(username string, repo string, id int) (data map[string]interface{}, err error) {
+	err = Get(fmt.Sprintf("repos/%s/%s/issues/%d", username, repo, id), &data)
+	return data, err
+}
+
+func getPullRequest(username string, repo string, id int) (data map[string]interface{}, err error) {
+	err = Get(fmt.Sprintf("repos/%s/%s/pulls/%d", username, repo, id), &data)
 	return data, err
 }
 
@@ -161,7 +172,7 @@ func AnalysisUser(username string) AnalysisData {
 		return AnalysisData{nil, err.Error(), iris.StatusInternalServerError}
 	}
 	return AnalysisData{
-		iris.Map{
+		Data: iris.Map{
 			"username":  username,
 			"location":  getDefault(res["location"], "unknown"),
 			"org":       res["type"] != "User",
@@ -172,7 +183,7 @@ func AnalysisUser(username string) AnalysisData {
 			"issues":    ScaleConvert(Sum(repos, "open_issues_count"), true),
 			"watchers":  ScaleConvert(Sum(repos, "watchers_count"), true),
 			"languages": CountLanguages(languages),
-		}, "", iris.StatusOK,
+		}, Code: iris.StatusOK,
 	}
 }
 
@@ -186,7 +197,7 @@ func AnalysisRepo(username string, repo string) AnalysisData {
 		return AnalysisData{nil, err.Error(), iris.StatusInternalServerError}
 	}
 	return AnalysisData{
-		iris.Map{
+		Data: iris.Map{
 			"username":  username,
 			"repo":      repo,
 			"size":      SizeConvert(res["size"].(float64), 1),
@@ -197,7 +208,7 @@ func AnalysisRepo(username string, repo string) AnalysisData {
 			"color":     GetColor(res["language"]),
 			"license":   getLicense(res["license"]),
 			"languages": CountLanguages(languages),
-		}, "", iris.StatusOK,
+		}, Code: iris.StatusOK,
 	}
 }
 
@@ -243,12 +254,12 @@ func AnalysisContributor(username string, repo string) AnalysisData {
 	}
 
 	return AnalysisData{
-		iris.Map{
+		Data: iris.Map{
 			"username":     username,
 			"repo":         repo,
 			"color":        GetColor(info["language"]),
 			"contributors": contributors,
-		}, "", iris.StatusOK,
+		}, Code: iris.StatusOK,
 	}
 }
 
@@ -281,6 +292,74 @@ func AnalysisRelease(username string, repo string, tag string) AnalysisData {
 			},
 			"description": MarkdownConvert(res["body"].(string)),
 			"assets":      CountAssets(res["assets"].([]interface{})),
+		}, Code: iris.StatusOK,
+	}
+}
+
+func AnalysisIssue(username string, repo string, _id string) AnalysisData {
+	id, err := strconv.Atoi(_id)
+	if err != nil {
+		return AnalysisData{nil, err.Error(), iris.StatusBadRequest}
+	}
+	res, err := getIssue(username, repo, id)
+	if err != nil {
+		return AnalysisData{nil, err.Error(), iris.StatusNotFound}
+	}
+	info, err := GetRepo(username, repo)
+	if err != nil {
+		return AnalysisData{nil, err.Error(), iris.StatusNotFound}
+	}
+	author := res["user"].(map[string]interface{})
+	return AnalysisData{
+		Data: iris.Map{
+			"username": username,
+			"repo":     repo,
+			"id":       res["number"],
+			"title":    res["title"],
+			"state":    res["state"],
+			"date":     res["created_at"],
+			"color":    GetColor(info["language"]),
+			"opener": map[string]interface{}{
+				"username": author["login"],
+				"avatar":   author["avatar_url"],
+				"image":    GetImage(author["avatar_url"].(string)),
+				"type":     author["type"],
+			},
+			"description": MarkdownConvert(res["body"].(string)),
+		}, Code: iris.StatusOK,
+	}
+}
+
+func AnalysisPullRequest(username string, repo string, _id string) AnalysisData {
+	id, err := strconv.Atoi(_id)
+	if err != nil {
+		return AnalysisData{nil, err.Error(), iris.StatusBadRequest}
+	}
+	res, err := getPullRequest(username, repo, id)
+	if err != nil {
+		return AnalysisData{nil, err.Error(), iris.StatusNotFound}
+	}
+	info, err := GetRepo(username, repo)
+	if err != nil {
+		return AnalysisData{nil, err.Error(), iris.StatusNotFound}
+	}
+	author := res["user"].(map[string]interface{})
+	return AnalysisData{
+		Data: iris.Map{
+			"username": username,
+			"repo":     repo,
+			"id":       res["number"],
+			"title":    res["title"],
+			"state":    res["state"],
+			"date":     res["created_at"],
+			"color":    GetColor(info["language"]),
+			"creator": map[string]interface{}{
+				"username": author["login"],
+				"avatar":   author["avatar_url"],
+				"image":    GetImage(author["avatar_url"].(string)),
+				"type":     author["type"],
+			},
+			"description": MarkdownConvert(res["body"].(string)),
 		}, Code: iris.StatusOK,
 	}
 }

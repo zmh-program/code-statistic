@@ -51,9 +51,9 @@ Add `&column=` to customize the number of columns.
 ## 🍇 Release Card
 The release card is used to display information about the release, such as branch, tag name, time and description, etc.
 ```markdown
-[![Web ChatGPT QQ Bot's Latest Release](https://stats.deeptrain.net/release/zmh-program/Deeptrain)](https://github.com/zmh-program/code-statistic)
+[![Deeptrain's Latest Release](https://stats.deeptrain.net/release/zmh-program/Deeptrain)](https://github.com/zmh-program/code-statistic)
 ```
-[![Web ChatGPT QQ Bot's Latest Release](https://stats.deeptrain.net/release/zmh-program/Deeptrain)](https://github.com/zmh-program/code-statistic)
+[![Deeptrain's Latest Release](https://stats.deeptrain.net/release/zmh-program/Deeptrain)](https://github.com/zmh-program/code-statistic)
 
 Show previous release versions by setting the parameter `tag`. Customize the release tag by adding `&tag=`. The default is **latest**.
 
