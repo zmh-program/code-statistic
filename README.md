@@ -14,7 +14,7 @@
 ## 🍊 User Card
 Hey, want to generate quickly? Have a look at our [website](https://stats.deeptrain.net/)!
 
-Use in your Github homepage! use it in your website! use it anywhere you want!
+The user card is used to count the languages of all projects under the user and generate statistics, calculate total stars earned, forks acquired, followers, watchers, number of open issues, etc.
 ```markdown
 [![zmh-program's Github Stats](https://stats.deeptrain.net/user/zmh-program/)](https://github.com/zmh-program/code-statistic)
 ```
@@ -27,7 +27,7 @@ Use in your Github homepage! use it in your website! use it anywhere you want!
 
 
 ## 🍉 Repository Card
-Use in repository introduction! use in pull request! use in issue! use it anywhere you want to introduce the project!
+The repository card are used to show the language analysis of the project, stars, forks, license, repository size, etc.
 
 ```markdown
 [![Deeptrain's Github Stats](https://stats.deeptrain.net/repo/zmh-program/Deeptrain)](https://github.com/zmh-program/code-statistic)
@@ -38,21 +38,24 @@ Use in repository introduction! use in pull request! use in issue! use it anywhe
 > by default, we can't get the data of private repo, please use your own [token](https://github.com/settings/tokens/new) to deploy. Don't forget to check the box to access your private repositories!
 
 ## 🍎 Contributor Card
-Use in repository introduction!
+The contributor card is used to count the contributors in a project and will be ranked by the number of `commits`.
 ```markdown
-[![Web ChatGPT QQ Bot's Contributors](https://stats.deeptrain.net/contributor/lss233/chatgpt-mirai-qq-bot)](https://github.com/zmh-program/code-statistic)
+[![Web ChatGPT QQ Bot's Contributors](https://stats.deeptrain.net/contributor/lss233/chatgpt-mirai-qq-bot?column=8)](https://github.com/zmh-program/code-statistic)
 ```
-[![Web ChatGPT QQ Bot's Contributors](https://stats.deeptrain.net/contributor/lss233/chatgpt-mirai-qq-bot)](https://github.com/zmh-program/code-statistic)
+[![Web ChatGPT QQ Bot's Contributors](https://stats.deeptrain.net/contributor/lss233/chatgpt-mirai-qq-bot?column=8)](https://github.com/zmh-program/code-statistic)
 
-> **Note**
-> The param `column` is the number of contribution values to be displayed in each row. The minimum is **4** and the default is **6**.
-> ```markdown
-> [![Web ChatGPT QQ Bot's Contributors](https://stats.deeptrain.net/contributor/lss233/chatgpt-mirai-qq-bot?column=12)](https://github.com/zmh-program/code-statistic)
-> ```
-> [![Web ChatGPT QQ Bot's Contributors](https://stats.deeptrain.net/contributor/lss233/chatgpt-mirai-qq-bot?column=12)](https://github.com/zmh-program/code-statistic)
 
-> **Warning**
-> by default, we can't get the data of private repo, please use your own token to deploy.
+The param `column` is the number of contributors in each row. The minimum is **4** and the default is **6**.
+Add `&column=` to customize the number of columns.
+
+## 🍇 Release Card
+The release card is used to display information about the release, such as branch, tag name, time and description, etc.
+```markdown
+[![Web ChatGPT QQ Bot's Latest Release](https://stats.deeptrain.net/release/zmh-program/Deeptrain/latest)](https://github.com/zmh-program/code-statistic)
+```
+[![Web ChatGPT QQ Bot's Latest Release](https://stats.deeptrain.net/release/zmh-program/Deeptrain/latest)](https://github.com/zmh-program/code-statistic)
+
+Show previous release versions by setting the parameter `tag`. Customize the release tag by adding `&tag=`. The default is **latest**.
 
 ## 🥝 Dark Theme
 Very easy, just add `?theme=dark` after it in any kind of card!

@@ -13,6 +13,7 @@ if (!$stats) {
 }
 $name = "$username / $repo";
 
+$desc = str_replace("&hellip;", "-", str_replace("<br>", "<br></br>", $stats['description']));
 $descHeight = substr_count($stats['description'], "\n") * 12;
 $assets = $stats['assets'];
 $position = 140 + $descHeight;
@@ -141,7 +142,7 @@ ob_start('compress');
                     <g class="stagger" style="animation-delay: 1200ms">
                         <foreignObject class="stat" x="0" y="0" width="100%" height="<?php echo $descHeight ?>" data-testid="description">
                             <body xmlns="http://www.w3.org/1999/xhtml" class="desc">
-                                <?php echo str_replace("<br>", "<br></br>", $stats['description']) ?>
+                                <?php echo $desc ?>
                             </body>
                         </foreignObject>
                     </g>
