@@ -2,9 +2,9 @@
 header('Content-Type: image/svg+xml');
 header('Cache-Control: no-cache');
 
-function compress($buffer)
+function compress($buffer): array|string|null
 {
-    $search = array('/>[^\S ]+/s', '/[^\S ]+</s', '/(\s)+/s', '/> </s', '/:\s+/', '/\{\s+/', '/\s+}/');
+    $search = array('/>[^\S ]+/', '/[^\S ]+</', '/(\s)+/', '/> </', '/:\s+/', '/\{\s+/', '/\s+}/');
     $replace = array('>', '<', '\\1', '><', ':', '{', '}');
     return preg_replace($search, $replace, $buffer);
 }
@@ -26,7 +26,7 @@ function fetch($uri)
 
 function get($param, $default = null)
 {
-    return isset($_GET[$param]) ? $_GET[$param] : $default;
+    return $_GET[$param] ?? $default;
 }
 
 /**
@@ -34,7 +34,7 @@ function get($param, $default = null)
  * @param $dark
  * @return array
  */
-function extracted($languages, $dark)
+function extracted($languages, $dark): array
 {
     if (!$languages) {
         $languages = array(
@@ -55,4 +55,9 @@ function truncate($string, $max) {
         return substr($string, 0, $max - 3) . '...';
     }
     return $string;
+}
+
+function datetime($date): string
+{
+    return rtrim(str_replace('T', ' ', $date), "Z");
 }

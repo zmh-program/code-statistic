@@ -50,16 +50,49 @@ func getRelease(username string, repo string, tag string) (data map[string]inter
 	} else {
 		err = Get(fmt.Sprintf("repos/%s/%s/releases/tags/%s", username, repo, tag), &data)
 	}
+	if err == nil && data["message"] == "Not Found" {
+		return nil, errors.New("release not found")
+	}
 	return data, err
 }
 
 func getIssue(username string, repo string, id int) (data map[string]interface{}, err error) {
 	err = Get(fmt.Sprintf("repos/%s/%s/issues/%d", username, repo, id), &data)
+	if err == nil && data["message"] == "Not Found" {
+		return nil, errors.New("issue not found")
+	}
 	return data, err
+}
+
+func getIssueLabels(username string, repo string, id int) []interface{} {
+	var data any
+	err := Get(fmt.Sprintf("repos/%s/%s/issues/%d/labels", username, repo, id), &data)
+	if err != nil {
+		return []interface{}{}
+	}
+	if _, ok := data.(map[string]interface{}); ok {
+		// not found
+		return []interface{}{}
+	}
+	labels := data.([]interface{})
+	result := make([]interface{}, len(labels))
+	for i, v := range labels {
+		m := v.(map[string]interface{})
+		result[i] = map[string]any{
+			"name":        m["name"],
+			"color":       m["color"],
+			"description": m["description"],
+			"default":     m["default"],
+		}
+	}
+	return result
 }
 
 func getPullRequest(username string, repo string, id int) (data map[string]interface{}, err error) {
 	err = Get(fmt.Sprintf("repos/%s/%s/pulls/%d", username, repo, id), &data)
+	if err == nil && data["message"] == "Not Found" {
+		return nil, errors.New("pull request not found")
+	}
 	return data, err
 }
 
@@ -309,21 +342,26 @@ func AnalysisIssue(username string, repo string, _id string) AnalysisData {
 	if err != nil {
 		return AnalysisData{nil, err.Error(), iris.StatusNotFound}
 	}
-	author := res["user"].(map[string]interface{})
+	opener := res["user"].(map[string]interface{})
+	state := res["state"].(string)
+	if res["state_reason"] != nil && res["state_reason"].(string) == "completed" {
+		state = "completed"
+	}
 	return AnalysisData{
 		Data: iris.Map{
 			"username": username,
 			"repo":     repo,
 			"id":       res["number"],
 			"title":    res["title"],
-			"state":    res["state"],
+			"state":    state,
 			"date":     res["created_at"],
 			"color":    GetColor(info["language"]),
+			"labels":   getIssueLabels(username, repo, id),
 			"opener": map[string]interface{}{
-				"username": author["login"],
-				"avatar":   author["avatar_url"],
-				"image":    GetImage(author["avatar_url"].(string)),
-				"type":     author["type"],
+				"username": opener["login"],
+				"avatar":   opener["avatar_url"],
+				"image":    GetImage(opener["avatar_url"].(string)),
+				"type":     opener["type"],
 			},
 			"description": MarkdownConvert(res["body"].(string)),
 		}, Code: iris.StatusOK,
@@ -343,7 +381,7 @@ func AnalysisPullRequest(username string, repo string, _id string) AnalysisData 
 	if err != nil {
 		return AnalysisData{nil, err.Error(), iris.StatusNotFound}
 	}
-	author := res["user"].(map[string]interface{})
+	creator := res["user"].(map[string]interface{})
 	return AnalysisData{
 		Data: iris.Map{
 			"username": username,
@@ -354,10 +392,10 @@ func AnalysisPullRequest(username string, repo string, _id string) AnalysisData 
 			"date":     res["created_at"],
 			"color":    GetColor(info["language"]),
 			"creator": map[string]interface{}{
-				"username": author["login"],
-				"avatar":   author["avatar_url"],
-				"image":    GetImage(author["avatar_url"].(string)),
-				"type":     author["type"],
+				"username": creator["login"],
+				"avatar":   creator["avatar_url"],
+				"image":    GetImage(creator["avatar_url"].(string)),
+				"type":     creator["type"],
 			},
 			"description": MarkdownConvert(res["body"].(string)),
 		}, Code: iris.StatusOK,

@@ -198,6 +198,6 @@ Very easy, just add `?theme=dark` after it in any kind of card!
    > Error response:
    > ```json
     > {
-    >   "message": "repo not found"
+    >   "message": "release not found"
     > }
     > ```

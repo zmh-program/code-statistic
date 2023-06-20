@@ -25,7 +25,7 @@ $background = $dark ? "#000" : "#fffefe";
 ob_start('compress');
 ?>
     <svg width="540" viewBox="0 0 420 <?php echo $height + 1 ?>" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-labelledby="descId">
-        <title id="titleId"><?php echo $name ?>'s Release <?php echo $tag ?></title>
+        <title id="titleId"><?php echo $repo ?>'s Release [<?php echo $tag ?>]</title>
         <desc id="descId">Release Statistics</desc>
         <defs>
             <mask id="circle-mask"><circle cx="10" cy="10" r="10" fill="white" /></mask>
@@ -69,6 +69,7 @@ ob_start('compress');
             .desc * {
                 font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif;
                 font-weight: normal;
+                color: <?php echo $header ?>;
             }
             .desc h1, .desc h2, .desc h3 {
                 font-weight: bold;
@@ -135,7 +136,7 @@ ob_start('compress');
                 <g transform="translate(<?php echo strlen($stats['branch']) * 14 + 120 ?>, 78)">
                     <g class="stagger" style="animation-delay: 900ms" transform="translate(25, 0)">
                         <svg class="oct-icon" x="0" aria-hidden="true" height="16" viewBox="0 0 16 16" width="16" data-view-component="true"><path d="m.427 1.927 1.215 1.215a8.002 8.002 0 1 1-1.6 5.685.75.75 0 1 1 1.493-.154 6.5 6.5 0 1 0 1.18-4.458l1.358 1.358A.25.25 0 0 1 3.896 6H.25A.25.25 0 0 1 0 5.75V2.104a.25.25 0 0 1 .427-.177ZM7.75 4a.75.75 0 0 1 .75.75v2.992l2.028.812a.75.75 0 0 1-.557 1.392l-2.5-1A.751.751 0 0 1 7 8.25v-3.5A.75.75 0 0 1 7.75 4Z"></path></svg>
-                        <text class="stat" x="20" y="12.5" data-testid="tag"><?php echo rtrim(str_replace('T', ' ', $stats['date']), "Z") ?></text>
+                        <text class="stat" x="20" y="12.5" data-testid="tag"><?php echo datetime($stats['date']) ?></text>
                     </g>
                 </g>
                 <g transform="translate(0, 104)">
