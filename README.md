@@ -57,6 +57,20 @@ The release card is used to display information about the release, such as branc
 
 Show previous release versions by setting the parameter `tag`. Customize the release tag by adding `&tag=`. The default is **latest**.
 
+## 🍋 Issue Card
+The issue card is used to show the status of the issue, title, time, communication, etc.
+```markdown
+[![Vue's Issue #13013](https://stats.deeptrain.net/issue/vuejs/vue/13013)](https://github.com/zmh-program/code-statistic)
+```
+[![Vue's Issue #13013](https://stats.deeptrain.net/issue/vuejs/vue/13013)](https://github.com/zmh-program/code-statistic)
+
+## 🍓 Pull Request Card
+The pull request card is used to show the status of the pull request, branches, title, time, migrations, etc.
+```markdown
+[![TurboWarp's PR #497](https://stats.deeptrain.net/pull/TurboWarp/extensions/497)](https://github.com/zmh-program/code-statistic)
+```
+[![TurboWarp's PR #497](https://stats.deeptrain.net/pull/TurboWarp/extensions/497)](https://github.com/zmh-program/code-statistic)
+
 ## 🥝 Dark Theme
 Very easy, just add `?theme=dark` after it in any kind of card!
 ```markdown
