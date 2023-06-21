@@ -22,6 +22,16 @@ const release = reactive({
   repo: '',
   tag: 'latest'
 })
+const issue = reactive({
+  username: '',
+  repo: '',
+  id: 1,
+})
+const pull = reactive({
+  username: '',
+  repo: '',
+  id: 1,
+})
 
 function validate(map: Record<string, any>) {
   for (const key in map) {
@@ -56,6 +66,14 @@ function generate() {
     case 'release':
       if (!validate(release)) return;
       link.value = join(`/release/${release.username}/${release.repo}/?tag=${release.tag}&theme=${theme.value}`);
+      break;
+    case 'issue':
+      if (!validate(issue)) return;
+      link.value = join(`/issue/${issue.username}/${issue.repo}/${issue.id}?theme=${theme.value}`);
+      break;
+    case 'pull':
+      if (!validate(pull)) return;
+      link.value = join(`/pull/${pull.username}/${pull.repo}/${pull.id}?theme=${theme.value}`);
       break;
   }
 }
@@ -105,6 +123,32 @@ function generate() {
           </t-form-item>
           <t-form-item label="Tag">
             <t-input placeholder="tag" v-model="release.tag" />
+          </t-form-item>
+        </t-tab-panel>
+        <t-tab-panel value="issue" label="Issue"><br>
+          <t-form-item label="User">
+            <t-input-adornment prepend="github.com/">
+              <t-input placeholder="username" v-model="issue.username" />
+            </t-input-adornment>
+          </t-form-item>
+          <t-form-item label="Repo">
+            <t-input placeholder="repository" v-model="issue.repo" />
+          </t-form-item>
+          <t-form-item label="Id">
+            <t-input placeholder="id" v-model="issue.id" />
+          </t-form-item>
+        </t-tab-panel>
+        <t-tab-panel value="pull" label="Pull Request"><br>
+          <t-form-item label="User">
+            <t-input-adornment prepend="github.com/">
+              <t-input placeholder="username" v-model="pull.username" />
+            </t-input-adornment>
+          </t-form-item>
+          <t-form-item label="Repo">
+            <t-input placeholder="repository" v-model="pull.repo" />
+          </t-form-item>
+          <t-form-item label="Id">
+            <t-input placeholder="id" v-model="pull.id" />
           </t-form-item>
         </t-tab-panel>
       </t-tabs>

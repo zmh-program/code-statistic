@@ -40,9 +40,9 @@ The repository card are used to show the language analysis of the project, stars
 ## 🍎 Contributor Card
 The contributor card is used to count the contributors in a project and will be ranked by the number of `commits`.
 ```markdown
-[![Web ChatGPT QQ Bot's Contributors](https://stats.deeptrain.net/contributor/zmh-program/web-chatgpt-qq-bot?column=8)](https://github.com/zmh-program/code-statistic)
+[![Web ChatGPT QQ Bot's Contributors](https://stats.deeptrain.net/contributor/zmh-program/web-chatgpt-qq-bot)](https://github.com/zmh-program/code-statistic)
 ```
-[![Web ChatGPT QQ Bot's Contributors](https://stats.deeptrain.net/contributor/zmh-program/web-chatgpt-qq-bot?column=8)](https://github.com/zmh-program/code-statistic)
+[![Web ChatGPT QQ Bot's Contributors](https://stats.deeptrain.net/contributor/zmh-program/web-chatgpt-qq-bot)](https://github.com/zmh-program/code-statistic)
 
 
 The param `column` is the number of contributors in each row. The minimum is **4** and the default is **6**.
@@ -67,9 +67,9 @@ The issue card is used to show the status of the issue, title, time, communicati
 ## 🍓 Pull Request Card
 The pull request card is used to show the status of the pull request, branches, title, time, migrations, etc.
 ```markdown
-[![TurboWarp's PR #497](https://stats.deeptrain.net/pull/TurboWarp/extensions/497)](https://github.com/zmh-program/code-statistic)
+[![Code Statistic's PR #1](https://stats.deeptrain.net/pull/zmh-program/code-statistic/1)](https://github.com/zmh-program/code-statistic)
 ```
-[![TurboWarp's PR #497](https://stats.deeptrain.net/pull/TurboWarp/extensions/497)](https://github.com/zmh-program/code-statistic)
+[![Code Statistic's PR #1](https://stats.deeptrain.net/pull/zmh-program/code-statistic/1)](https://github.com/zmh-program/code-statistic)
 
 ## 🥝 Dark Theme
 Very easy, just add `?theme=dark` after it in any kind of card!
