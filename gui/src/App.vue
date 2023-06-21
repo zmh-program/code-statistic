@@ -200,9 +200,9 @@ html, body {
   gap: 8px;
   margin: 30px;
   width: 80%;
+  height: max-content;
   min-width: 220px;
   max-width: 550px;
-  align-items: flex-end;
 }
 .t-input-adornment {
   width: 100%;
@@ -275,7 +275,7 @@ html, body {
   font-family: 'Open Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-@media (max-width: 320px) {
+@media (max-width: 960px) {
   #app {
     scale: .65;
     width: 200%;
