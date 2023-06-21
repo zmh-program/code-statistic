@@ -64,17 +64,15 @@ func getIssue(username string, repo string, id int) (data map[string]interface{}
 	return data, err
 }
 
-func getIssueLabels(username string, repo string, id int) []interface{} {
-	var data any
-	err := Get(fmt.Sprintf("repos/%s/%s/issues/%d/labels", username, repo, id), &data)
-	if err != nil {
-		return []interface{}{}
+func getPullRequest(username string, repo string, id int) (data map[string]interface{}, err error) {
+	err = Get(fmt.Sprintf("repos/%s/%s/pulls/%d", username, repo, id), &data)
+	if err == nil && data["message"] == "Not Found" {
+		return nil, errors.New("pull request not found")
 	}
-	if _, ok := data.(map[string]interface{}); ok {
-		// not found
-		return []interface{}{}
-	}
-	labels := data.([]interface{})
+	return data, err
+}
+
+func formatLabels(labels []interface{}) (data []interface{}) {
 	result := make([]interface{}, len(labels))
 	for i, v := range labels {
 		m := v.(map[string]interface{})
@@ -86,23 +84,6 @@ func getIssueLabels(username string, repo string, id int) []interface{} {
 		}
 	}
 	return result
-}
-
-func countIssueComments(username string, repo string, id int) int {
-	var data []interface{}
-	err := Get(fmt.Sprintf("repos/%s/%s/issues/%d/comments", username, repo, id), &data)
-	if err != nil {
-		return 0
-	}
-	return len(data)
-}
-
-func getPullRequest(username string, repo string, id int) (data map[string]interface{}, err error) {
-	err = Get(fmt.Sprintf("repos/%s/%s/pulls/%d", username, repo, id), &data)
-	if err == nil && data["message"] == "Not Found" {
-		return nil, errors.New("pull request not found")
-	}
-	return data, err
 }
 
 func getLicense(license interface{}) string {
@@ -358,15 +339,16 @@ func AnalysisIssue(username string, repo string, _id string) AnalysisData {
 	}
 	return AnalysisData{
 		Data: iris.Map{
-			"username": username,
-			"repo":     repo,
-			"id":       res["number"],
-			"title":    res["title"],
-			"state":    state,
-			"date":     res["created_at"],
-			"color":    GetColor(info["language"]),
-			"labels":   getIssueLabels(username, repo, id),
-			"comments": countIssueComments(username, repo, id),
+			"username":  username,
+			"repo":      repo,
+			"id":        res["number"],
+			"title":     res["title"],
+			"state":     state,
+			"date":      res["created_at"],
+			"color":     GetColor(info["language"]),
+			"labels":    formatLabels(res["labels"].([]interface{})),
+			"comments":  res["comments"],
+			"reactions": res["reactions"].(map[string]interface{})["total_count"],
 			"opener": map[string]interface{}{
 				"username": opener["login"],
 				"avatar":   opener["avatar_url"],
@@ -392,15 +374,22 @@ func AnalysisPullRequest(username string, repo string, _id string) AnalysisData 
 		return AnalysisData{nil, err.Error(), iris.StatusNotFound}
 	}
 	creator := res["user"].(map[string]interface{})
+	state := res["state"].(string)
+	if res["merged"].(bool) {
+		state = "merged"
+	}
 	return AnalysisData{
 		Data: iris.Map{
-			"username": username,
-			"repo":     repo,
-			"id":       res["number"],
-			"title":    res["title"],
-			"state":    res["state"],
-			"date":     res["created_at"],
-			"color":    GetColor(info["language"]),
+			"username":  username,
+			"repo":      repo,
+			"id":        res["number"],
+			"title":     res["title"],
+			"state":     state,
+			"date":      res["created_at"],
+			"color":     GetColor(info["language"]),
+			"labels":    formatLabels(res["labels"].([]interface{})),
+			"comments":  res["comments"],
+			"reactions": res["reactions"].(map[string]interface{})["total_count"],
 			"creator": map[string]interface{}{
 				"username": creator["login"],
 				"avatar":   creator["avatar_url"],
