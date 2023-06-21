@@ -201,13 +201,14 @@ html, body {
   width: 80%;
   min-width: 220px;
   max-width: 550px;
+  align-items: flex-end;
 }
 .t-input-adornment {
   width: 100%;
 }
 
 .card {
-  width: 100%;
+  width: max-content;
   padding-bottom: 12px;
 }
 .card .t-card__body {

@@ -1,6 +1,6 @@
 <div align="center"> 
 
-[<img src="docs/icon.png" alt="Code Statistic" width="64" height="64" style="transform: translateY(50px);">](https://stats.deeptrain.net)
+[<img src="./icon.png" alt="Code Statistic" width="64" height="64" style="transform: translateY(50px);">](https://stats.deeptrain.net)
 # [Code Statistic](https://stats.deeptrain.net)
 
 #### ⚡ Dynamically generate your github statistic card!
@@ -81,10 +81,10 @@ Very easy, just add `?theme=dark` after it in any kind of card!
 
 ## 👨‍💻 API
 1. User
-    > `GET` `https://stats.deeptrain.net/api/user/{user}`
-    > 
-    > Example response:
-    > ```json
+   > `GET` `https://stats.deeptrain.net/api/user/{user}`
+   >
+   > Example response:
+   > ```json
     > {
     >   "username": "zmh-program",
     >   "org": false,
@@ -107,19 +107,19 @@ Very easy, just add `?theme=dark` after it in any kind of card!
     >   ]
     > }
     > ```
-    > Error response:
-    > ```json
+   > Error response:
+   > ```json
     > {
     >  "message": "user not found"
     > }
     > ```                  
     <br>
 
-2. Repo 
-    >  `GET` `https://stats.deeptrain.net/api/repo/{user}/{repo}`
-    > 
-    > Example response:
-    > ```json
+2. Repo
+   >  `GET` `https://stats.deeptrain.net/api/repo/{user}/{repo}`
+   >
+   > Example response:
+   > ```json
     > {
     >   "username": "zmh-program",
     >   "license": "MIT",
@@ -142,8 +142,8 @@ Very easy, just add `?theme=dark` after it in any kind of card!
     >   ]
     > }
     > ```
-    > Error response:
-    > ```json
+   > Error response:
+   > ```json
     > {
     >   "message": "repo not found"
     > }
@@ -290,5 +290,5 @@ Very easy, just add `?theme=dark` after it in any kind of card!
 
 ## Changelog
 - v1 `Express + EJS`
-- v2 `Nuxt + Element` 
+- v2 `Nuxt + Element`
 - v3 `Golang + PHP + Vue3 + TDesign`
