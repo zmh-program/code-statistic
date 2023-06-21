@@ -152,8 +152,8 @@ ob_start('compress');
                     <g class="stagger" style="animation-delay: 1050ms" transform="translate(25, 0)">
                         <svg class="icon" x="0" aria-hidden="true" height="16" viewBox="0 0 16 16" width="16" data-view-component="true"><path d="M11.93 8.5a4.002 4.002 0 0 1-7.86 0H.75a.75.75 0 0 1 0-1.5h3.32a4.002 4.002 0 0 1 7.86 0h3.32a.75.75 0 0 1 0 1.5Zm-1.43-.75a2.5 2.5 0 1 0-5 0 2.5 2.5 0 0 0 5 0Z"></path></svg>
                         <text class="stat" x="20" y="12.5" data-testid="commits"><?php echo $stats['commits'] ?> commit<?php echo $stats['commits'] > 1 ? 's' : '' ?></text>
-                        <text class="stat" x="200" y="12.5" data-testid="additions" style="fill: #3fb950">+<?php echo $stats['additions'] ?></text>
-                        <text class="stat" x="<?php echo 230 + strlen($stats['additions']) * 12 ?>" y="12.5" data-testid="deletions" style="fill: #cb2431">-<?php echo $stats['deletions'] ?></text>
+                        <text class="stat" x="162" y="12.5" data-testid="additions" style="fill: #3fb950">+<?php echo $stats['additions'] ?></text>
+                        <text class="stat" x="234" y="12.5" data-testid="deletions" style="fill: #cb2431">-<?php echo $stats['deletions'] ?></text>
                     </g>
                 </g>
             </svg>
