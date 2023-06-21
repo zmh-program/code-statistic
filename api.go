@@ -380,16 +380,19 @@ func AnalysisPullRequest(username string, repo string, _id string) AnalysisData 
 	}
 	return AnalysisData{
 		Data: iris.Map{
-			"username":  username,
-			"repo":      repo,
-			"id":        res["number"],
-			"title":     res["title"],
-			"state":     state,
-			"date":      res["created_at"],
-			"color":     GetColor(info["language"]),
-			"labels":    formatLabels(res["labels"].([]interface{})),
-			"comments":  res["comments"],
-			"reactions": res["reactions"].(map[string]interface{})["total_count"],
+			"username":      username,
+			"repo":          repo,
+			"id":            res["number"],
+			"title":         res["title"],
+			"state":         state,
+			"date":          res["created_at"],
+			"color":         GetColor(info["language"]),
+			"labels":        formatLabels(res["labels"].([]interface{})),
+			"commits":       res["commits"],
+			"additions":     ScaleConvert(res["additions"].(float64), false),
+			"deletions":     ScaleConvert(res["deletions"].(float64), false),
+			"changed_files": res["changed_files"],
+			"comments":      res["comments"],
 			"creator": map[string]interface{}{
 				"username": creator["login"],
 				"avatar":   creator["avatar_url"],
@@ -397,6 +400,10 @@ func AnalysisPullRequest(username string, repo string, _id string) AnalysisData 
 				"type":     creator["type"],
 			},
 			"description": MarkdownConvert(res["body"].(string)),
+			"migration": map[string]interface{}{
+				"base": res["base"].(map[string]interface{})["label"],
+				"head": res["head"].(map[string]interface{})["label"],
+			},
 		}, Code: iris.StatusOK,
 	}
 }

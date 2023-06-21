@@ -10,7 +10,7 @@ ob_start('compress');
 
 <svg width="540" viewBox="0 0 660 216" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="descId">
     <title id="titleId">Error</title>
-    <desc id="descId">User Code Statistics</desc>
+    <desc id="descId">Error Card</desc>
     <style>
         .header {
             font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;

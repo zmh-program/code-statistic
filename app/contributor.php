@@ -20,8 +20,8 @@ $height = 100 + (ceil($number / $column) * 64);
 ob_start('compress');
 ?>
 <svg width="540" viewBox="0 0 <?php echo 100 + ($column * 64) ?> <?php echo $height + 1 ?>" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-labelledby="descId">
-    <title id="titleId"><?php echo $name ?>'s Contributors</title>
-    <desc id="descId">Repository Contributors</desc>
+    <title id="titleId"><?php echo $repo ?>'s Contributors</title>
+    <desc id="descId">Contributor Card</desc>
     <defs>
         <mask id="circle-mask"><circle cx="25" cy="25" r="25" fill="white" /></mask>
         <?php foreach ($stats['contributors'] as $idx => $contributor) { ?>
