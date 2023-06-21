@@ -313,7 +313,7 @@ func AnalysisRelease(username string, repo string, tag string) AnalysisData {
 				"image":    GetImage(author["avatar_url"].(string)),
 				"type":     author["type"],
 			},
-			"description": MarkdownConvert(res["body"].(string)),
+			"description": MarkdownConvert(res["body"]),
 			"assets":      countAssets(res["assets"].([]interface{})),
 		}, Code: iris.StatusOK,
 	}
@@ -355,7 +355,7 @@ func AnalysisIssue(username string, repo string, _id string) AnalysisData {
 				"image":    GetImage(opener["avatar_url"].(string)),
 				"type":     opener["type"],
 			},
-			"description": MarkdownConvert(res["body"].(string)),
+			"description": MarkdownConvert(res["body"]),
 		}, Code: iris.StatusOK,
 	}
 }
@@ -399,7 +399,7 @@ func AnalysisPullRequest(username string, repo string, _id string) AnalysisData 
 				"image":    GetImage(creator["avatar_url"].(string)),
 				"type":     creator["type"],
 			},
-			"description": MarkdownConvert(res["body"].(string)),
+			"description": MarkdownConvert(res["body"]),
 			"migration": map[string]interface{}{
 				"base": res["base"].(map[string]interface{})["label"],
 				"head": res["head"].(map[string]interface{})["label"],

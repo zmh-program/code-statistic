@@ -178,8 +178,11 @@ func GetImage(uri string) string {
 	return base64.StdEncoding.EncodeToString(body)
 }
 
-func MarkdownConvert(text string) string {
-	return string(blackfriday.Run([]byte(text)))
+func MarkdownConvert(text any) string {
+	if text == nil {
+		return ""
+	}
+	return string(blackfriday.Run([]byte(text.(string))))
 }
 
 func getDefault(value any, defaults any) any {
