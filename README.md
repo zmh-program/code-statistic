@@ -201,3 +201,74 @@ Very easy, just add `?theme=dark` after it in any kind of card!
     >   "message": "release not found"
     > }
     > ```
+
+5. Issue
+   > `GET` `https://stats.deeptrain.net/api/issue/{user}/{repo}/{id}`
+   >
+   > Example response:
+   > ```json
+   > {
+   >   "color": "#f1e05a",
+   >   "comments": 1,
+   >   "date": "2022-01-18T21:10:09Z",
+   >   "description": "...",
+   >   "id": 12,
+   >   "labels": [],
+   >   "opener": {
+   >     "avatar": "https://avatars.githubusercontent.com/u/63081316?v=4",
+   >     "image": "iVBORw0KGgoAAAANSUhEUgAA…0cg9hQAAAAASUVORK5CYII=",
+   >     "type": "User",
+   >     "username": "mollthecoder"
+   >   },
+   >   "reactions": 0,
+   >   "repo": "extensions",
+   >   "state": "closed",
+   >   "title": "Create dictionaries.js",
+   >   "username": "turbowarp"
+   > }
+   > ```
+   > Error response:
+   > ```json
+    > {
+    >   "message": "issue not found"
+    > }
+    > ```
+
+6. Pull Request
+   > `GET` `https://stats.deeptrain.net/api/pull/{user}/{repo}/{id}`
+   >
+   > Example response:
+   > ```json
+   > {
+   >   "additions": "72",
+   >   "changed_files": 1,
+   >   "color": "#f1e05a",
+   >   "comments": 1,
+   >   "commits": 1,
+   >   "creator": {
+   >     "avatar": "https://avatars.githubusercontent.com/u/63081316?v=4",
+   >     "image": "iVBORw0KGgoAAAANSUhEUgAA…0cg9hQAAAAASUVORK5CYII=",
+   >     "type": "User",
+   >     "username": "mollthecoder"
+   >   },
+   >   "date": "2022-01-18T21:10:09Z",
+   >   "deletions": "0",
+   >   "description": "...",
+   >   "id": 12,
+   >   "labels": [],
+   >   "migration": {
+   >     "base": "TurboWarp:master",
+   >     "head": "mollthecoder:patch-1"
+   >   },
+   >   "repo": "extensions",
+   >   "state": "closed",
+   >   "title": "Create dictionaries.js",
+   >   "username": "turbowarp"
+   > }
+   > ```
+   > Error response:
+   > ```json
+    > {
+    >   "message": "pull requst not found"
+    > }
+    > ```
