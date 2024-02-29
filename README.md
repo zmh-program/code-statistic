@@ -30,9 +30,9 @@ The user card is used to count the languages of all projects under the user and 
 The repository card are used to show the language analysis of the project, stars, forks, license, repository size, etc.
 
 ```markdown
-[![Deeptrain's Github Stats](https://stats.deeptrain.net/repo/zmh-program/Deeptrain)](https://github.com/zmh-program/code-statistic)
+[![Deeptrain's Github Stats](https://stats.deeptrain.net/repo/zmh-program/chatnio)](https://github.com/zmh-program/code-statistic)
 ```
-[![Deeptrain's Github Stats](https://stats.deeptrain.net/repo/zmh-program/Deeptrain)](https://github.com/zmh-program/code-statistic)
+[![Deeptrain's Github Stats](https://stats.deeptrain.net/repo/zmh-program/chatnio)](https://github.com/zmh-program/code-statistic)
 
 > **Warning**
 > by default, we can't get the data of private repo, please use your own [token](https://github.com/settings/tokens/new) to deploy. Don't forget to check the box to access your private repositories!
@@ -51,9 +51,9 @@ Add `&column=` to customize the number of columns.
 ## 🍇 Release Card
 The release card is used to display information about the release, such as branch, tag name, time and description, etc.
 ```markdown
-[![Deeptrain's Latest Release](https://stats.deeptrain.net/release/zmh-program/Deeptrain)](https://github.com/zmh-program/code-statistic)
+[![Deeptrain's Latest Release](https://stats.deeptrain.net/release/zmh-program/chatnio)](https://github.com/zmh-program/code-statistic)
 ```
-[![Deeptrain's Latest Release](https://stats.deeptrain.net/release/zmh-program/Deeptrain)](https://github.com/zmh-program/code-statistic)
+[![Deeptrain's Latest Release](https://stats.deeptrain.net/release/zmh-program/chatnio)](https://github.com/zmh-program/code-statistic)
 
 Show previous release versions by setting the parameter `tag`. Customize the release tag by adding `&tag=`. The default is **latest**.
 
